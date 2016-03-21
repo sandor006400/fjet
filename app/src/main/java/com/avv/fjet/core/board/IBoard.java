@@ -1,0 +1,12 @@
+package com.avv.fjet.core.board;
+
+/**
+ * Creado por Alexander Vladimirovich Vorobiev / 27/02/2016
+ */
+public interface IBoard {
+
+    interface IBoardState {
+
+    }
+
+}
