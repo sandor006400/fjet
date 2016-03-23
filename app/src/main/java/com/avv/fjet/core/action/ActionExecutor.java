@@ -1,12 +1,7 @@
 package com.avv.fjet.core.action;
 
-import android.util.Log;
-
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * Creado por Alexander Vladimirovich Vorobiev / 27/02/2016
@@ -24,8 +19,6 @@ public class ActionExecutor {
     private List<Action> actionsList = new ArrayList<Action>();
     private int currentAction = -1;
 
-    private BlockingQueue<Action> queue = new LinkedBlockingQueue<>();
-
     // endregion - Fields
 
     // region - Constructors
@@ -42,6 +35,11 @@ public class ActionExecutor {
 
     // region - Methods
 
+    /**
+     * Updates actionList. If currentAction isn't the last of acrtionList discards all following
+     * Actions
+     * @param action
+     */
     private void updateActionsList(Action action){
         if (this.currentAction + 1 < this.actionsList.size()){
             this.actionsList.set(this.currentAction, action);
@@ -51,6 +49,10 @@ public class ActionExecutor {
         this.currentAction++;
     }
 
+    /**
+     * Executes undo of last Action of actionList and sets value of currentAction to the
+     * next Action index of actionList
+     */
     public void undoLastAction(){
         if (this.currentAction != -1 && this.currentAction < this.actionsList.size()) {
             this.actionsList.get(this.currentAction).undo();
@@ -58,6 +60,10 @@ public class ActionExecutor {
         }
     }
 
+    /**
+     * Executes redo of last Action of actionList and sets value of currentAction to the
+     * previous Action index of actionList
+     */
     public void redoLastAction(){
         if (this.currentAction + 1 < this.actionsList.size()) {
             this.currentAction++;
@@ -65,9 +71,13 @@ public class ActionExecutor {
         }
     }
 
+    /**
+     * Executes the action and add it to actionsList
+     * @param action
+     */
     public void executeAction(Action action){
-        updateActionsList(action);
         action.execute();
+        updateActionsList(action);
     }
 
     // endregion - Methods
