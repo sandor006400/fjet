@@ -1,12 +1,11 @@
 package com.avv.fjet;
 
 import android.app.Activity;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.avv.fjet.core.Game;
 import com.avv.fjet.core.action.Action;
-import com.avv.fjet.core.action.ActionProcessor;
 
 public class MainActivity extends Activity {
 
@@ -28,27 +27,14 @@ public class MainActivity extends Activity {
 
     private void daleChicha(){
 
-        ActionProcessor aP = new ActionProcessor();
+        Game g = new Game();
+        TestThread t1 = new TestThread(g, "Thread_1");
+        TestThread t2 = new TestThread(g, "Thread_2");
+        TestUnRedoThread urT = new TestUnRedoThread(g, "UnRedo_Thread_1");
 
-        Thread t1 = new Thread(aP);
-        t1.run();
-        aP.start();
-
-        for(int i = 0; i < 100; i++){
-            Log.d("FUUUU", "ciclo -> " + i);
-            TestAction a = new TestAction(String.valueOf(i));
-            aP.processAction(a);
-
-                if (i % 10 == 0){
-                    aP.undoLastAction();
-                }
-
-                if (i % 20 == 0){
-                    aP.redoLastAction();
-                }
-        }
-        aP.stop();
-        assert (true);
+        t1.start();
+        t2.start();
+        urT.start();
     }
 
     private class TestAction extends Action {
@@ -67,6 +53,49 @@ public class MainActivity extends Activity {
         @Override
         public void undo() {
             Log.d("FUUUU", "Undo -> " + tag);
+        }
+    }
+
+    private class TestThread extends Thread {
+
+        private Game g;
+        private String name;
+
+        TestThread(Game game, String name){
+            this.g = game;
+            this.name = name;
+        }
+
+        @Override
+        public void run() {
+            for(int i = 0; i < 100; i++){
+                TestAction a = new TestAction(String.valueOf(i) + this.name);
+                this.g.processAction(a);
+            }
+        }
+    }
+
+    private class TestUnRedoThread extends Thread {
+
+        private Game g;
+        private String name;
+
+        TestUnRedoThread(Game game, String name){
+            this.g = game;
+            this.name = name;
+        }
+
+        @Override
+        public void run() {
+            for(int i = 0; i < 100; i++){
+                this.g.undoLastAction();
+                try {
+                    sleep(5);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                this.g.redoLastAction();
+            }
         }
     }
 

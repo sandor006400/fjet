@@ -1,7 +1,7 @@
 package com.avv.fjet;
 
 import com.avv.fjet.core.action.Action;
-import com.avv.fjet.core.action.ActionProcessor;
+import com.avv.fjet.core.action.ActionExecutor;
 
 import org.junit.Test;
 
@@ -12,7 +12,7 @@ import java.lang.Thread;
 public class ActionProcessorUnitTest {
     @Test
     public void test_processAction() throws Exception {
-        ActionProcessor aP = new ActionProcessor();
+        ActionExecutor aP = new ActionExecutor();
 
         Thread t1 = new Thread(aP);
         t1.run();
@@ -20,7 +20,7 @@ public class ActionProcessorUnitTest {
 
         for(int i = 0; i < 100; i++){
             TestAction a = new TestAction(String.valueOf(i));
-            aP.processAction(a);
+            aP.executeAction(a);
 
             /*if (i % 10 == 0){
                 aP.undoLastAction();
