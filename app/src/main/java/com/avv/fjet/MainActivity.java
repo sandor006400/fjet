@@ -28,8 +28,8 @@ public class MainActivity extends Activity {
     private void daleChicha(){
 
         Game g = new Game();
-        TestThread t1 = new TestThread(g, "Thread_1");
-        TestThread t2 = new TestThread(g, "Thread_2");
+        TestThread t1 = new TestThread(g, " Thread_1 ");
+        TestThread t2 = new TestThread(g, " Thread_2 ");
         TestUnRedoThread urT = new TestUnRedoThread(g, "UnRedo_Thread_1");
 
         t1.start();
@@ -46,8 +46,24 @@ public class MainActivity extends Activity {
         }
 
         @Override
+        protected ActionResult getExecutionResult() {
+            return null;
+        }
+
+        @Override
+        protected ActionUndoResult getExecutionUndoResult() {
+            return null;
+        }
+
+        @Override
         public void execute() {
-            Log.d("FUUUU", "Execute -> " + tag);
+            Log.d("Accion", ">>>>>>>>> - " + tag);
+            try {
+                Thread.sleep(20);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            Log.d("Accion", "<<<<<<<<< - " + tag);
         }
 
         @Override
@@ -68,7 +84,7 @@ public class MainActivity extends Activity {
 
         @Override
         public void run() {
-            for(int i = 0; i < 100; i++){
+            for(int i = 0; i < 10; i++){
                 TestAction a = new TestAction(String.valueOf(i) + this.name);
                 this.g.processAction(a);
             }
@@ -87,14 +103,21 @@ public class MainActivity extends Activity {
 
         @Override
         public void run() {
-            for(int i = 0; i < 100; i++){
+            for(int i = 0; i < 10; i++){
                 this.g.undoLastAction();
                 try {
                     sleep(5);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+            }
+            for(int i = 0; i < 10; i++){
                 this.g.redoLastAction();
+                try {
+                    sleep(5);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
