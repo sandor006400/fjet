@@ -1,7 +1,7 @@
 package com.avv.fjet.core.board.util;
 
-import com.avv.fjet.core.board.CubicCoords;
 import com.avv.fjet.core.board.HexCoords;
+import com.avv.fjet.core.board.SquareCoords;
 
 /**
  * Created by Alexander Vladimirovich Vorobiev
@@ -34,35 +34,6 @@ public class UtilCoordinates {
 
     // region - Methods
 
-    public static HexCoords cubicCoordsToHexCoords(CubicCoords cubicCoords) {
-        int x = cubicCoords.getX();
-        int y = cubicCoords.getZ();
-        return new HexCoords(x ,y);
-    }
-
-    public static CubicCoords hexCoordsToCubicCoords(HexCoords hexCoords) {
-        int x = hexCoords.getQ();
-        int z = hexCoords.getR();
-        int y = - x - z;
-        return new CubicCoords(x, y, z);
-    }
-
-    /**
-     * Distance between two cubic versions of hexagon grid coordinates. It's valid because the
-     * coordinates are placed on diagonal plane x + y + z = 0. The result is the highest value
-     * of absolute diferences between coordinates in each axis.
-     * @param coordsA
-     * @param coordsB
-     * @return
-     */
-    public static int distanceBetweenCubicCoords(CubicCoords coordsA, CubicCoords coordsB){
-        return Math.max(
-                Math.max(
-                        Math.abs(coordsA.getX() - coordsB.getX()),
-                        Math.abs(coordsA.getY() - coordsB.getY())),
-                Math.abs(coordsA.getZ() - coordsB.getZ()));
-    }
-
     /**
      * Distance between two hexagon grid coordinates.
      * @param coordsA
@@ -70,24 +41,45 @@ public class UtilCoordinates {
      * @return
      */
     public static int distanceBetweenHexCoords(HexCoords coordsA, HexCoords coordsB){
-        CubicCoords cubCoordsA = hexCoordsToCubicCoords(coordsA);
-        CubicCoords cubCoordsB = hexCoordsToCubicCoords(coordsB);
-        return distanceBetweenCubicCoords(
-                cubCoordsA,
-                cubCoordsB);
-    }
-
-    public static CubicCoords addCubicCoords(CubicCoords coordsA, CubicCoords coordsB){
-        int x = coordsA.getX() + coordsB.getX();
-        int y = coordsA.getY() + coordsB.getY();
-        int z = coordsA.getZ() + coordsB.getZ();
-        return new CubicCoords(x, y, z);
+        return Math.max(
+                Math.abs(coordsA.getQ() - coordsB.getQ()),
+                Math.abs(coordsA.getR() - coordsB.getR()));
     }
 
     public static HexCoords addHexCoords(HexCoords coordsA, HexCoords coordsB){
         int q = coordsA.getQ() + coordsB.getQ();
         int r = coordsA.getR() + coordsB.getR();
         return new HexCoords(q, r);
+    }
+
+    /**
+     * Chebyshev distance between two square grid coordinates.
+     * @param coordsA
+     * @param coordsB
+     * @return
+     */
+    public static int chebyshevDistanceBetweenSquareCoords(SquareCoords coordsA, SquareCoords coordsB){
+        return Math.max(
+                Math.abs(coordsA.getX() - coordsB.getX()),
+                Math.abs(coordsA.getX() - coordsB.getY()));
+    }
+
+    /**
+     * Distance between two square grid coordinates if the only way to move is thru neighbor
+     * coordinates.
+     * @param coordsA
+     * @param coordsB
+     * @return
+     */
+    public static int distanceBetweenSquareCoords(SquareCoords coordsA, SquareCoords coordsB){
+        return Math.abs(coordsA.getX() - coordsB.getX())
+                + Math.abs(coordsA.getX() - coordsB.getY());
+    }
+
+    public static SquareCoords addSquareCoords(SquareCoords coordsA, SquareCoords coordsB){
+        int x = coordsA.getX() + coordsB.getX();
+        int y = coordsA.getY() + coordsB.getY();
+        return new SquareCoords(x, y);
     }
 
     // endregion - Methods

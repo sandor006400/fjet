@@ -1,14 +1,21 @@
 package com.avv.fjet.core.board;
 
+import com.avv.fjet.core.board.util.UtilCoordinates;
+
 /**
  * Created by Alexander Vladimirovich Vorobiev
  * At 27/03/2016
  * -------------------------------------------
- * Cubic coordinates
+ * Square cell coordinates
  */
-public class CubicCoords implements ICoordinates {
+public class SquareCoords implements ICoordinates {
 
     // region - Constants
+
+    private static final SquareCoords [] NEIGHBORS = {
+            new SquareCoords(0, 1),
+            new SquareCoords(-1, 0), new SquareCoords(1, 0),
+            new SquareCoords(0, -1)};
 
     // endregion - Constants
 
@@ -16,16 +23,14 @@ public class CubicCoords implements ICoordinates {
 
     private int x;
     private int y;
-    private int z;
 
     // endregion - Fields
 
     // region - Constructors
 
-    public CubicCoords(int x, int y, int z){
+    public SquareCoords(int x, int y){
         this.x = x;
         this.y = y;
-        this.z = z;
     }
 
     // endregion - Constructors
@@ -40,28 +45,33 @@ public class CubicCoords implements ICoordinates {
         return this.y;
     }
 
-    public int getZ(){
-        return this.z;
-    }
-
     // endregion - Getters and Setters
 
     // region - Methods for/from SuperClass/Interfaces
 
     @Override
     public ICoordinates[] getNeighborsArray() {
-        return
+        SquareCoords [] neighbors = new SquareCoords[NEIGHBORS.length];
+
+        for (int i = 0; i < NEIGHBORS.length; i++){
+            neighbors[i] = UtilCoordinates.addSquareCoords(this, NEIGHBORS[i]);
+        }
+        return neighbors;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof SquareCoords){
+            SquareCoords coords = (SquareCoords) o;
+            return this.x == coords.x
+                    && this.y == coords.y;
+        }
+        return false;
     }
 
     // endregion - Methods for/from SuperClass/Interfaces
 
     // region - Methods
-
-    public boolean equals(CubicCoords coords) {
-        return this.x == coords.x
-                && this.y == coords.y
-                && this.z == coords.z;
-    }
 
     // endregion - Methods
 

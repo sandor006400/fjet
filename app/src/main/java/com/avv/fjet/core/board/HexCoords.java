@@ -1,5 +1,7 @@
 package com.avv.fjet.core.board;
 
+import com.avv.fjet.core.board.util.UtilCoordinates;
+
 /**
  * Created by Alexander Vladimirovich Vorobiev
  * At 27/03/2016
@@ -9,6 +11,11 @@ package com.avv.fjet.core.board;
 public class HexCoords implements ICoordinates {
 
     // region - Constants
+
+    private static final HexCoords [] NEIGHBORS = {
+            new HexCoords(0, -1), new HexCoords(1, -1),
+            new HexCoords(-1, 0), new HexCoords(1, 0),
+            new HexCoords(-1, 1), new HexCoords(0, 1)};
 
     // endregion - Constants
 
@@ -44,16 +51,26 @@ public class HexCoords implements ICoordinates {
 
     @Override
     public ICoordinates[] getNeighborsArray() {
+        HexCoords [] neighbors = new HexCoords[NEIGHBORS.length];
 
+        for (int i = 0; i < NEIGHBORS.length; i++){
+            neighbors[i] = UtilCoordinates.addHexCoords(this, NEIGHBORS[i]);
+        }
+        return neighbors;
     }
 
     // endregion - Methods for/from SuperClass/Interfaces
 
     // region - Methods
 
-    public boolean equals(HexCoords coords) {
-        return this.q == coords.q
-                && this.r == coords.r;
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof HexCoords){
+            HexCoords coords = (HexCoords) o;
+            return this.q == coords.q
+                    && this.r == coords.r;
+        }
+        return false;
     }
 
     // endregion - Methods
