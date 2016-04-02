@@ -1,10 +1,10 @@
-package com.avv.fjet.core.unit;
+package org.avv.fjet.core.board;
 
 /**
  * Created by Alexander Vladimirovich Vorobiev
- * At 27/02/2016
+ * At 27/03/2016
  */
-public class IUnit {
+public class Cell {
 
     // region - Constants
 

@@ -1,7 +1,7 @@
-package com.avv.fjet.core.board.util;
+package org.avv.fjet.core.board.util;
 
-import com.avv.fjet.core.board.HexCoords;
-import com.avv.fjet.core.board.SquareCoords;
+import org.avv.fjet.core.board.HexCoords;
+import org.avv.fjet.core.board.SquareCoords;
 
 /**
  * Created by Alexander Vladimirovich Vorobiev

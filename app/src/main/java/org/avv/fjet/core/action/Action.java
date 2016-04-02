@@ -1,4 +1,4 @@
-package com.avv.fjet.core.action;
+package org.avv.fjet.core.action;
 
 import java.util.ArrayList;
 import java.util.List;

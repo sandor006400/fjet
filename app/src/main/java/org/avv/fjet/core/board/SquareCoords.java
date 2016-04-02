@@ -1,6 +1,9 @@
-package com.avv.fjet.core.board;
+package org.avv.fjet.core.board;
 
-import com.avv.fjet.core.board.util.UtilCoordinates;
+import org.avv.fjet.core.board.util.UtilCoordinates;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Alexander Vladimirovich Vorobiev
@@ -13,9 +16,9 @@ public class SquareCoords implements ICoordinates {
     // region - Constants
 
     private static final SquareCoords [] NEIGHBORS = {
-            new SquareCoords(0, 1),
+            new SquareCoords(0, -1),
             new SquareCoords(-1, 0), new SquareCoords(1, 0),
-            new SquareCoords(0, -1)};
+            new SquareCoords(0, 1)};
 
     // endregion - Constants
 
@@ -67,6 +70,26 @@ public class SquareCoords implements ICoordinates {
                     && this.y == coords.y;
         }
         return false;
+    }
+
+    @Override
+    public ICoordinates[] getCoordsInRangeArray(int n) {
+        List<SquareCoords> neighbors = new ArrayList<>();
+
+        for (int dy = -n; dy <= n; dy++){               // -N ≤ dy ≤ N
+            int minX = Math.max(-dy - n, dy - n);
+            int maxX = Math.min(-dy + n, dy + n);
+
+            for (int dx = minX; dx <= maxX; dx++){      // -dy-N ≤ dy ≤ -dy+N
+                neighbors.add(UtilCoordinates.addSquareCoords(this, new SquareCoords(dx, dy)));
+            }
+        }
+        return neighbors.toArray(new SquareCoords[neighbors.size()]);
+    }
+
+    @Override
+    public String toString() {
+        return "SquareCoords(" + this.x + "," + this.y + ")";
     }
 
     // endregion - Methods for/from SuperClass/Interfaces

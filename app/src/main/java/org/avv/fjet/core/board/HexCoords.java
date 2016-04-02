@@ -1,6 +1,9 @@
-package com.avv.fjet.core.board;
+package org.avv.fjet.core.board;
 
-import com.avv.fjet.core.board.util.UtilCoordinates;
+import org.avv.fjet.core.board.util.UtilCoordinates;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Alexander Vladimirovich Vorobiev
@@ -71,6 +74,31 @@ public class HexCoords implements ICoordinates {
                     && this.r == coords.r;
         }
         return false;
+    }
+
+    /**
+     * Hex coord within N range from current HexCoords. See <a href="http://www.redblobgames.com/grids/hexagons/#range">Coordinate range</a>/>.
+     * @param n
+     * @return
+     */
+    @Override
+    public ICoordinates[] getCoordsInRangeArray(int n) {
+        List<HexCoords> neighbors = new ArrayList<>();
+
+        for (int dr = -n; dr <= n; dr++){               // -N ≤ dr ≤ N
+            int minQ = Math.max(-dr - n, -n);
+            int maxQ = Math.min(-dr + n, n);
+
+            for (int dq = minQ; dq <= maxQ; dq++){      // max(-N, -dr-N) ≤ dq ≤ min(N, -dr+N)
+                neighbors.add(UtilCoordinates.addHexCoords(this, new HexCoords(dq, dr)));
+            }
+        }
+        return neighbors.toArray(new HexCoords[neighbors.size()]);
+    }
+
+    @Override
+    public String toString() {
+        return "HexCoords(" + this.q + "," + this.r + ")";
     }
 
     // endregion - Methods

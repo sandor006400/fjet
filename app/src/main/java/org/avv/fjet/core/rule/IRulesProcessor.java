@@ -1,4 +1,4 @@
-package com.avv.fjet.core.rule;
+package org.avv.fjet.core.rule;
 
 /**
  * Creado por Alexander Vladimirovich Vorobiev / 27/02/2016

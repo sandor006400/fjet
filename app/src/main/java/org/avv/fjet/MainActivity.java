@@ -1,11 +1,16 @@
-package com.avv.fjet;
+package org.avv.fjet;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.avv.fjet.core.Game;
-import com.avv.fjet.core.action.Action;
+import org.avv.fjet.core.Game;
+import org.avv.fjet.core.action.Action;
+import org.avv.fjet.core.board.HexCoords;
+import org.avv.fjet.core.board.ICoordinates;
+import org.avv.fjet.core.board.SquareCoords;
+
+import java.util.Arrays;
 
 public class MainActivity extends Activity {
 
@@ -27,14 +32,20 @@ public class MainActivity extends Activity {
 
     private void daleChicha(){
 
-        Game g = new Game();
+        /*Game g = new Game();
         TestThread t1 = new TestThread(g, " Thread_1 ");
         TestThread t2 = new TestThread(g, " Thread_2 ");
         TestUnRedoThread urT = new TestUnRedoThread(g, "UnRedo_Thread_1");
 
         t1.start();
         t2.start();
-        urT.start();
+        urT.start();*/
+        HexCoords sC = new HexCoords(3,4);
+        ICoordinates[] results = sC.getCoordsInRangeArray(2);
+
+        for (ICoordinates c : results) {
+            Log.d("Resultado", c.toString());
+        }
     }
 
     private class TestAction extends Action {

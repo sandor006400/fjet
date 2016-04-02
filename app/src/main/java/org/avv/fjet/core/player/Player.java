@@ -1,4 +1,4 @@
-package com.avv.fjet.core.player;
+package org.avv.fjet.core.player;
 
 /**
  * Created by Alexander Vladimirovich Vorobiev

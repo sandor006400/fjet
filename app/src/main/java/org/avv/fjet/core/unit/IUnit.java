@@ -1,10 +1,10 @@
-package com.avv.fjet.core.board;
+package org.avv.fjet.core.unit;
 
 /**
  * Created by Alexander Vladimirovich Vorobiev
- * At 27/03/2016
+ * At 27/02/2016
  */
-public class Cell {
+public class IUnit {
 
     // region - Constants
 
@@ -12,23 +12,13 @@ public class Cell {
 
     // region - Fields
 
-    private ICoordinates coordinates;
-
     // endregion - Fields
 
     // region - Constructors
 
-    public Cell(ICoordinates coord){
-        this.coordinates = coord;
-    }
-
     // endregion - Constructors
 
     // region - Getters and Setters
-
-    private ICoordinates getCoordinates(){
-        return this.coordinates;
-    }
 
     // endregion - Getters and Setters
 

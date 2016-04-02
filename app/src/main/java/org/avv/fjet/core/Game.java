@@ -1,7 +1,7 @@
-package com.avv.fjet.core;
+package org.avv.fjet.core;
 
-import com.avv.fjet.core.action.Action;
-import com.avv.fjet.core.action.ActionExecutor;
+import org.avv.fjet.core.action.Action;
+import org.avv.fjet.core.action.ActionExecutor;
 
 /**
  * Created by Alexander Vladimirovich Vorobiev
