@@ -11,7 +11,7 @@ import java.util.List;
  * -------------------------------------------
  * Hexagonal cell axial coordinates
  */
-public class HexCoords implements ICoordinates {
+public class HexCoords implements ICoords {
 
     // region - Constants
 
@@ -53,7 +53,7 @@ public class HexCoords implements ICoordinates {
     // region - Methods for/from SuperClass/Interfaces
 
     @Override
-    public ICoordinates[] getNeighborsArray() {
+    public ICoords[] getNeighborsArray() {
         HexCoords [] neighbors = new HexCoords[NEIGHBORS.length];
 
         for (int i = 0; i < NEIGHBORS.length; i++){
@@ -82,7 +82,7 @@ public class HexCoords implements ICoordinates {
      * @return
      */
     @Override
-    public ICoordinates[] getCoordsInRangeArray(int n) {
+    public ICoords[] getCoordsInRangeArray(int n) {
         List<HexCoords> neighbors = new ArrayList<>();
 
         for (int dr = -n; dr <= n; dr++){               // -N ≤ dr ≤ N

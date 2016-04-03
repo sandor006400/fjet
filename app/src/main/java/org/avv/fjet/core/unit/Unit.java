@@ -1,15 +1,12 @@
-package org.avv.fjet.core.board;
+package org.avv.fjet.core.unit;
 
-import org.avv.fjet.core.unit.Unit;
-
-import java.util.HashMap;
-import java.util.Map;
+import org.avv.fjet.core.board.Cell;
 
 /**
  * Created by Alexander Vladimirovich Vorobiev
- * At 27/03/2016
+ * At 27/02/2016
  */
-public class Board {
+public class Unit {
 
     // region - Constants
 
@@ -17,8 +14,7 @@ public class Board {
 
     // region - Fields
 
-    private Map<ICoords, Cell> cellsMap = new HashMap<>();
-    private Map<ICoords, Unit> unitsMap = new HashMap<>();
+    private Cell cell;
 
     // endregion - Fields
 
@@ -28,8 +24,12 @@ public class Board {
 
     // region - Getters and Setters
 
-    public Cell getCellWithCoords(ICoords coords){
-        return this.cellsMap.get(coords);
+    public void setCell(Cell cell){
+        this.cell = cell;
+    }
+
+    public Cell getCell(){
+        return this.cell;
     }
 
     // endregion - Getters and Setters
@@ -43,10 +43,6 @@ public class Board {
     // endregion - Methods
 
     // region - Inner and Anonymous Classes
-
-    interface IBoardState {
-
-    }
 
     // endregion - Inner and Anonymous Classes
 

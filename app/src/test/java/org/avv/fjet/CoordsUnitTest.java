@@ -1,8 +1,10 @@
 package org.avv.fjet;
 
 import org.avv.fjet.core.board.HexCoords;
+import org.avv.fjet.core.board.Point;
 import org.avv.fjet.core.board.SquareCoords;
 
+import org.avv.fjet.core.board.util.UtilCoordinates;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -100,6 +102,21 @@ public class CoordsUnitTest {
     // endregion - HexCoords tests
 
     // region - UtilCoordinates tests
+
+    @Test
+    public void test_calcHexCoordsConversions() throws Exception {
+        HexCoords result = new HexCoords(3,4);
+        int hexCellEdge = 20;
+        Point p = UtilCoordinates.hexCoordsToPixel(hexCellEdge, result);
+        HexCoords finalCoord = UtilCoordinates.hexCoordsFromPixel(p.getX(), p.getY(), hexCellEdge);
+        assertEquals(result, finalCoord);
+    }
+
+    @Test
+    public void test_roundHexCoords() throws Exception {
+        HexCoords result = new HexCoords(3,4);
+        assertEquals(result, UtilCoordinates.roundHexCoords(3.232243f, 3.62321f));
+    }
 
     // endregion - UtilCoordinates tests
 

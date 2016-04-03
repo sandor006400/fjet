@@ -7,10 +7,9 @@ import android.util.Log;
 import org.avv.fjet.core.Game;
 import org.avv.fjet.core.action.Action;
 import org.avv.fjet.core.board.HexCoords;
-import org.avv.fjet.core.board.ICoordinates;
-import org.avv.fjet.core.board.SquareCoords;
-
-import java.util.Arrays;
+import org.avv.fjet.core.board.ICoords;
+import org.avv.fjet.core.board.Point;
+import org.avv.fjet.core.board.util.UtilCoordinates;
 
 public class MainActivity extends Activity {
 
@@ -40,12 +39,21 @@ public class MainActivity extends Activity {
         t1.start();
         t2.start();
         urT.start();*/
-        HexCoords sC = new HexCoords(3,4);
-        ICoordinates[] results = sC.getCoordsInRangeArray(2);
+        /*HexCoords sC = new HexCoords(3,4);
+        ICoords[] results = sC.getCoordsInRangeArray(2);
 
-        for (ICoordinates c : results) {
+        for (ICoords c : results) {
             Log.d("Resultado", c.toString());
-        }
+        }*/
+
+        HexCoords result = new HexCoords(3,4);
+        int hexCellEdge = 20;
+        Point p = UtilCoordinates.hexCoordsToPixel(hexCellEdge, result);
+        HexCoords finalCoord = UtilCoordinates.hexCoordsFromPixel(p.getX(), p.getY(), hexCellEdge);
+
+        Log.d("<<<<<<<", result.toString());
+        Log.d(">>>>>>>", p.toString());
+        Log.d("<<<<<<<", finalCoord.toString());
     }
 
     private class TestAction extends Action {
@@ -53,6 +61,7 @@ public class MainActivity extends Activity {
         private String tag;
 
         public TestAction(String tag){
+            super(Type.EXECUTIVE);
             this.tag = tag;
         }
 

@@ -11,7 +11,7 @@ import java.util.List;
  * -------------------------------------------
  * Square cell coordinates
  */
-public class SquareCoords implements ICoordinates {
+public class SquareCoords implements ICoords {
 
     // region - Constants
 
@@ -53,7 +53,7 @@ public class SquareCoords implements ICoordinates {
     // region - Methods for/from SuperClass/Interfaces
 
     @Override
-    public ICoordinates[] getNeighborsArray() {
+    public ICoords[] getNeighborsArray() {
         SquareCoords [] neighbors = new SquareCoords[NEIGHBORS.length];
 
         for (int i = 0; i < NEIGHBORS.length; i++){
@@ -73,7 +73,7 @@ public class SquareCoords implements ICoordinates {
     }
 
     @Override
-    public ICoordinates[] getCoordsInRangeArray(int n) {
+    public ICoords[] getCoordsInRangeArray(int n) {
         List<SquareCoords> neighbors = new ArrayList<>();
 
         for (int dy = -n; dy <= n; dy++){               // -N ≤ dy ≤ N

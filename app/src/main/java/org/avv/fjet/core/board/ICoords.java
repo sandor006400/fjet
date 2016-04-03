@@ -4,7 +4,7 @@ package org.avv.fjet.core.board;
  * Created by Alexander Vladimirovich Vorobiev
  * At 27/03/2016
  */
-public interface ICoordinates {
+public interface ICoords {
 
     // region - Constants
 
@@ -28,14 +28,14 @@ public interface ICoordinates {
      * Returns array of coordinates. The neighbor coordinates are those with edge joins.
      * @return
      */
-    ICoordinates[] getNeighborsArray();
+    ICoords[] getNeighborsArray();
 
     /**
      * Returns coords within N range area from Current Coordinate.
      * @param n
      * @return
      */
-    ICoordinates[] getCoordsInRangeArray(int n);
+    ICoords[] getCoordsInRangeArray(int n);
 
     // endregion - Methods for/from SuperClass/Interfaces
 

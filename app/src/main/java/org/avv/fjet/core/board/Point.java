@@ -1,10 +1,12 @@
-package org.avv.fjet.core.unit;
+package org.avv.fjet.core.board;
 
 /**
  * Created by Alexander Vladimirovich Vorobiev
- * At 27/02/2016
+ * At 03/04/2016
+ * -------------------------------------------
+ * Point wrapper
  */
-public class IUnit {
+public class Point {
 
     // region - Constants
 
@@ -12,13 +14,29 @@ public class IUnit {
 
     // region - Fields
 
+    private int x;
+    private int y;
+
     // endregion - Fields
 
     // region - Constructors
 
+    public Point(int x, int y){
+        this.x = x;
+        this.y = y;
+    }
+
     // endregion - Constructors
 
     // region - Getters and Setters
+
+    public int getX(){
+        return this.x;
+    }
+
+    public int getY(){
+        return this.y;
+    }
 
     // endregion - Getters and Setters
 
@@ -27,6 +45,10 @@ public class IUnit {
     // endregion - Methods for/from SuperClass/Interfaces
 
     // region - Methods
+
+    public android.graphics.Point getAndroidPoint(){
+        return new android.graphics.Point(this.x, this.y);
+    }
 
     // endregion - Methods
 
