@@ -10,7 +10,7 @@ public class ActionExecutor {
 
     // region - Constants
 
-    private static final String DEBUD_TAG = "ActionProcessor";
+    private static final String DEBUD_TAG = "ActionExecutor";
 
     // endregion - Constants
 
@@ -77,7 +77,10 @@ public class ActionExecutor {
      */
     public void executeAction(Action action){
         action.execute();
-        updateActionsList(action);
+
+        if (action.getType() == Action.Type.EXECUTIVE) {
+            updateActionsList(action);
+        }
     }
 
     // endregion - Methods
