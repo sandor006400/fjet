@@ -1,5 +1,7 @@
 package org.avv.fjet.core.board.util;
 
+import android.util.Log;
+
 import org.avv.fjet.core.board.HexCoords;
 import org.avv.fjet.core.board.Point;
 import org.avv.fjet.core.board.SquareCoords;
@@ -56,27 +58,23 @@ public class UtilCoordinates {
     }
 
     /**
-     * Calculates HexCoords using pixel (x,y) coordinate, board pixel dimensions (width,height) and
-     * Board dimensions (xols,rows). See <a href="http://www.redblobgames.com/grids/hexagons/#pixel-to-hex">Pixel to Hex</a>
+     * Calculates HexCoords using pixel (x,y) coordinate, board height in pixels and
+     * number of Board's rows). See <a href="http://www.redblobgames.com/grids/hexagons/#pixel-to-hex">Pixel to Hex</a>
      * @param xCoord
      * @param yCoord
-     * @param width
-     * @param height
-     * @param cols
+     * @param boardPixHeight
      * @param rows
      * @return
      */
-    public static HexCoords hexCoordsFromPixel(int xCoord, int yCoord, int width, int height, int cols, int rows){
+    public static HexCoords hexCoordsFromPixel(int xCoord, int yCoord, int boardPixHeight, int rows){
 
         // Size is the edge measure of hexagon edge. Size = height * 2 / (rows * 3 + 1)
-        float size = (height * 2) / (rows * 3 + 1);
-        float q = (xCoord * SQRT_OF_3 / 3 - yCoord / 3) / size;
-        float r = yCoord * 2 / 3 / size;
-        return roundHexCoords(q, r);
+        float size = (boardPixHeight * 2) / (rows * 3 + 1);
+        return hexCoordsFromPixel(xCoord, yCoord, size);
     }
 
     /**
-     * Calculates HexCoords using pixel (x,y) coordinate and edge size of hexagon cell. See <a href="http://www.redblobgames.com/grids/hexagons/#pixel-to-hex">Pixel to Hex</a>
+     * Calculates HexCoords using pixel (x,y) coordinate and edge size of hexagon cell in pixels. See <a href="http://www.redblobgames.com/grids/hexagons/#pixel-to-hex">Pixel to Hex</a>
      * @param xCoord
      * @param yCoord
      * @param edgeSize
@@ -89,7 +87,7 @@ public class UtilCoordinates {
     }
 
     /**
-     * Rounds float coordinates (q,r) to the nearest hex coordinate. See <a href="http://www.redblobgames.com/grids/hexagons/#rounding">Rounding to nearest hex</a>
+     * Rounds float coordinates (q,r) to the nearest hex coordinate. See <a href="http://www.redblobgames.com/grids/hexagons/#rounding">Rounding to nearest hex</a>.
      * @param q
      * @param r
      * @return
@@ -113,10 +111,27 @@ public class UtilCoordinates {
         return new HexCoords(rx, rz);
     }
 
+    /**
+     * Calculates the central point of the hexagonal cell in pixels. See <a href="http://www.redblobgames.com/grids/hexagons/#hex-to-pixel">Hex to Pixel</a>.
+     * @param edgeSize
+     * @param coords
+     * @return
+     */
     public static Point hexCoordsToPixel(float edgeSize, HexCoords coords){
-        int x = Math.round(edgeSize * SQRT_OF_3 * (coords.getQ() + coords.getR() / 2));
+        int x = Math.round(edgeSize * SQRT_OF_3 * ((float)coords.getQ() + (float) coords.getR() / 2));
         int y = Math.round(edgeSize * 3/2 * coords.getR());
         return new Point(x,y);
+    }
+
+    /**
+     * Convert “odd-r horizontal layout coordinate" to axial hex coordinate. See <a href="http://www.redblobgames.com/grids/hexagons/#conversions">Coordinate conversion</a>
+     * @param x
+     * @param y
+     * @return
+     */
+    public static HexCoords offsetHexCoordsToAxialHexCoords(int x, int y){
+        int q = x - (y - (x % 2)) / 2;
+        return new HexCoords(q, y); // r == y
     }
 
     /**

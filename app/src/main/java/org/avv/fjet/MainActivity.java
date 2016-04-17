@@ -6,17 +6,17 @@ import android.util.Log;
 
 import org.avv.fjet.core.Game;
 import org.avv.fjet.core.action.Action;
-import org.avv.fjet.core.board.HexCoords;
-import org.avv.fjet.core.board.ICoords;
-import org.avv.fjet.core.board.Point;
-import org.avv.fjet.core.board.util.UtilCoordinates;
 
 public class MainActivity extends Activity {
+
+    private FJetSurfaceView gameView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        this.gameView = (FJetSurfaceView) findViewById(R.id.surfaceView);
 
         Log.d("FUUUU", "arrancando...");
     }
@@ -27,6 +27,13 @@ public class MainActivity extends Activity {
 
         Log.d("FUUUU", "comienza lo bueno...");
         daleChicha();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        this.gameView.stop();
     }
 
     private void daleChicha(){
@@ -46,14 +53,18 @@ public class MainActivity extends Activity {
             Log.d("Resultado", c.toString());
         }*/
 
-        HexCoords result = new HexCoords(3,4);
+        /*HexCoords result = new HexCoords(3,4);
         int hexCellEdge = 20;
         Point p = UtilCoordinates.hexCoordsToPixel(hexCellEdge, result);
         HexCoords finalCoord = UtilCoordinates.hexCoordsFromPixel(p.getX(), p.getY(), hexCellEdge);
 
         Log.d("<<<<<<<", result.toString());
         Log.d(">>>>>>>", p.toString());
-        Log.d("<<<<<<<", finalCoord.toString());
+        Log.d("<<<<<<<", finalCoord.toString());*/
+    }
+
+    private class SVThread extends Thread {
+
     }
 
     private class TestAction extends Action {

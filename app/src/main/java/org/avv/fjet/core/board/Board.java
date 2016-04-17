@@ -17,12 +17,17 @@ public class Board {
 
     // region - Fields
 
-    private Map<ICoords, Cell> cellsMap = new HashMap<>();
-    private Map<ICoords, Unit> unitsMap = new HashMap<>();
+    private Map<ICoords, Cell> cellsMap;
+    private Map<ICoords, Unit> unitsMap;
 
     // endregion - Fields
 
     // region - Constructors
+
+    public Board(){
+        this.cellsMap = new HashMap<>();
+        this.unitsMap = new HashMap<>();
+    }
 
     // endregion - Constructors
 
@@ -30,6 +35,14 @@ public class Board {
 
     public Cell getCellWithCoords(ICoords coords){
         return this.cellsMap.get(coords);
+    }
+
+    public void setCellAndCoords(ICoords coords, Cell cell){
+        this.cellsMap.put(coords, cell);
+    }
+
+    public Map getCells(){
+        return this.cellsMap;
     }
 
     // endregion - Getters and Setters
