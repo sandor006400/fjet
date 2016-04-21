@@ -40,7 +40,7 @@ public class FJetSurfaceView extends SurfaceView
         SurfaceHolder holder = getHolder();
         holder.addCallback(this);
 
-        this.thread = new SurfaceViewThread(holder, BoardFactory.createBoard(BoardFactory.BoardType.HEX_CELLS, 2, 2));
+        this.thread = new SurfaceViewThread(holder, BoardFactory.createBoard(BoardFactory.BoardType.HEX_CELLS, 3, 3));
     }
 
     // endregion - Constructors
@@ -101,7 +101,7 @@ public class FJetSurfaceView extends SurfaceView
 
     private void initializeThread(){
 
-        Board b = BoardFactory.createBoard(BoardFactory.BoardType.HEX_CELLS, 2, 2);
+        Board b = BoardFactory.createBoard(BoardFactory.BoardType.HEX_CELLS, 3, 3);
         this.thread = new SurfaceViewThread(getHolder(), b);
     }
 
@@ -114,7 +114,7 @@ public class FJetSurfaceView extends SurfaceView
         private Board board;
         private final SurfaceHolder holder;
         private boolean running;
-        private final long INTERVAL = 10000;//1000 / 60;
+        private final long INTERVAL = 3000;//1000 / 60;
 
         public SurfaceViewThread(SurfaceHolder holder, Board board){
             this.holder = holder;
@@ -145,17 +145,28 @@ public class FJetSurfaceView extends SurfaceView
                                 paint2.setStrokeWidth(1);
                                 paint2.setColor(Color.GREEN);
                                 paint2.setStyle(Paint.Style.STROKE);
-                                int edgeSize = 10;
+                                int edgeSize = 20;
 
                                 for (Object coords : board.getCells().keySet()){
 
+                                    if (((HexCoords)coords).getQ() % 3 == 0){
+                                        paint2.setColor(Color.RED);
+
+                                    } else if (((HexCoords)coords).getQ() % 3 == 1){
+                                        paint2.setColor(Color.GREEN);
+
+                                    } else {
+                                        paint2.setColor(Color.BLUE);
+                                    }
+
                                     if (coords instanceof HexCoords){
+
                                         Log.d("---->", "coords: " + coords.toString());
                                         Point p = UtilCoordinates.hexCoordsToPixel(edgeSize, (HexCoords) coords);
 
                                         Log.d("---->", "point: " + p.getX() + "," + p.getY());
-                                        c.drawPoint(edgeSize*3 + p.getX(),edgeSize*3 + p.getY(), paint);
-                                        c.drawCircle(edgeSize*3 + p.getX(), edgeSize*3 + p.getY(), edgeSize, paint2);
+                                        c.drawPoint(edgeSize + p.getX(), edgeSize + p.getY(), paint);
+                                        c.drawCircle(edgeSize + p.getX(), edgeSize + p.getY(), edgeSize, paint2);
                                     }
                                 }
 

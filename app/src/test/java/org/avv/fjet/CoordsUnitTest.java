@@ -1,11 +1,21 @@
 package org.avv.fjet;
 
+import org.avv.fjet.core.board.BoardFactory;
+import org.avv.fjet.core.board.Cell;
 import org.avv.fjet.core.board.HexCoords;
+import org.avv.fjet.core.board.ICoords;
 import org.avv.fjet.core.board.Point;
 import org.avv.fjet.core.board.SquareCoords;
 
 import org.avv.fjet.core.board.util.UtilCoordinates;
 import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import static org.junit.Assert.*;
 
 /**
@@ -110,6 +120,31 @@ public class CoordsUnitTest {
         Point p = UtilCoordinates.hexCoordsToPixel(hexCellEdge, result);
         HexCoords finalCoord = UtilCoordinates.hexCoordsFromPixel(p.getX(), p.getY(), hexCellEdge);
         assertEquals(result, finalCoord);
+    }
+
+    @Test
+    public void test_calcHexCoordsToOffsetCoords() throws Exception {
+        Object [] objs = BoardFactory.createBoard(BoardFactory.BoardType.HEX_CELLS, 3, 3).getCells().keySet().toArray();
+        List<HexCoords> coords = Arrays.asList(Arrays.copyOf(objs, objs.length, HexCoords[].class));
+        List<HexCoords> expectedCoords = Arrays.asList(
+                new HexCoords(0, 0), new HexCoords(1, 0), new HexCoords(2, 0),
+                new HexCoords(0, 1), new HexCoords(1, 1), new HexCoords(2, 1),
+                new HexCoords(-1, 2), new HexCoords(0, 2), new HexCoords(1, 2)
+        );
+        boolean allCoordsMatch = true;
+
+        if (coords.size() != expectedCoords.size()){
+            allCoordsMatch = false;
+
+        } else {
+
+            for (HexCoords c : coords) {
+                if (!expectedCoords.contains(c)){
+                    allCoordsMatch = false;
+                }
+            }
+        }
+        assertTrue(allCoordsMatch);
     }
 
     @Test

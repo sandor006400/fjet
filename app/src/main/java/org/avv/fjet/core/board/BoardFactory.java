@@ -50,7 +50,7 @@ public class BoardFactory {
             switch (t) {
 
                 case HEX_CELLS:
-                    Log.d(DEBUG_TAG, "createBoard, HEX_CELLS");
+                    //Log.d(DEBUG_TAG, "createBoard, HEX_CELLS");
                     for (int i = 0; i < height; i++){
                         for (int j = 0; j < width; j++){
                             ICoords coords = UtilCoordinates.offsetHexCoordsToAxialHexCoords(i, j);
@@ -62,7 +62,7 @@ public class BoardFactory {
                     break;
 
                 case SQUARE_CELLS:
-                    Log.d(DEBUG_TAG, "createBoard, SQUARE_CELLS");
+                    //Log.d(DEBUG_TAG, "createBoard, SQUARE_CELLS");
                     for (int i = 0; i < height; i++){
                         for (int j = 0; j < width; j++){
                             ICoords coords = new SquareCoords(i, j);

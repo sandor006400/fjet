@@ -130,7 +130,7 @@ public class UtilCoordinates {
      * @return
      */
     public static HexCoords offsetHexCoordsToAxialHexCoords(int x, int y){
-        int q = x - (y - (x % 2)) / 2;
+        int q = x - (y - (y & 1)) / 2;
         return new HexCoords(q, y); // r == y
     }
 
