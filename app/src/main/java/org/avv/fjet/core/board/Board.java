@@ -2,7 +2,9 @@ package org.avv.fjet.core.board;
 
 import org.avv.fjet.core.unit.Unit;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -20,6 +22,8 @@ public class Board {
     private Map<ICoords, Cell> cellsMap;
     private Map<ICoords, Unit> unitsMap;
 
+    private List<Cell> selectedCells;  // The selected cells
+
     // endregion - Fields
 
     // region - Constructors
@@ -27,6 +31,7 @@ public class Board {
     public Board(){
         this.cellsMap = new HashMap<>();
         this.unitsMap = new HashMap<>();
+        this.selectedCells = new ArrayList<>();
     }
 
     // endregion - Constructors
@@ -34,7 +39,12 @@ public class Board {
     // region - Getters and Setters
 
     public Cell getCellWithCoords(ICoords coords){
-        return this.cellsMap.get(coords);
+        for (Map.Entry<ICoords, Cell> entry : this.cellsMap.entrySet()){
+            if (entry.getKey().equals(coords)){
+                return entry.getValue();
+            }
+        }
+        return null;
     }
 
     public void setCellAndCoords(ICoords coords, Cell cell){
@@ -45,6 +55,10 @@ public class Board {
         return this.cellsMap;
     }
 
+    public List<Cell> getSelectedCells(){
+        return this.selectedCells;
+    }
+
     // endregion - Getters and Setters
 
     // region - Methods for/from SuperClass/Interfaces
@@ -52,6 +66,26 @@ public class Board {
     // endregion - Methods for/from SuperClass/Interfaces
 
     // region - Methods
+
+    public boolean anyCellIsSelected(){
+        return !this.selectedCells.isEmpty();
+    }
+
+    public void selectCells(ICoords [] coords){
+        Cell selectedCell;
+
+        for (ICoords c : coords){
+            selectedCell = getCellWithCoords(c);
+
+            if (selectedCell != null) {
+                this.selectedCells.add(selectedCell);
+            }
+        }
+    }
+
+    public void deselectCell(){
+        this.selectedCells.clear();
+    }
 
     // endregion - Methods
 

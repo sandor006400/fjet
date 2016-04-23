@@ -50,6 +50,11 @@ public class Point {
         return new android.graphics.Point(this.x, this.y);
     }
 
+    @Override
+    public String toString() {
+        return "Point(" + this.x + "," + this.y + ")";
+    }
+
     // endregion - Methods
 
     // region - Inner and Anonymous Classes

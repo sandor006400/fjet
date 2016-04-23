@@ -4,6 +4,8 @@ import android.util.Log;
 
 import org.avv.fjet.core.board.util.UtilCoordinates;
 
+import java.util.Map;
+
 /**
  * Created by Alexander Vladimirovich Vorobiev
  * At 17/04/2016

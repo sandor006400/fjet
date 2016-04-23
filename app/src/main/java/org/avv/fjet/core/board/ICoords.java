@@ -37,6 +37,8 @@ public interface ICoords {
      */
     ICoords[] getCoordsInRangeArray(int n);
 
+    ICoords getCopy();
+
     // endregion - Methods for/from SuperClass/Interfaces
 
     // region - Methods

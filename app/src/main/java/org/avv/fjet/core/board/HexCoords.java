@@ -101,6 +101,11 @@ public class HexCoords implements ICoords {
         return "HexCoords(" + this.q + "," + this.r + ")";
     }
 
+    @Override
+    public ICoords getCopy() {
+        return new HexCoords(this.q, this.r);
+    }
+
     // endregion - Methods
 
     // region - Inner and Anonymous Classes

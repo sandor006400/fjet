@@ -2,7 +2,6 @@ package org.avv.fjet.core.action;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.UUID;
 
 /**
@@ -53,9 +52,9 @@ public abstract class Action {
 
     // region - Methods for/from SuperClass/Interfaces
 
-    abstract protected ActionResult getExecutionResult();
+    abstract protected Object getExecutionResult();
 
-    abstract protected ActionUndoResult getExecutionUndoResult();
+    abstract protected Object getExecutionUndoResult();
 
     // endregion - Methods for/from SuperClass/Interfaces
 
@@ -66,18 +65,18 @@ public abstract class Action {
     }
 
     public void execute(){
-        final ActionResult result = getExecutionResult();
+        final Object result = getExecutionResult();
 
         for (ActionObserver observer : this.obsevers){
-            observer.sendActionResult(result);
+            observer.receiveActionResult(result);
         }
     }
 
     public void undo(){
-        final ActionUndoResult undoResult = getExecutionUndoResult();
+        final Object undoResult = getExecutionUndoResult();
 
         for (ActionObserver observer : this.obsevers){
-            observer.sendActionUndoResult(undoResult);
+            observer.receiveActionUndoResult(undoResult);
         }
     }
 
@@ -92,17 +91,9 @@ public abstract class Action {
 
     public interface ActionObserver {
 
-        void sendActionResult(ActionResult result);
+        void receiveActionResult(Object result);
 
-        void sendActionUndoResult(ActionUndoResult undoResult);
-
-    }
-
-    public interface ActionResult {
-
-    }
-
-    public interface ActionUndoResult {
+        void receiveActionUndoResult(Object undoResult);
 
     }
 

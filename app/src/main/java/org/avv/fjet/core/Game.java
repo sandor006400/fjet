@@ -2,6 +2,7 @@ package org.avv.fjet.core;
 
 import org.avv.fjet.core.action.Action;
 import org.avv.fjet.core.action.ActionExecutor;
+import org.avv.fjet.core.board.Board;
 
 /**
  * Created by Alexander Vladimirovich Vorobiev
@@ -16,14 +17,23 @@ public class Game {
     // region - Fields
 
     private final ActionExecutor executor = new ActionExecutor();
+    private Board board;
 
     // endregion - Fields
 
     // region - Constructors
 
+    public Game(Board board){
+        this.board = board;
+    }
+
     // endregion - Constructors
 
     // region - Getters and Setters
+
+    public Board getBoard(){
+        return this.board;
+    }
 
     // endregion - Getters and Setters
 

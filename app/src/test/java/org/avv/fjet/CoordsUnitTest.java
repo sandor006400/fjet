@@ -1,20 +1,15 @@
 package org.avv.fjet;
 
 import org.avv.fjet.core.board.BoardFactory;
-import org.avv.fjet.core.board.Cell;
 import org.avv.fjet.core.board.HexCoords;
-import org.avv.fjet.core.board.ICoords;
 import org.avv.fjet.core.board.Point;
 import org.avv.fjet.core.board.SquareCoords;
 
 import org.avv.fjet.core.board.util.UtilCoordinates;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import static org.junit.Assert.*;
 
@@ -25,6 +20,11 @@ import static org.junit.Assert.*;
 public class CoordsUnitTest {
 
     // region - SquareCoords tests
+
+    @Test
+    public void test_squareCoordsEquals() throws Exception {
+        assertEquals (new SquareCoords(3,3), new SquareCoords(3,3));
+    }
 
     @Test
     public void test_squareCoordsNeighbors() throws Exception {
@@ -67,6 +67,11 @@ public class CoordsUnitTest {
     // endregion - SquareCoords tests
 
     // region - HexCoords tests
+
+    @Test
+    public void test_hexCoordsEquals() throws Exception {
+        assertEquals (new HexCoords(3,3), new HexCoords(3,3));
+    }
 
     @Test
     public void test_hexCoordsNeighbors() throws Exception {

@@ -4,16 +4,25 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.os.Handler;
+import android.os.Message;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import org.avv.fjet.core.Game;
+import org.avv.fjet.core.action.Action;
+import org.avv.fjet.core.action.ActionFactory;
+import org.avv.fjet.core.action.SelectCellAction;
 import org.avv.fjet.core.board.Board;
 import org.avv.fjet.core.board.BoardFactory;
 import org.avv.fjet.core.board.HexCoords;
 import org.avv.fjet.core.board.Point;
 import org.avv.fjet.core.board.util.UtilCoordinates;
+
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * Created by Alexander Vladimirovich Vorobiev
@@ -39,8 +48,9 @@ public class FJetSurfaceView extends SurfaceView
 
         SurfaceHolder holder = getHolder();
         holder.addCallback(this);
-
-        this.thread = new SurfaceViewThread(holder, BoardFactory.createBoard(BoardFactory.BoardType.HEX_CELLS, 3, 3));
+        Board b = BoardFactory.createBoard(BoardFactory.BoardType.HEX_CELLS, 10, 10);
+        Game g = new Game(b);
+        this.thread = new SurfaceViewThread(holder, g);
     }
 
     // endregion - Constructors
@@ -50,6 +60,7 @@ public class FJetSurfaceView extends SurfaceView
     // endregion - Getters and Setters
 
     // region - Methods for/from SuperClass/Interfaces
+
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
 
@@ -85,6 +96,10 @@ public class FJetSurfaceView extends SurfaceView
 
     // region - Methods
 
+    public void processTouchEvent(Point p){
+        this.thread.handleTouchEvent(p);
+    }
+
     public void run(){
         this.thread.setRunning();
     }
@@ -100,25 +115,29 @@ public class FJetSurfaceView extends SurfaceView
     }
 
     private void initializeThread(){
-
-        Board b = BoardFactory.createBoard(BoardFactory.BoardType.HEX_CELLS, 3, 3);
-        this.thread = new SurfaceViewThread(getHolder(), b);
+        Board b = BoardFactory.createBoard(BoardFactory.BoardType.HEX_CELLS, 10, 10);
+        Game g = new Game(b);
+        this.thread = new SurfaceViewThread(getHolder(), g);
     }
 
     // endregion - Methods
 
     // region - Inner and Anonymous Classes
 
-    private class SurfaceViewThread extends Thread {
+    private class SurfaceViewThread extends Thread implements Action.ActionObserver {
 
-        private Board board;
+        int edgeSize = 20;
+        private Game game;
         private final SurfaceHolder holder;
         private boolean running;
-        private final long INTERVAL = 3000;//1000 / 60;
+        private final long INTERVAL = 1000 / 60;
+        private final BlockingQueue<Action> actions = new LinkedBlockingQueue<>();
 
-        public SurfaceViewThread(SurfaceHolder holder, Board board){
+        private HexCoords [] coords;
+
+        public SurfaceViewThread(SurfaceHolder holder, Game game){
             this.holder = holder;
-            this.board = board;
+            this.game = game;
         }
 
         @Override
@@ -137,6 +156,13 @@ public class FJetSurfaceView extends SurfaceView
 
                         while(System.currentTimeMillis() < timeToWait){
 
+                            // Executes all pending actions
+                            Action currentAction;
+
+                            while ((currentAction = this.actions.poll()) != null) {
+                                currentAction.execute();
+                            }
+
                             if (!done){
                                 Paint paint = new Paint();
                                 paint.setStrokeWidth(3);
@@ -145,9 +171,8 @@ public class FJetSurfaceView extends SurfaceView
                                 paint2.setStrokeWidth(1);
                                 paint2.setColor(Color.GREEN);
                                 paint2.setStyle(Paint.Style.STROKE);
-                                int edgeSize = 20;
 
-                                for (Object coords : board.getCells().keySet()){
+                                for (Object coords : game.getBoard().getCells().keySet()){
 
                                     if (((HexCoords)coords).getQ() % 3 == 0){
                                         paint2.setColor(Color.RED);
@@ -161,12 +186,25 @@ public class FJetSurfaceView extends SurfaceView
 
                                     if (coords instanceof HexCoords){
 
-                                        Log.d("---->", "coords: " + coords.toString());
                                         Point p = UtilCoordinates.hexCoordsToPixel(edgeSize, (HexCoords) coords);
 
-                                        Log.d("---->", "point: " + p.getX() + "," + p.getY());
                                         c.drawPoint(edgeSize + p.getX(), edgeSize + p.getY(), paint);
                                         c.drawCircle(edgeSize + p.getX(), edgeSize + p.getY(), edgeSize, paint2);
+                                    }
+
+                                }
+
+                                if (this.coords != null) {
+                                    for (HexCoords coordsSel : this.coords) {
+                                        Paint paintSel = new Paint();
+                                        paintSel.setAlpha(124);
+                                        paintSel.setColor(Color.LTGRAY);
+
+                                        Log.d("---->", "coords Sel: " + coords.toString());
+                                        Point p = UtilCoordinates.hexCoordsToPixel(edgeSize, coordsSel);
+
+                                        Log.d("---->", "point Sel: " + p.getX() + "," + p.getY());
+                                        c.drawCircle(edgeSize + p.getX(), edgeSize + p.getY(), edgeSize, paintSel);
                                     }
                                 }
 
@@ -184,6 +222,23 @@ public class FJetSurfaceView extends SurfaceView
             }
         }
 
+        @Override
+        public void receiveActionUndoResult(Object undoResult) {
+
+
+
+        }
+
+        @Override
+        public void receiveActionResult(Object result) {
+            if (result instanceof HexCoords){
+
+                synchronized (this) {
+                    this.coords = new HexCoords[]{(HexCoords) result};
+                }
+            }
+        }
+
         public void setRunning(){
             running = true;
         }
@@ -194,6 +249,20 @@ public class FJetSurfaceView extends SurfaceView
 
         private void redraw(Canvas c){
             c.drawColor(Color.WHITE);
+        }
+
+
+        public void handleTouchEvent(Point p) {
+            SelectCellAction a = (SelectCellAction) ActionFactory.createAction(ActionFactory.SELECT_CELL_ACTION);
+
+            if (a != null) {
+                Log.d("Screen coords -> ", p.toString());
+                a.setBoard(this.game.getBoard())
+                        .setCoords(UtilCoordinates.hexCoordsFromPixel(p.getX(), p.getY(), thread.edgeSize))
+                        .setObserver(this);
+                this.game.processAction(a);
+            }
+            this.actions.add(a);
         }
 
     }

@@ -2,13 +2,14 @@ package org.avv.fjet.core.action;
 
 import org.avv.fjet.core.board.Board;
 import org.avv.fjet.core.board.ICoords;
-import org.avv.fjet.core.unit.Unit;
+
+import java.util.Arrays;
 
 /**
  * Created by Alexander Vladimirovich Vorobiev
- * At 03/04/2016
+ * At 22/04/2016
  */
-public class MoveUnitAction extends Action {
+public class SelectCellAction extends Action {
 
     // region - Constants
 
@@ -16,17 +17,15 @@ public class MoveUnitAction extends Action {
 
     // region - Fields
 
-    private Unit unit;
-    private ICoords origin;
-    private ICoords destination;
+    private ICoords coords;
     private Board board;
 
     // endregion - Fields
 
     // region - Constructors
 
-    public MoveUnitAction() {
-        super(Type.EXECUTIVE);
+    public SelectCellAction() {
+        super(Type.INFORMATIVE);
 
     }
 
@@ -34,18 +33,12 @@ public class MoveUnitAction extends Action {
 
     // region - Getters and Setters
 
-    public MoveUnitAction setUnit(Unit unit){
-        this.unit = unit;
-        this.origin = unit.getCell().getCoords();
+    public SelectCellAction setCoords(ICoords coords){
+        this.coords = coords;
         return this;
     }
 
-    public MoveUnitAction setDestination(ICoords coords){
-        this.destination = coords;
-        return this;
-    }
-
-    public MoveUnitAction setBoard(Board board){
+    public SelectCellAction setBoard(Board board){
         this.board = board;
         return this;
     }
@@ -56,18 +49,21 @@ public class MoveUnitAction extends Action {
 
     @Override
     protected Object getExecutionResult() {
-        this.unit.getCell().removeUnit();
-        this.unit.setCell(this.board.getCellWithCoords(this.destination));
+        this.board.deselectCell();
+        this.board.selectCells(new ICoords[]{this.coords});
+
+        if (this.board.getSelectedCells() != null && this.board.getSelectedCells().size() == 1
+                && this.board.getSelectedCells().get(0).getCoords().equals(this.coords)){
+            return coords.getCopy();
+        }
         return null;
     }
 
     @Override
     protected Object getExecutionUndoResult() {
-        this.unit.getCell().removeUnit();
-        this.unit.setCell(this.board.getCellWithCoords(this.origin));
+        // This action is only informative, implementation not required
         return null;
     }
-
 
     // endregion - Methods for/from SuperClass/Interfaces
 
