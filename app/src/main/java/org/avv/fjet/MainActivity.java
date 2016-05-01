@@ -41,7 +41,10 @@ public class MainActivity extends Activity {
         //return super.dispatchTouchEvent(ev);
 
         if (ev.getAction() == MotionEvent.ACTION_DOWN) {
-            this.gameView.processTouchEvent(new Point((int) ev.getX(), (int) ev.getY()));
+            float x = ev.getX() - this.gameView.getLeft();
+            float y = ev.getY() - this.gameView.getTop();
+
+            this.gameView.processTouchEvent(new Point((int) x, (int) y));
         }
         return true;
     }

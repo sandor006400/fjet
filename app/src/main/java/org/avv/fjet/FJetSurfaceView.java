@@ -126,7 +126,7 @@ public class FJetSurfaceView extends SurfaceView
 
     private class SurfaceViewThread extends Thread implements Action.ActionObserver {
 
-        int edgeSize = 20;
+        int edgeSize = 40;
         private Game game;
         private final SurfaceHolder holder;
         private boolean running;
@@ -188,8 +188,8 @@ public class FJetSurfaceView extends SurfaceView
 
                                         Point p = UtilCoordinates.hexCoordsToPixel(edgeSize, (HexCoords) coords);
 
-                                        c.drawPoint(edgeSize + p.getX(), edgeSize + p.getY(), paint);
-                                        c.drawCircle(edgeSize + p.getX(), edgeSize + p.getY(), edgeSize, paint2);
+                                        c.drawPoint(/*edgeSize + */p.getX(), /*edgeSize + */p.getY(), paint);
+                                        c.drawCircle(/*edgeSize + */p.getX(), /*edgeSize +*/ p.getY(), edgeSize, paint2);
                                     }
 
                                 }
@@ -204,7 +204,7 @@ public class FJetSurfaceView extends SurfaceView
                                         Point p = UtilCoordinates.hexCoordsToPixel(edgeSize, coordsSel);
 
                                         Log.d("---->", "point Sel: " + p.getX() + "," + p.getY());
-                                        c.drawCircle(edgeSize + p.getX(), edgeSize + p.getY(), edgeSize, paintSel);
+                                        c.drawCircle(/*edgeSize + */p.getX(), /*edgeSize + */p.getY(), edgeSize, paintSel);
                                     }
                                 }
 
@@ -234,6 +234,7 @@ public class FJetSurfaceView extends SurfaceView
             if (result instanceof HexCoords){
 
                 synchronized (this) {
+                    Log.d("--->", "coordenada recibida: " + result.toString());
                     this.coords = new HexCoords[]{(HexCoords) result};
                 }
             }
@@ -257,8 +258,10 @@ public class FJetSurfaceView extends SurfaceView
 
             if (a != null) {
                 Log.d("Screen coords -> ", p.toString());
+                HexCoords hexCoords = UtilCoordinates.hexCoordsFromPixel(p.getX(), p.getY(), thread.edgeSize);
+                Log.d("Board coords -> ", hexCoords.toString());
                 a.setBoard(this.game.getBoard())
-                        .setCoords(UtilCoordinates.hexCoordsFromPixel(p.getX(), p.getY(), thread.edgeSize))
+                        .setCoords(hexCoords)
                         .setObserver(this);
                 this.game.processAction(a);
             }
