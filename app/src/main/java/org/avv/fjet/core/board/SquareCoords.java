@@ -97,6 +97,11 @@ public class SquareCoords implements ICoords {
         return new SquareCoords(this.x, this.y);
     }
 
+    @Override
+    public String toShortString() {
+        return "(" + this.x + "," + this.y + ")";
+    }
+
     // endregion - Methods for/from SuperClass/Interfaces
 
     // region - Methods

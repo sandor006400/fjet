@@ -28,7 +28,6 @@ public class CoordsUnitTest {
 
     @Test
     public void test_squareCoordsNeighbors() throws Exception {
-
         SquareCoords coords = new SquareCoords(3,4);
 
         // (3,4) neighbors are [(3,3), (2,4), (4,4), (3,5)]
@@ -38,6 +37,15 @@ public class CoordsUnitTest {
                 new SquareCoords(4,4),
                 new SquareCoords(3,5)};
         assertArrayEquals(neighbors, coords.getNeighborsArray());
+    }
+
+    @Test
+    public void test_calcSquareCoordsToPixelConversions() throws Exception {
+        SquareCoords coords = new SquareCoords(3,4);
+        float edgeSize = 20;
+        Point p = new Point(70, 90);
+        Point pResult = UtilCoordinates.squareCoordsToPixel(edgeSize, coords);
+        assertEquals(p, pResult);
     }
 
     @Test
@@ -119,11 +127,32 @@ public class CoordsUnitTest {
     // region - UtilCoordinates tests
 
     @Test
-    public void test_calcHexCoordsConversions() throws Exception {
+    public void test_calcHexCoordsToPixelConversions() throws Exception {
         HexCoords result = new HexCoords(3,4);
+        Point p = new Point(60, 80);
         int hexCellEdge = 20;
-        Point p = UtilCoordinates.hexCoordsToPixel(hexCellEdge, result);
-        HexCoords finalCoord = UtilCoordinates.hexCoordsFromPixel(p.getX(), p.getY(), hexCellEdge);
+        Point pResul = UtilCoordinates.hexCoordsToPixel(hexCellEdge, result);
+        assertEquals(p, pResul);
+    }
+
+    @Test
+    public void test_calcPixelToHexCoordsConversions_colAprox() throws Exception {
+        float hexCellEdge = 10;
+        HexCoords result = new HexCoords(0,0);
+        float x = UtilCoordinates.SQRT_OF_3 * hexCellEdge - 0.02f;  // 17.300507
+        float y = hexCellEdge;
+        HexCoords finalCoord = UtilCoordinates.hexCoordsFromPixel(x, y, hexCellEdge);
+        assertEquals(result, finalCoord);
+    }
+    @Test
+    public void test_calcPixelToHexCoordsConversions_rowAprox() throws Exception {
+        float hexCellEdge = 10;
+        HexCoords result = new HexCoords(0,0);
+        float x = (UtilCoordinates.SQRT_OF_3 * 2 / 3) * hexCellEdge;
+        float y = hexCellEdge;
+
+        System.out.println("x: " + x + " y: " + y);
+        HexCoords finalCoord = UtilCoordinates.hexCoordsFromPixel(x, y, hexCellEdge);
         assertEquals(result, finalCoord);
     }
 

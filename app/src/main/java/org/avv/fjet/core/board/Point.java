@@ -55,6 +55,13 @@ public class Point {
         return "Point(" + this.x + "," + this.y + ")";
     }
 
+    @Override
+    public boolean equals(Object o) {
+        return o instanceof Point
+                && ((Point)o).getX() == this.getX()
+                && ((Point)o).getY() == this.getY();
+    }
+
     // endregion - Methods
 
     // region - Inner and Anonymous Classes

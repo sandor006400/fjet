@@ -39,6 +39,8 @@ public interface ICoords {
 
     ICoords getCopy();
 
+    String toShortString();
+
     // endregion - Methods for/from SuperClass/Interfaces
 
     // region - Methods

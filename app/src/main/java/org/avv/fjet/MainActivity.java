@@ -26,6 +26,8 @@ public class MainActivity extends Activity {
         super.onResume();
 
         Log.d("FUUUU", "comienza lo bueno...");
+        Log.d("FUUUU", "10 / 3f = " + 10 / 3f);
+        Log.d("FUUUU", "10 - 3.3f = " + (10 - 3.3f));
         daleChicha();
     }
 
@@ -43,7 +45,6 @@ public class MainActivity extends Activity {
         if (ev.getAction() == MotionEvent.ACTION_DOWN) {
             float x = ev.getX() - this.gameView.getLeft();
             float y = ev.getY() - this.gameView.getTop();
-
             this.gameView.processTouchEvent(new Point((int) x, (int) y));
         }
         return true;

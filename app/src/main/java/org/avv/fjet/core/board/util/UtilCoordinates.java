@@ -80,9 +80,13 @@ public class UtilCoordinates {
      * @param edgeSize
      * @return
      */
-    public static HexCoords hexCoordsFromPixel(int xCoord, int yCoord, float edgeSize){
-        float q = (xCoord * SQRT_OF_3 / 3.0f - yCoord / 3.0f) / edgeSize;
-        float r = yCoord * 2.0f / 3.0f / edgeSize;
+    public static HexCoords hexCoordsFromPixel(float xCoord, float yCoord, float edgeSize){
+
+        // Translating coords to origin
+        xCoord -= edgeSize * SQRT_OF_3 / 2;
+        yCoord -= edgeSize;
+        float q = (xCoord * SQRT_OF_3 / 3f - yCoord / 3f) / edgeSize;
+        float r = (yCoord * (2f / 3f)) / edgeSize;
         return roundHexCoords(q, r);
     }
 
@@ -102,12 +106,20 @@ public class UtilCoordinates {
         float dY = Math.abs(ry - y);
         float dZ = Math.abs(rz - r);
 
-        if (dX > dZ && dX > dZ) {
+        System.out.println("roundHexCoords dX: " + dX + " dY: " + dY + " dZ: " + dZ);
+        System.out.println("roundHexCoords (before) rX: " + rx + " rY: " + ry + " rZ: " + rz);
+
+        if (dX > dZ && dX > dY) {
             rx = -ry - rz;
 
-        } else if (dZ > dY) {
+        } else if (dY > dZ) {
+            ry = -rx - rz;
+
+        } else {
             rz = -rx - ry;
         }
+
+        System.out.println("roundHexCoords (after) rX: " + rx + " rY: " + ry + " rZ: " + rz);
         return new HexCoords(rx, rz);
     }
 
@@ -118,8 +130,8 @@ public class UtilCoordinates {
      * @return
      */
     public static Point hexCoordsToPixel(float edgeSize, HexCoords coords){
-        int x = Math.round(edgeSize * SQRT_OF_3 * ((float)coords.getQ() + (float) coords.getR() / 2));
-        int y = Math.round(edgeSize * 3/2 * coords.getR());
+        int x = Math.round(edgeSize * SQRT_OF_3 * ((1f / 2f) + (float)coords.getQ() + (float)coords.getR() / 2));
+        int y = Math.round(edgeSize * (3f / 2f) * coords.getR() + edgeSize);
         return new Point(x,y);
     }
 
@@ -175,10 +187,40 @@ public class UtilCoordinates {
      * @param rows
      * @return
      */
-    public static SquareCoords calcSquareCoordsFromPixelCoords(int xCoord, int yCoord, int width, int height, int cols, int rows){
+    // TODO -> Tests pendientes
+    /*public static SquareCoords squareCoordsFromPixelCoords(int xCoord, int yCoord, int width, int height, int cols, int rows){
         int x = (cols / width) * xCoord;
         int y = (rows / height) * yCoord;
         return new SquareCoords(x, y);
+    }*/
+
+    /**
+     * Calculates Square coordinate using pixel (x,y) coordinate and cell's edgeSize.
+     * @param xCoord
+     * @param yCoord
+     * @param edgeSize
+     * @return
+     */
+    public static SquareCoords squareCoordsFromPixelCoords(int xCoord, int yCoord, float edgeSize){
+
+        int x =  (int)Math.floor((float)xCoord / edgeSize);
+        int y = (int)Math.floor((float)yCoord / edgeSize);
+
+
+        Log.d("sCoords", "pix: " + xCoord + "," + yCoord + " conv: " + x + "," + y);
+        return new SquareCoords(x, y);
+    }
+
+    /**
+     * Calculates the central point of the square cell in pixels.
+     * @param edgeSize
+     * @param coords
+     * @return
+     */
+    public static Point squareCoordsToPixel(float edgeSize, SquareCoords coords){
+        int x = Math.round(edgeSize * (float)coords.getX() + (edgeSize / 2f));
+        int y = Math.round(edgeSize * (float)coords.getY() + (edgeSize / 2f));
+        return new Point(x,y);
     }
 
     // endregion - Methods

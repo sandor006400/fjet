@@ -106,6 +106,11 @@ public class HexCoords implements ICoords {
         return new HexCoords(this.q, this.r);
     }
 
+    @Override
+    public String toShortString() {
+        return "(" + this.q + "," + this.r + ")";
+    }
+
     // endregion - Methods
 
     // region - Inner and Anonymous Classes
