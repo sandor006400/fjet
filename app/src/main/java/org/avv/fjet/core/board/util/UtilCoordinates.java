@@ -106,9 +106,6 @@ public class UtilCoordinates {
         float dY = Math.abs(ry - y);
         float dZ = Math.abs(rz - r);
 
-        System.out.println("roundHexCoords dX: " + dX + " dY: " + dY + " dZ: " + dZ);
-        System.out.println("roundHexCoords (before) rX: " + rx + " rY: " + ry + " rZ: " + rz);
-
         if (dX > dZ && dX > dY) {
             rx = -ry - rz;
 
@@ -118,8 +115,6 @@ public class UtilCoordinates {
         } else {
             rz = -rx - ry;
         }
-
-        System.out.println("roundHexCoords (after) rX: " + rx + " rY: " + ry + " rZ: " + rz);
         return new HexCoords(rx, rz);
     }
 
@@ -202,12 +197,8 @@ public class UtilCoordinates {
      * @return
      */
     public static SquareCoords squareCoordsFromPixelCoords(int xCoord, int yCoord, float edgeSize){
-
         int x =  (int)Math.floor((float)xCoord / edgeSize);
         int y = (int)Math.floor((float)yCoord / edgeSize);
-
-
-        Log.d("sCoords", "pix: " + xCoord + "," + yCoord + " conv: " + x + "," + y);
         return new SquareCoords(x, y);
     }
 

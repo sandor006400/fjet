@@ -16,4 +16,28 @@
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
 
+    <Button
+        android:id="@+id/button70"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:text="x0.7" />
+
+    <Button
+        android:id="@+id/button100"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@id/button70"
+        android:text="x1.0" />
+
+    <Button
+        android:id="@+id/button130"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@id/button100"
+        android:text="x1.3" />
+
 </RelativeLayout>

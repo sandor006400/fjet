@@ -50,16 +50,20 @@ public class FJetSurfaceView extends SurfaceView
     public FJetSurfaceView(Context context, AttributeSet attrs){
         super(context, attrs);
 
+
+    }
+
+    // endregion - Constructors
+
+    // region - Getters and Setters
+
+    public void init(){
         SurfaceHolder holder = getHolder();
         holder.addCallback(this);
         Board b = BoardFactory.createBoard(BoardFactory.BoardType.HEX_CELLS, 10, 10);
         Game g = new Game(b);
         this.thread = new SurfaceViewThread(holder, g);
     }
-
-    // endregion - Constructors
-
-    // region - Getters and Setters
 
     // endregion - Getters and Setters
 
@@ -69,10 +73,12 @@ public class FJetSurfaceView extends SurfaceView
     public void surfaceCreated(SurfaceHolder holder) {
 
         if (this.thread.getState() == Thread.State.NEW) {
+            Log.d("-->", "New thread!!!");
             thread.setRunning();
             thread.start();
 
         } else if (this.thread.getState() == Thread.State.TERMINATED){
+            Log.d("-->", "Recreating thread!!!");
             initializeThread();
             thread.setRunning();
             thread.start();
@@ -92,6 +98,7 @@ public class FJetSurfaceView extends SurfaceView
                 thread.join();
                 retry = false;
             } catch (InterruptedException e) {
+
             }
         }
     }
@@ -101,24 +108,37 @@ public class FJetSurfaceView extends SurfaceView
     // region - Methods
 
     public void processTouchEvent(Point p){
-        this.thread.handleTouchEvent(p);
+        if (this.thread != null) {
+            this.thread.handleTouchEvent(p);
+        }
+    }
+
+    public void processAction(Action a){
+        if (this.thread != null) {
+            Log.d("--->", "Action received in View");
+            this.thread.processAction(a);
+        }
     }
 
     public void run(){
-        this.thread.setRunning();
+        if (this.thread != null) {
+            this.thread.setRunning();
+        }
     }
 
     public void stop(){
 
-        this.thread.setStop();
-        try {
-            this.thread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        if (this.thread != null) {
+            this.thread.setStop();
+            try {
+                this.thread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 
-    private void initializeThread(){
+    public void initializeThread(){
         Board b = BoardFactory.createBoard(BoardFactory.BoardType.HEX_CELLS, 10, 10);
         Game g = new Game(b);
         this.thread = new SurfaceViewThread(getHolder(), g);
@@ -130,6 +150,9 @@ public class FJetSurfaceView extends SurfaceView
 
     private class SurfaceViewThread extends Thread implements Action.ActionObserver {
 
+
+        static final float DEFAULT_SCALE = 1.0f;
+        float scale = DEFAULT_SCALE;
         int edgeSize = 30;
         private Game game;
         private final SurfaceHolder holder;
@@ -169,6 +192,8 @@ public class FJetSurfaceView extends SurfaceView
                                 currentAction.execute();
                             }
 
+                            float currentEdgeSize = getSizedEdge();
+
                             if (!done){
                                 Paint paint = new Paint();
                                 paint.setStrokeWidth(3);
@@ -192,47 +217,47 @@ public class FJetSurfaceView extends SurfaceView
 
                                     if (coords instanceof HexCoords){
 
-                                        Point p = UtilCoordinates.hexCoordsToPixel(edgeSize, (HexCoords) coords);
+                                        Point p = UtilCoordinates.hexCoordsToPixel(currentEdgeSize, (HexCoords) coords);
 
-                                        Log.d("---->", "point Sel: " + p.getX() + "," + p.getY());
+                                        //Log.d("---->", "point Sel: " + p.getX() + "," + p.getY());
                                         //c.drawPoint(/*edgeSize + */p.getX(), /*edgeSize + */p.getY(), paint);
                                         //c.drawCircle(/*edgeSize + */p.getX(), /*edgeSize +*/ p.getY(), edgeSize, paint2);
 
-                                        c.drawLine(p.getX(), p.getY() - edgeSize,
-                                                p.getX() + (UtilCoordinates.SQRT_OF_3 * edgeSize / 2), p.getY() - (edgeSize * 0.5f), paint);
-                                        c.drawLine(p.getX() + (UtilCoordinates.SQRT_OF_3 * edgeSize / 2), p.getY() - (edgeSize * 0.5f),
-                                                p.getX() + (UtilCoordinates.SQRT_OF_3 * edgeSize / 2), p.getY() + (edgeSize * 0.5f), paint);
-                                        c.drawLine(p.getX() + (UtilCoordinates.SQRT_OF_3 * edgeSize / 2), p.getY() + (edgeSize * 0.5f),
-                                                p.getX(), p.getY() + edgeSize, paint);
-                                        c.drawLine(p.getX(), p.getY() + edgeSize,
-                                                p.getX() - (UtilCoordinates.SQRT_OF_3 * edgeSize / 2), p.getY() + (edgeSize * 0.5f), paint);
-                                        c.drawLine(p.getX() - (UtilCoordinates.SQRT_OF_3 * edgeSize / 2), p.getY() + (edgeSize * 0.5f),
-                                                p.getX() - (UtilCoordinates.SQRT_OF_3 * edgeSize / 2), p.getY() - (edgeSize * 0.5f), paint);
-                                        c.drawLine(p.getX() - (UtilCoordinates.SQRT_OF_3 * edgeSize / 2), p.getY() - (edgeSize * 0.5f),
-                                                p.getX(), p.getY() - edgeSize, paint);
+                                        c.drawLine(p.getX(), p.getY() - currentEdgeSize,
+                                                p.getX() + (UtilCoordinates.SQRT_OF_3 * currentEdgeSize / 2), p.getY() - (currentEdgeSize * 0.5f), paint);
+                                        c.drawLine(p.getX() + (UtilCoordinates.SQRT_OF_3 * currentEdgeSize / 2), p.getY() - (currentEdgeSize * 0.5f),
+                                                p.getX() + (UtilCoordinates.SQRT_OF_3 * currentEdgeSize / 2), p.getY() + (currentEdgeSize * 0.5f), paint);
+                                        c.drawLine(p.getX() + (UtilCoordinates.SQRT_OF_3 * currentEdgeSize / 2), p.getY() + (currentEdgeSize * 0.5f),
+                                                p.getX(), p.getY() + currentEdgeSize, paint);
+                                        c.drawLine(p.getX(), p.getY() + currentEdgeSize,
+                                                p.getX() - (UtilCoordinates.SQRT_OF_3 * currentEdgeSize / 2), p.getY() + (currentEdgeSize * 0.5f), paint);
+                                        c.drawLine(p.getX() - (UtilCoordinates.SQRT_OF_3 * currentEdgeSize / 2), p.getY() + (currentEdgeSize * 0.5f),
+                                                p.getX() - (UtilCoordinates.SQRT_OF_3 * currentEdgeSize / 2), p.getY() - (currentEdgeSize * 0.5f), paint);
+                                        c.drawLine(p.getX() - (UtilCoordinates.SQRT_OF_3 * currentEdgeSize / 2), p.getY() - (currentEdgeSize * 0.5f),
+                                                p.getX(), p.getY() - currentEdgeSize, paint);
 
 
                                         paint.setTextSize(12);
                                         paint.setColor(Color.BLACK);
 
-                                        c.drawText(((ICoords)coords).toShortString(), p.getX() - edgeSize / 2, p.getY(), paint);
+                                        c.drawText(((ICoords)coords).toShortString(), p.getX() - currentEdgeSize / 2, p.getY(), paint);
 
                                     } else if (coords instanceof SquareCoords){
 
-                                        Point p = UtilCoordinates.squareCoordsToPixel(edgeSize, (SquareCoords) coords);
+                                        Point p = UtilCoordinates.squareCoordsToPixel(currentEdgeSize, (SquareCoords) coords);
 
                                         //c.drawPoint(/*edgeSize + */p.getX(), /*edgeSize + */p.getY(), paint);
-                                        Log.d("---->", "point Sel: " + p.getX() + "," + p.getY());
-                                        float x1 = p.getX() - edgeSize / 2;
-                                        float y1 = p.getY() - edgeSize / 2;
-                                        float x2 = p.getX() + edgeSize / 2;
-                                        float y2 = p.getY() + edgeSize / 2;
+                                        //Log.d("---->", "point Sel: " + p.getX() + "," + p.getY());
+                                        float x1 = p.getX() - currentEdgeSize / 2;
+                                        float y1 = p.getY() - currentEdgeSize / 2;
+                                        float x2 = p.getX() + currentEdgeSize / 2;
+                                        float y2 = p.getY() + currentEdgeSize / 2;
                                         c.drawRect(x1, y1, x2, y2, paint2);
 
                                         paint.setTextSize(12);
                                         paint.setColor(Color.BLACK);
 
-                                        c.drawText(((ICoords)coords).toShortString(), p.getX() - edgeSize / 2, p.getY(), paint);
+                                        c.drawText(((ICoords)coords).toShortString(), p.getX() - currentEdgeSize / 2, p.getY(), paint);
                                     }
 
 
@@ -243,37 +268,38 @@ public class FJetSurfaceView extends SurfaceView
                                         Paint paintSel = new Paint();
                                         paintSel.setAlpha(50);
                                         paintSel.setColor(Color.BLUE);
+                                        paintSel.setStyle(Paint.Style.STROKE);
                                         paintSel.setStrokeWidth(7);
 
                                         //Log.d("---->", "coords Sel: " + coords.toString());
                                         Point p = new Point(0,0);
 
                                         if (coordsSel instanceof HexCoords) {
-                                            p = UtilCoordinates.hexCoordsToPixel(edgeSize, (HexCoords) coordsSel);
+                                            p = UtilCoordinates.hexCoordsToPixel(currentEdgeSize, (HexCoords) coordsSel);
 
                                             //Log.d("---->", "point Sel: " + p.getX() + "," + p.getY());
                                             //c.drawCircle(/*edgeSize + */p.getX(), /*edgeSize + */p.getY(), edgeSize, paintSel);
-                                            c.drawLine(p.getX(), p.getY() - edgeSize,
-                                                    p.getX() + (UtilCoordinates.SQRT_OF_3 * edgeSize / 2), p.getY() - (edgeSize * 0.5f), paintSel);
-                                            c.drawLine(p.getX() + (UtilCoordinates.SQRT_OF_3 * edgeSize / 2), p.getY() - (edgeSize * 0.5f),
-                                                    p.getX() + (UtilCoordinates.SQRT_OF_3 * edgeSize / 2), p.getY() + (edgeSize * 0.5f), paintSel);
-                                            c.drawLine(p.getX() + (UtilCoordinates.SQRT_OF_3 * edgeSize / 2), p.getY() + (edgeSize * 0.5f),
-                                                    p.getX(), p.getY() + edgeSize, paintSel);
-                                            c.drawLine(p.getX(), p.getY() + edgeSize,
-                                                    p.getX() - (UtilCoordinates.SQRT_OF_3 * edgeSize / 2), p.getY() + (edgeSize * 0.5f), paintSel);
-                                            c.drawLine(p.getX() - (UtilCoordinates.SQRT_OF_3 * edgeSize / 2), p.getY() + (edgeSize * 0.5f),
-                                                    p.getX() - (UtilCoordinates.SQRT_OF_3 * edgeSize / 2), p.getY() - (edgeSize * 0.5f), paintSel);
-                                            c.drawLine(p.getX() - (UtilCoordinates.SQRT_OF_3 * edgeSize / 2), p.getY() - (edgeSize * 0.5f),
-                                                    p.getX(), p.getY() - edgeSize, paintSel);
+                                            c.drawLine(p.getX(), p.getY() - currentEdgeSize,
+                                                    p.getX() + (UtilCoordinates.SQRT_OF_3 * currentEdgeSize / 2), p.getY() - (currentEdgeSize * 0.5f), paintSel);
+                                            c.drawLine(p.getX() + (UtilCoordinates.SQRT_OF_3 * currentEdgeSize / 2), p.getY() - (currentEdgeSize * 0.5f),
+                                                    p.getX() + (UtilCoordinates.SQRT_OF_3 * currentEdgeSize / 2), p.getY() + (currentEdgeSize * 0.5f), paintSel);
+                                            c.drawLine(p.getX() + (UtilCoordinates.SQRT_OF_3 * currentEdgeSize / 2), p.getY() + (currentEdgeSize * 0.5f),
+                                                    p.getX(), p.getY() + currentEdgeSize, paintSel);
+                                            c.drawLine(p.getX(), p.getY() + currentEdgeSize,
+                                                    p.getX() - (UtilCoordinates.SQRT_OF_3 * currentEdgeSize / 2), p.getY() + (currentEdgeSize * 0.5f), paintSel);
+                                            c.drawLine(p.getX() - (UtilCoordinates.SQRT_OF_3 * currentEdgeSize / 2), p.getY() + (currentEdgeSize * 0.5f),
+                                                    p.getX() - (UtilCoordinates.SQRT_OF_3 * currentEdgeSize / 2), p.getY() - (currentEdgeSize * 0.5f), paintSel);
+                                            c.drawLine(p.getX() - (UtilCoordinates.SQRT_OF_3 * currentEdgeSize / 2), p.getY() - (currentEdgeSize * 0.5f),
+                                                    p.getX(), p.getY() - currentEdgeSize, paintSel);
 
                                         } else if (coordsSel instanceof SquareCoords) {
-                                            p = UtilCoordinates.squareCoordsToPixel(edgeSize, (SquareCoords) coordsSel);
+                                            p = UtilCoordinates.squareCoordsToPixel(currentEdgeSize, (SquareCoords) coordsSel);
 
                                             //Log.d("---->", "point Sel: " + p.getX() + "," + p.getY());
-                                            float x1 = p.getX() - edgeSize / 2;
-                                            float y1 = p.getY() - edgeSize / 2;
-                                            float x2 = p.getX() + edgeSize / 2;
-                                            float y2 = p.getY() + edgeSize / 2;
+                                            float x1 = p.getX() - currentEdgeSize / 2;
+                                            float y1 = p.getY() - currentEdgeSize / 2;
+                                            float x2 = p.getX() + currentEdgeSize / 2;
+                                            float y2 = p.getY() + currentEdgeSize / 2;
                                             c.drawRect(x1, y1, x2, y2, paintSel);
                                         }
 
@@ -284,10 +310,10 @@ public class FJetSurfaceView extends SurfaceView
                                         paintTexto.setColor(Color.BLACK);
                                         paintTexto.setStyle(Paint.Style.FILL);
                                         paintTexto.getTextBounds(coordsString, 0, coordsString.length(), bounds);
-                                        bounds.offset(p.getX() - edgeSize / 2, p.getY());
+                                        bounds.offset((int)(p.getX() - currentEdgeSize / 2), p.getY());
                                         c.drawRect(bounds, paintTexto);
                                         paintTexto.setColor(Color.WHITE);
-                                        c.drawText(coordsString, p.getX() - edgeSize / 2, p.getY(), paintTexto);
+                                        c.drawText(coordsString, p.getX() - currentEdgeSize / 2, p.getY(), paintTexto);
                                     }
                                 }
 
@@ -322,17 +348,22 @@ public class FJetSurfaceView extends SurfaceView
 
         @Override
         public void receiveActionResult(Object result) {
-            if (result instanceof HexCoords){
 
+            if (result != null) {
                 synchronized (this) {
-                    Log.d("--->", "coordenada recibida: " + result.toString());
-                    this.coords = new HexCoords[]{(HexCoords) result};
-                }
-            } else if (result instanceof SquareCoords){
 
-                synchronized (this) {
-                    Log.d("--->", "coordenada recibida: " + result.toString());
-                    this.coords = new SquareCoords[]{(SquareCoords) result};
+                    if (result instanceof HexCoords) {
+                        //Log.d("--->", "coordenada recibida: " + result.toString());
+                        this.coords = new HexCoords[]{(HexCoords) result};
+
+                    }else if (result instanceof SquareCoords) {
+                        //Log.d("--->", "coordenada recibida: " + result.toString());
+                        this.coords = new SquareCoords[]{(SquareCoords) result};
+
+                    } else if (result.getClass() == Float.class) {
+                        Log.d("--->", "Clase resut: " + result.getClass().getSimpleName());
+                        this.scale = (float)result;
+                    }
                 }
             }
         }
@@ -349,22 +380,41 @@ public class FJetSurfaceView extends SurfaceView
             c.drawColor(Color.WHITE);
         }
 
+        private float getSizedEdge(){
+            return this.edgeSize * this.scale;
+        }
 
         public void handleTouchEvent(Point p) {
             SelectCellAction a = (SelectCellAction) ActionFactory.createAction(ActionFactory.SELECT_CELL_ACTION);
 
             if (a != null) {
                 this.p = p;
-                Log.d("Screen coords -> ", p.toString());
-                HexCoords hexCoords = UtilCoordinates.hexCoordsFromPixel(p.getX(), p.getY(), thread.edgeSize);
+                //Log.d("Screen coords -> ", p.toString());
+                HexCoords hexCoords = UtilCoordinates.hexCoordsFromPixel(
+                        p.getX(),
+                        p.getY(),
+                        thread.edgeSize * this.scale);
                 //SquareCoords hexCoords = UtilCoordinates.squareCoordsFromPixelCoords(p.getX(), p.getY(), thread.edgeSize);
-                Log.d("Board coords -> ", hexCoords.toString());
+                //Log.d("Board coords -> ", hexCoords.toString());
                 a.setBoard(this.game.getBoard())
                         .setCoords(hexCoords)
                         .setObserver(this);
+
+
+                /// !!!!!!!!!!!!!!!!!!!!!!!!!
+                // CUALQUIERA DE LAS DOS LLAMADAS VALDRIA !!!
                 this.game.processAction(a);
             }
             this.actions.add(a);
+        }
+
+        public void processAction(Action a){
+            if (a != null){
+
+                a.setObserver(this);
+                this.game.processAction(a);
+                //this.actions.add(a);
+            }
         }
 
     }
