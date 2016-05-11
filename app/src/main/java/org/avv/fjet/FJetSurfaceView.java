@@ -19,12 +19,14 @@ import org.avv.fjet.core.action.ActionFactory;
 import org.avv.fjet.core.action.SelectCellAction;
 import org.avv.fjet.core.board.Board;
 import org.avv.fjet.core.board.BoardFactory;
+import org.avv.fjet.core.board.Cell;
 import org.avv.fjet.core.board.HexCoords;
 import org.avv.fjet.core.board.ICoords;
 import org.avv.fjet.core.board.Point;
 import org.avv.fjet.core.board.SquareCoords;
 import org.avv.fjet.core.board.util.UtilCoordinates;
 
+import java.util.HashMap;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -41,6 +43,7 @@ public class FJetSurfaceView extends SurfaceView
 
     // region - Fields
 
+    private BoardFactory.BoardType type = BoardFactory.BoardType.HEX_CELLS;
     private SurfaceViewThread thread;
 
     // endregion - Fields
@@ -60,7 +63,7 @@ public class FJetSurfaceView extends SurfaceView
     public void init(){
         SurfaceHolder holder = getHolder();
         holder.addCallback(this);
-        Board b = BoardFactory.createBoard(BoardFactory.BoardType.HEX_CELLS, 10, 10);
+        Board b = BoardFactory.createBoard(this.type, 10, 10);
         Game g = new Game(b);
         this.thread = new SurfaceViewThread(holder, g);
     }
@@ -120,6 +123,11 @@ public class FJetSurfaceView extends SurfaceView
         }
     }
 
+    public void setCellType(BoardFactory.BoardType type){
+        this.type = type;
+        this.thread.setBoardType(type);
+    }
+
     public void run(){
         if (this.thread != null) {
             this.thread.setRunning();
@@ -139,7 +147,7 @@ public class FJetSurfaceView extends SurfaceView
     }
 
     public void initializeThread(){
-        Board b = BoardFactory.createBoard(BoardFactory.BoardType.HEX_CELLS, 10, 10);
+        Board b = BoardFactory.createBoard(this.type, 10, 10);
         Game g = new Game(b);
         this.thread = new SurfaceViewThread(getHolder(), g);
     }
@@ -179,31 +187,33 @@ public class FJetSurfaceView extends SurfaceView
                     c = holder.lockCanvas(null);
 
                     synchronized (holder) {
-                        redraw(c);
-                        long timeToWait = System.currentTimeMillis() + INTERVAL;
-                        boolean done = false;
 
-                        while(System.currentTimeMillis() < timeToWait){
+                        if (c != null) {
+                            redraw(c);
+                            long timeToWait = System.currentTimeMillis() + INTERVAL;
+                            boolean done = false;
 
-                            // Executes all pending actions
-                            Action currentAction;
+                            while (System.currentTimeMillis() < timeToWait) {
 
-                            while ((currentAction = this.actions.poll()) != null) {
-                                currentAction.execute();
-                            }
+                                // Executes all pending actions
+                                Action currentAction;
 
-                            float currentEdgeSize = getSizedEdge();
+                                while ((currentAction = this.actions.poll()) != null) {
+                                    currentAction.execute();
+                                }
 
-                            if (!done){
-                                Paint paint = new Paint();
-                                paint.setStrokeWidth(3);
-                                paint.setColor(Color.BLACK);
-                                Paint paint2 = new Paint();
-                                paint2.setStrokeWidth(1);
-                                paint2.setColor(Color.GREEN);
-                                paint2.setStyle(Paint.Style.STROKE);
+                                float currentEdgeSize = getSizedEdge();
 
-                                for (Object coords : game.getBoard().getCells().keySet()){
+                                if (!done) {
+                                    Paint paint = new Paint();
+                                    paint.setStrokeWidth(3);
+                                    paint.setColor(Color.BLACK);
+                                    Paint paint2 = new Paint();
+                                    paint2.setStrokeWidth(1);
+                                    paint2.setColor(Color.GREEN);
+                                    paint2.setStyle(Paint.Style.STROKE);
+
+                                    for (Object coords : game.getBoard().getCells().keySet()) {
 
                                     /*if (((SquareCoords)coords).getX() % 3 == 0){
                                         paint2.setColor(Color.RED);
@@ -215,117 +225,117 @@ public class FJetSurfaceView extends SurfaceView
                                         paint2.setColor(Color.BLUE);
                                     }*/
 
-                                    if (coords instanceof HexCoords){
+                                        if (coords instanceof HexCoords) {
 
-                                        Point p = UtilCoordinates.hexCoordsToPixel(currentEdgeSize, (HexCoords) coords);
-
-                                        //Log.d("---->", "point Sel: " + p.getX() + "," + p.getY());
-                                        //c.drawPoint(/*edgeSize + */p.getX(), /*edgeSize + */p.getY(), paint);
-                                        //c.drawCircle(/*edgeSize + */p.getX(), /*edgeSize +*/ p.getY(), edgeSize, paint2);
-
-                                        c.drawLine(p.getX(), p.getY() - currentEdgeSize,
-                                                p.getX() + (UtilCoordinates.SQRT_OF_3 * currentEdgeSize / 2), p.getY() - (currentEdgeSize * 0.5f), paint);
-                                        c.drawLine(p.getX() + (UtilCoordinates.SQRT_OF_3 * currentEdgeSize / 2), p.getY() - (currentEdgeSize * 0.5f),
-                                                p.getX() + (UtilCoordinates.SQRT_OF_3 * currentEdgeSize / 2), p.getY() + (currentEdgeSize * 0.5f), paint);
-                                        c.drawLine(p.getX() + (UtilCoordinates.SQRT_OF_3 * currentEdgeSize / 2), p.getY() + (currentEdgeSize * 0.5f),
-                                                p.getX(), p.getY() + currentEdgeSize, paint);
-                                        c.drawLine(p.getX(), p.getY() + currentEdgeSize,
-                                                p.getX() - (UtilCoordinates.SQRT_OF_3 * currentEdgeSize / 2), p.getY() + (currentEdgeSize * 0.5f), paint);
-                                        c.drawLine(p.getX() - (UtilCoordinates.SQRT_OF_3 * currentEdgeSize / 2), p.getY() + (currentEdgeSize * 0.5f),
-                                                p.getX() - (UtilCoordinates.SQRT_OF_3 * currentEdgeSize / 2), p.getY() - (currentEdgeSize * 0.5f), paint);
-                                        c.drawLine(p.getX() - (UtilCoordinates.SQRT_OF_3 * currentEdgeSize / 2), p.getY() - (currentEdgeSize * 0.5f),
-                                                p.getX(), p.getY() - currentEdgeSize, paint);
-
-
-                                        paint.setTextSize(12);
-                                        paint.setColor(Color.BLACK);
-
-                                        c.drawText(((ICoords)coords).toShortString(), p.getX() - currentEdgeSize / 2, p.getY(), paint);
-
-                                    } else if (coords instanceof SquareCoords){
-
-                                        Point p = UtilCoordinates.squareCoordsToPixel(currentEdgeSize, (SquareCoords) coords);
-
-                                        //c.drawPoint(/*edgeSize + */p.getX(), /*edgeSize + */p.getY(), paint);
-                                        //Log.d("---->", "point Sel: " + p.getX() + "," + p.getY());
-                                        float x1 = p.getX() - currentEdgeSize / 2;
-                                        float y1 = p.getY() - currentEdgeSize / 2;
-                                        float x2 = p.getX() + currentEdgeSize / 2;
-                                        float y2 = p.getY() + currentEdgeSize / 2;
-                                        c.drawRect(x1, y1, x2, y2, paint2);
-
-                                        paint.setTextSize(12);
-                                        paint.setColor(Color.BLACK);
-
-                                        c.drawText(((ICoords)coords).toShortString(), p.getX() - currentEdgeSize / 2, p.getY(), paint);
-                                    }
-
-
-                                }
-
-                                if (this.coords != null) {
-                                    for (ICoords coordsSel : this.coords) {
-                                        Paint paintSel = new Paint();
-                                        paintSel.setAlpha(50);
-                                        paintSel.setColor(Color.BLUE);
-                                        paintSel.setStyle(Paint.Style.STROKE);
-                                        paintSel.setStrokeWidth(7);
-
-                                        //Log.d("---->", "coords Sel: " + coords.toString());
-                                        Point p = new Point(0,0);
-
-                                        if (coordsSel instanceof HexCoords) {
-                                            p = UtilCoordinates.hexCoordsToPixel(currentEdgeSize, (HexCoords) coordsSel);
+                                            Point p = UtilCoordinates.hexCoordsToPixel(currentEdgeSize, (HexCoords) coords);
 
                                             //Log.d("---->", "point Sel: " + p.getX() + "," + p.getY());
-                                            //c.drawCircle(/*edgeSize + */p.getX(), /*edgeSize + */p.getY(), edgeSize, paintSel);
+                                            //c.drawPoint(/*edgeSize + */p.getX(), /*edgeSize + */p.getY(), paint);
+                                            //c.drawCircle(/*edgeSize + */p.getX(), /*edgeSize +*/ p.getY(), edgeSize, paint2);
+
                                             c.drawLine(p.getX(), p.getY() - currentEdgeSize,
-                                                    p.getX() + (UtilCoordinates.SQRT_OF_3 * currentEdgeSize / 2), p.getY() - (currentEdgeSize * 0.5f), paintSel);
+                                                    p.getX() + (UtilCoordinates.SQRT_OF_3 * currentEdgeSize / 2), p.getY() - (currentEdgeSize * 0.5f), paint);
                                             c.drawLine(p.getX() + (UtilCoordinates.SQRT_OF_3 * currentEdgeSize / 2), p.getY() - (currentEdgeSize * 0.5f),
-                                                    p.getX() + (UtilCoordinates.SQRT_OF_3 * currentEdgeSize / 2), p.getY() + (currentEdgeSize * 0.5f), paintSel);
+                                                    p.getX() + (UtilCoordinates.SQRT_OF_3 * currentEdgeSize / 2), p.getY() + (currentEdgeSize * 0.5f), paint);
                                             c.drawLine(p.getX() + (UtilCoordinates.SQRT_OF_3 * currentEdgeSize / 2), p.getY() + (currentEdgeSize * 0.5f),
-                                                    p.getX(), p.getY() + currentEdgeSize, paintSel);
+                                                    p.getX(), p.getY() + currentEdgeSize, paint);
                                             c.drawLine(p.getX(), p.getY() + currentEdgeSize,
-                                                    p.getX() - (UtilCoordinates.SQRT_OF_3 * currentEdgeSize / 2), p.getY() + (currentEdgeSize * 0.5f), paintSel);
+                                                    p.getX() - (UtilCoordinates.SQRT_OF_3 * currentEdgeSize / 2), p.getY() + (currentEdgeSize * 0.5f), paint);
                                             c.drawLine(p.getX() - (UtilCoordinates.SQRT_OF_3 * currentEdgeSize / 2), p.getY() + (currentEdgeSize * 0.5f),
-                                                    p.getX() - (UtilCoordinates.SQRT_OF_3 * currentEdgeSize / 2), p.getY() - (currentEdgeSize * 0.5f), paintSel);
+                                                    p.getX() - (UtilCoordinates.SQRT_OF_3 * currentEdgeSize / 2), p.getY() - (currentEdgeSize * 0.5f), paint);
                                             c.drawLine(p.getX() - (UtilCoordinates.SQRT_OF_3 * currentEdgeSize / 2), p.getY() - (currentEdgeSize * 0.5f),
-                                                    p.getX(), p.getY() - currentEdgeSize, paintSel);
+                                                    p.getX(), p.getY() - currentEdgeSize, paint);
 
-                                        } else if (coordsSel instanceof SquareCoords) {
-                                            p = UtilCoordinates.squareCoordsToPixel(currentEdgeSize, (SquareCoords) coordsSel);
 
+                                            paint.setTextSize(12);
+                                            paint.setColor(Color.BLACK);
+
+                                            c.drawText(((ICoords) coords).toShortString(), p.getX() - currentEdgeSize / 2, p.getY(), paint);
+
+                                        } else if (coords instanceof SquareCoords) {
+
+                                            Point p = UtilCoordinates.squareCoordsToPixel(currentEdgeSize, (SquareCoords) coords);
+
+                                            //c.drawPoint(/*edgeSize + */p.getX(), /*edgeSize + */p.getY(), paint);
                                             //Log.d("---->", "point Sel: " + p.getX() + "," + p.getY());
                                             float x1 = p.getX() - currentEdgeSize / 2;
                                             float y1 = p.getY() - currentEdgeSize / 2;
                                             float x2 = p.getX() + currentEdgeSize / 2;
                                             float y2 = p.getY() + currentEdgeSize / 2;
-                                            c.drawRect(x1, y1, x2, y2, paintSel);
+                                            c.drawRect(x1, y1, x2, y2, paint2);
+
+                                            paint.setTextSize(12);
+                                            paint.setColor(Color.BLACK);
+
+                                            c.drawText(((ICoords) coords).toShortString(), p.getX() - currentEdgeSize / 2, p.getY(), paint);
                                         }
 
-                                        Paint paintTexto = new Paint();
-                                        String coordsString = ((ICoords)coordsSel).toShortString();
-                                        Rect bounds = new Rect();
-                                        paintTexto.setTextSize(20);
-                                        paintTexto.setColor(Color.BLACK);
-                                        paintTexto.setStyle(Paint.Style.FILL);
-                                        paintTexto.getTextBounds(coordsString, 0, coordsString.length(), bounds);
-                                        bounds.offset((int)(p.getX() - currentEdgeSize / 2), p.getY());
-                                        c.drawRect(bounds, paintTexto);
-                                        paintTexto.setColor(Color.WHITE);
-                                        c.drawText(coordsString, p.getX() - currentEdgeSize / 2, p.getY(), paintTexto);
+
                                     }
+
+                                    if (this.coords != null) {
+                                        for (ICoords coordsSel : this.coords) {
+                                            Paint paintSel = new Paint();
+                                            paintSel.setAlpha(50);
+                                            paintSel.setColor(Color.BLUE);
+                                            paintSel.setStyle(Paint.Style.STROKE);
+                                            paintSel.setStrokeWidth(7);
+
+                                            //Log.d("---->", "coords Sel: " + coords.toString());
+                                            Point p = new Point(0, 0);
+
+                                            if (coordsSel instanceof HexCoords) {
+                                                p = UtilCoordinates.hexCoordsToPixel(currentEdgeSize, (HexCoords) coordsSel);
+
+                                                //Log.d("---->", "point Sel: " + p.getX() + "," + p.getY());
+                                                //c.drawCircle(/*edgeSize + */p.getX(), /*edgeSize + */p.getY(), edgeSize, paintSel);
+                                                c.drawLine(p.getX(), p.getY() - currentEdgeSize,
+                                                        p.getX() + (UtilCoordinates.SQRT_OF_3 * currentEdgeSize / 2), p.getY() - (currentEdgeSize * 0.5f), paintSel);
+                                                c.drawLine(p.getX() + (UtilCoordinates.SQRT_OF_3 * currentEdgeSize / 2), p.getY() - (currentEdgeSize * 0.5f),
+                                                        p.getX() + (UtilCoordinates.SQRT_OF_3 * currentEdgeSize / 2), p.getY() + (currentEdgeSize * 0.5f), paintSel);
+                                                c.drawLine(p.getX() + (UtilCoordinates.SQRT_OF_3 * currentEdgeSize / 2), p.getY() + (currentEdgeSize * 0.5f),
+                                                        p.getX(), p.getY() + currentEdgeSize, paintSel);
+                                                c.drawLine(p.getX(), p.getY() + currentEdgeSize,
+                                                        p.getX() - (UtilCoordinates.SQRT_OF_3 * currentEdgeSize / 2), p.getY() + (currentEdgeSize * 0.5f), paintSel);
+                                                c.drawLine(p.getX() - (UtilCoordinates.SQRT_OF_3 * currentEdgeSize / 2), p.getY() + (currentEdgeSize * 0.5f),
+                                                        p.getX() - (UtilCoordinates.SQRT_OF_3 * currentEdgeSize / 2), p.getY() - (currentEdgeSize * 0.5f), paintSel);
+                                                c.drawLine(p.getX() - (UtilCoordinates.SQRT_OF_3 * currentEdgeSize / 2), p.getY() - (currentEdgeSize * 0.5f),
+                                                        p.getX(), p.getY() - currentEdgeSize, paintSel);
+
+                                            } else if (coordsSel instanceof SquareCoords) {
+                                                p = UtilCoordinates.squareCoordsToPixel(currentEdgeSize, (SquareCoords) coordsSel);
+
+                                                //Log.d("---->", "point Sel: " + p.getX() + "," + p.getY());
+                                                float x1 = p.getX() - currentEdgeSize / 2;
+                                                float y1 = p.getY() - currentEdgeSize / 2;
+                                                float x2 = p.getX() + currentEdgeSize / 2;
+                                                float y2 = p.getY() + currentEdgeSize / 2;
+                                                c.drawRect(x1, y1, x2, y2, paintSel);
+                                            }
+
+                                            Paint paintTexto = new Paint();
+                                            String coordsString = ((ICoords) coordsSel).toShortString();
+                                            Rect bounds = new Rect();
+                                            paintTexto.setTextSize(20);
+                                            paintTexto.setColor(Color.BLACK);
+                                            paintTexto.setStyle(Paint.Style.FILL);
+                                            paintTexto.getTextBounds(coordsString, 0, coordsString.length(), bounds);
+                                            bounds.offset((int) (p.getX() - currentEdgeSize / 2), p.getY());
+                                            c.drawRect(bounds, paintTexto);
+                                            paintTexto.setColor(Color.WHITE);
+                                            c.drawText(coordsString, p.getX() - currentEdgeSize / 2, p.getY(), paintTexto);
+                                        }
+                                    }
+
+                                    if (this.p != null) {
+                                        Paint paintPoint = new Paint();
+                                        paintPoint.setColor(Color.RED);
+                                        paintPoint.setStrokeWidth(5);
+
+                                        c.drawPoint(p.getX(), p.getY(), paintPoint);
+                                    }
+                                    done = true;
                                 }
-
-                                if (this.p != null){
-                                    Paint paintPoint = new Paint();
-                                    paintPoint.setColor(Color.RED);
-                                    paintPoint.setStrokeWidth(5);
-
-                                    c.drawPoint(p.getX(), p.getY(), paintPoint);
-                                }
-
-                                done = true;
                             }
                         }
                     }
@@ -377,7 +387,10 @@ public class FJetSurfaceView extends SurfaceView
         }
 
         private void redraw(Canvas c){
-            c.drawColor(Color.WHITE);
+
+            if (c != null) {
+                c.drawColor(Color.WHITE);
+            }
         }
 
         private float getSizedEdge(){
@@ -389,17 +402,28 @@ public class FJetSurfaceView extends SurfaceView
 
             if (a != null) {
                 this.p = p;
-                //Log.d("Screen coords -> ", p.toString());
-                HexCoords hexCoords = UtilCoordinates.hexCoordsFromPixel(
-                        p.getX(),
-                        p.getY(),
-                        thread.edgeSize * this.scale);
-                //SquareCoords hexCoords = UtilCoordinates.squareCoordsFromPixelCoords(p.getX(), p.getY(), thread.edgeSize);
-                //Log.d("Board coords -> ", hexCoords.toString());
-                a.setBoard(this.game.getBoard())
-                        .setCoords(hexCoords)
-                        .setObserver(this);
+                ICoords coords = null;
 
+                if (type == BoardFactory.BoardType.HEX_CELLS) {
+                    //Log.d("Screen coords -> ", p.toString());
+                    coords = UtilCoordinates.hexCoordsFromPixel(
+                            p.getX(),
+                            p.getY(),
+                            thread.edgeSize * this.scale);
+
+                } else if (type == BoardFactory.BoardType.SQUARE_CELLS) {
+                    coords = UtilCoordinates.squareCoordsFromPixelCoords(
+                            p.getX(),
+                            p.getY(),
+                            thread.edgeSize * this.scale);
+                }
+                //Log.d("Board coords -> ", hexCoords.toString());
+
+                if (coords != null) {
+                    a.setBoard(this.game.getBoard())
+                            .setCoords(coords)
+                            .setObserver(this);
+                }
 
                 /// !!!!!!!!!!!!!!!!!!!!!!!!!
                 // CUALQUIERA DE LAS DOS LLAMADAS VALDRIA !!!
@@ -414,6 +438,13 @@ public class FJetSurfaceView extends SurfaceView
                 a.setObserver(this);
                 this.game.processAction(a);
                 //this.actions.add(a);
+            }
+        }
+
+        public void setBoardType(BoardFactory.BoardType type){
+            synchronized (this) {
+                Board b = BoardFactory.createBoard(type, 10, 10);
+                this.game = new Game(b);
             }
         }
 

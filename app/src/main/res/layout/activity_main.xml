@@ -40,4 +40,20 @@
         android:layout_toRightOf="@id/button100"
         android:text="x1.3" />
 
+    <Button
+        android:id="@+id/buttonHex"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@id/button130"
+        android:text="Hex" />
+
+    <Button
+        android:id="@+id/buttonSquare"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@id/buttonHex"
+        android:text="Squ" />
+
 </RelativeLayout>
