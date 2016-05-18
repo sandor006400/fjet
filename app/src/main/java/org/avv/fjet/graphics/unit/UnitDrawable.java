@@ -1,15 +1,17 @@
-package org.avv.fjet.view;
+package org.avv.fjet.graphics.unit;
 
 /**
- * Created by Alexander Vorobiev on 11/05/16.
+ * Created by Alexander Vorobiev on 17/05/16.
  */
-public class GameView {
+public class UnitDrawable {
 
     // region - Constants
 
     // endregion - Constants
 
     // region - Fields
+
+    private Animation[] animations;
 
     // endregion - Fields
 

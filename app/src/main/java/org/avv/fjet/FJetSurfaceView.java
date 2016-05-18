@@ -5,6 +5,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.ShapeDrawable;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
@@ -25,6 +27,7 @@ import org.avv.fjet.core.board.ICoords;
 import org.avv.fjet.core.board.Point;
 import org.avv.fjet.core.board.SquareCoords;
 import org.avv.fjet.core.board.util.UtilCoordinates;
+import org.avv.fjet.graphics.unit.Animation;
 
 import java.util.HashMap;
 import java.util.concurrent.BlockingQueue;
@@ -172,9 +175,19 @@ public class FJetSurfaceView extends SurfaceView
         private Point p;
         private ICoords [] coords;
 
+        private Animation anim;
+
         public SurfaceViewThread(SurfaceHolder holder, Game game){
             this.holder = holder;
             this.game = game;
+
+            Drawable d1 = getResources().getDrawable( R.drawable.drawable_01, getContext().getTheme() );
+            Drawable d2 = getResources().getDrawable( R.drawable.drawable_02, getContext().getTheme() );
+
+            this.anim = new Animation()
+                    .setDrawables(new Drawable[]{d1, d2})
+                    .setDuration(Animation.Duration.X_TIMES, 30000)
+                    .setUpdatesPerFrame(10, INTERVAL);
         }
 
         @Override
@@ -302,6 +315,7 @@ public class FJetSurfaceView extends SurfaceView
                                                 c.drawLine(p.getX() - (UtilCoordinates.SQRT_OF_3 * currentEdgeSize / 2), p.getY() - (currentEdgeSize * 0.5f),
                                                         p.getX(), p.getY() - currentEdgeSize, paintSel);
 
+
                                             } else if (coordsSel instanceof SquareCoords) {
                                                 p = UtilCoordinates.squareCoordsToPixel(currentEdgeSize, (SquareCoords) coordsSel);
 
@@ -324,6 +338,13 @@ public class FJetSurfaceView extends SurfaceView
                                             c.drawRect(bounds, paintTexto);
                                             paintTexto.setColor(Color.WHITE);
                                             c.drawText(coordsString, p.getX() - currentEdgeSize / 2, p.getY(), paintTexto);
+
+
+                                            //--------------------------------------------------
+
+                                            anim.draw(c, new Rect(p.getX() - 10, p.getY() - 10, p.getX() + 10, p.getY() + 10));
+
+                                            //--------------------------------------------------
                                         }
                                     }
 

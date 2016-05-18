@@ -1,4 +1,4 @@
-package org.avv.fjet.view;
+package org.avv.fjet.graphics;
 
 import android.graphics.Canvas;
 import android.graphics.Color;

@@ -144,6 +144,7 @@ public class CoordsUnitTest {
         HexCoords finalCoord = UtilCoordinates.hexCoordsFromPixel(x, y, hexCellEdge);
         assertEquals(result, finalCoord);
     }
+
     @Test
     public void test_calcPixelToHexCoordsConversions_rowAprox() throws Exception {
         float hexCellEdge = 10;
