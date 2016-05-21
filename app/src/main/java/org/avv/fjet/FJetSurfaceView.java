@@ -168,7 +168,8 @@ public class FJetSurfaceView extends SurfaceView
         private Game game;
         private final SurfaceHolder holder;
         private boolean running;
-        private final long INTERVAL = 1000 / 60;
+        private int fps = 60;
+        private final long INTERVAL = 1000 / fps;
         private final BlockingQueue<Action> actions = new LinkedBlockingQueue<>();
 
 
@@ -183,11 +184,16 @@ public class FJetSurfaceView extends SurfaceView
 
             Drawable d1 = getResources().getDrawable( R.drawable.drawable_01, getContext().getTheme() );
             Drawable d2 = getResources().getDrawable( R.drawable.drawable_02, getContext().getTheme() );
+            Drawable d3 = getResources().getDrawable( R.drawable.drawable_03, getContext().getTheme() );
+
+            Log.d("GameThread",  "interval -> " + String.valueOf(INTERVAL));
 
             this.anim = new Animation()
-                    .setDrawables(new Drawable[]{d1, d2})
-                    .setDuration(Animation.Duration.X_TIMES, 30000)
-                    .setUpdatesPerFrame(10, INTERVAL);
+                    .setDrawables(new Drawable[]{d1, d2, d3})
+                    .setDuration(Animation.Duration.X_TIMES, 300)
+                    .setUpdatesPerFrame(fps, 3);
+
+            Log.d("GameThread",  "dura -> " + String.valueOf(INTERVAL));
         }
 
         @Override

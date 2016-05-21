@@ -23,7 +23,7 @@ public class Animation {
 
     public final static int DEFAULT_CYCLES = 0;
     public final static int DEFAULT_UPDATES_PER_FRAME = 1;
-    public final static int MIN_UPDATE_TIME = 30;
+    public final static int MAX_UPDATES_PER_FRAME = 60;
 
     // endregion - Constants
 
@@ -69,26 +69,27 @@ public class Animation {
             this.cycles = cycles;
             this.updatesLeft = cycles * this.updatesPerFrame;
         }
+        Log.d(DEBUG_TAG, "setDuration -> updatesLeft: " + String.valueOf(this.updatesLeft));
         return this;
     }
 
     /**
-     * Used to specify a number of updates per frame using a drawing thread refreshing time (cycleDuration)
-     * @param updates
-     * @param cycleDuration
+     * This method calculates a total amounts of game updates for each frame refresh
+     * @param gameFPS
+     * @param animationFPS
      * @return
      */
-    public Animation setUpdatesPerFrame(int updates, float cycleDuration){
-        int auxUpdatesPerFrame = Math.round((float)updates * cycleDuration);
+    public Animation setUpdatesPerFrame(int gameFPS, int animationFPS){
+        int upsPerFrame = Math.round((float)gameFPS / (float)animationFPS);
 
-        Log.d(DEBUG_TAG, "setUpdatesPerFrame -> updates: " + String.valueOf(updates)
-                + " cycleDuracion: " + String.valueOf(cycleDuration)
-        + " auxUpdatesPerFrame: " + String.valueOf(auxUpdatesPerFrame));
-
-        if (auxUpdatesPerFrame > MIN_UPDATE_TIME){
-            //this.updatesPerFrame = auxUpdatesPerFrame;
-            this.updatesPerFrame = updates;
+        if (upsPerFrame < MAX_UPDATES_PER_FRAME){
+            this.updatesPerFrame = upsPerFrame;
+            this.updatesLeft = cycles * this.updatesPerFrame;
         }
+        Log.d(DEBUG_TAG, "setUpdatesPerFrame -> animationFPS: " + String.valueOf(gameFPS)
+                    + " animationFPS: " + String.valueOf(animationFPS)
+                    + " updatesPerFrame: " + String.valueOf(upsPerFrame)
+                + " updatesLeft: " + String.valueOf(this.updatesLeft));
         return this;
     }
 
