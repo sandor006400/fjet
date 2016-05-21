@@ -44,21 +44,15 @@ public class Game {
     // region - Methods
 
     public void processAction(Action a){
-        synchronized (this.executor){
-            this.executor.executeAction(a);
-        }
+        this.executor.executeAction(a);
     }
 
     public void undoLastAction(){
-        synchronized (this.executor){
-            this.executor.undoLastAction();
-        }
+        this.executor.undoLastAction();
     }
 
     public void redoLastAction(){
-        synchronized (this.executor){
-            this.executor.redoLastAction();
-        }
+        this.executor.redoLastAction();
     }
 
     // endregion - Methods

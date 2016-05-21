@@ -67,11 +67,8 @@ public abstract class GameViewThread extends Thread {
                         try {
                             c = holder.lockCanvas(null);
 
-                            Log.d("GameViewThread", "holder != null");
-
                             synchronized (holder) {
                                 if (c != null) {
-                                    Log.d("GameViewThread", "canvas != null");
                                     cleanCanvas(c);
 
                                     // Here a drawable objects are drawn

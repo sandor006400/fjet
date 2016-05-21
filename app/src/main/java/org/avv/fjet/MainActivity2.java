@@ -8,6 +8,7 @@ import android.view.WindowManager;
 
 import org.avv.fjet.core.Game;
 import org.avv.fjet.core.board.Board;
+import org.avv.fjet.core.board.BoardFactory;
 import org.avv.fjet.graphics.GameView;
 
 /**
@@ -50,8 +51,11 @@ public class MainActivity2 extends Activity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
+        Board b = BoardFactory.createBoard(BoardFactory.BoardType.HEX_CELLS, 10, 10);
+        Game g = new Game(b);
+
         this.gameView = new GameView(this);
-        this.gameEngine = new GameEngine(new Game(new Board()), this.gameView.getHolder());
+        this.gameEngine = new GameEngine(g, this.gameView.getHolder());
         this.gameEngine.setFPS(1);
 
         this.gameEngine.onCreate();
