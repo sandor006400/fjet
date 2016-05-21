@@ -2,6 +2,7 @@ package org.avv.fjet.graphics;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -17,12 +18,14 @@ public class GameView extends SurfaceView
 
     // region - Fields
 
+    private IGameViewObserver observer;
+
     // endregion - Fields
 
     // region - Constructors
 
-    public GameView(Context context, AttributeSet attrs){
-        super(context, attrs);
+    public GameView(Context context){
+        super(context);
 
         init();
     }
@@ -31,6 +34,10 @@ public class GameView extends SurfaceView
 
     // region - Getters and Setters
 
+    public void setObserver(IGameViewObserver observer){
+        this.observer = observer;
+    }
+
     // endregion - Getters and Setters
 
     // region - Methods for/from SuperClass/Interfaces
@@ -38,6 +45,10 @@ public class GameView extends SurfaceView
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
 
+        Log.d("GameView", "surfaceCreated");
+        if (this.observer != null){
+            this.observer.onSurfaceCreated();
+        }
     }
 
     @Override
@@ -48,6 +59,7 @@ public class GameView extends SurfaceView
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
 
+        Log.d("GameView", "surfaceDestroyed");
     }
 
     // endregion - Methods for/from SuperClass/Interfaces
@@ -62,6 +74,12 @@ public class GameView extends SurfaceView
     // endregion - Methods
 
     // region - Inner and Anonymous Classes
+
+    public interface IGameViewObserver {
+
+        void onSurfaceCreated();
+
+    }
 
     // endregion - Inner and Anonymous Classes
 

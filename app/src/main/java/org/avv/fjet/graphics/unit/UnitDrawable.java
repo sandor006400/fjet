@@ -1,5 +1,7 @@
 package org.avv.fjet.graphics.unit;
 
+import org.avv.fjet.core.board.Point;
+
 /**
  * Created by Alexander Vorobiev on 17/05/16.
  */
@@ -7,11 +9,18 @@ public class UnitDrawable {
 
     // region - Constants
 
+    public enum State {
+        ATTACKING,
+
+    }
+
     // endregion - Constants
 
     // region - Fields
 
     private Animation[] animations;
+    private Point position;
+    private Point vector;
 
     // endregion - Fields
 

@@ -28,6 +28,7 @@ import org.avv.fjet.core.board.Point;
 import org.avv.fjet.core.board.SquareCoords;
 import org.avv.fjet.core.board.util.UtilCoordinates;
 import org.avv.fjet.graphics.unit.Animation;
+import org.avv.fjet.graphics.util.UtilCellDrawing;
 
 import java.util.HashMap;
 import java.util.concurrent.BlockingQueue;
@@ -246,46 +247,20 @@ public class FJetSurfaceView extends SurfaceView
 
                                         if (coords instanceof HexCoords) {
 
+                                            UtilCellDrawing.drawHexCellEdge(c, this.edgeSize, this.scale, (HexCoords) coords, Color.BLACK, 3f);
+
                                             Point p = UtilCoordinates.hexCoordsToPixel(currentEdgeSize, (HexCoords) coords);
-
-                                            //Log.d("---->", "point Sel: " + p.getX() + "," + p.getY());
-                                            //c.drawPoint(/*edgeSize + */p.getX(), /*edgeSize + */p.getY(), paint);
-                                            //c.drawCircle(/*edgeSize + */p.getX(), /*edgeSize +*/ p.getY(), edgeSize, paint2);
-
-                                            c.drawLine(p.getX(), p.getY() - currentEdgeSize,
-                                                    p.getX() + (UtilCoordinates.SQRT_OF_3 * currentEdgeSize / 2), p.getY() - (currentEdgeSize * 0.5f), paint);
-                                            c.drawLine(p.getX() + (UtilCoordinates.SQRT_OF_3 * currentEdgeSize / 2), p.getY() - (currentEdgeSize * 0.5f),
-                                                    p.getX() + (UtilCoordinates.SQRT_OF_3 * currentEdgeSize / 2), p.getY() + (currentEdgeSize * 0.5f), paint);
-                                            c.drawLine(p.getX() + (UtilCoordinates.SQRT_OF_3 * currentEdgeSize / 2), p.getY() + (currentEdgeSize * 0.5f),
-                                                    p.getX(), p.getY() + currentEdgeSize, paint);
-                                            c.drawLine(p.getX(), p.getY() + currentEdgeSize,
-                                                    p.getX() - (UtilCoordinates.SQRT_OF_3 * currentEdgeSize / 2), p.getY() + (currentEdgeSize * 0.5f), paint);
-                                            c.drawLine(p.getX() - (UtilCoordinates.SQRT_OF_3 * currentEdgeSize / 2), p.getY() + (currentEdgeSize * 0.5f),
-                                                    p.getX() - (UtilCoordinates.SQRT_OF_3 * currentEdgeSize / 2), p.getY() - (currentEdgeSize * 0.5f), paint);
-                                            c.drawLine(p.getX() - (UtilCoordinates.SQRT_OF_3 * currentEdgeSize / 2), p.getY() - (currentEdgeSize * 0.5f),
-                                                    p.getX(), p.getY() - currentEdgeSize, paint);
-
-
                                             paint.setTextSize(12);
                                             paint.setColor(Color.BLACK);
-
                                             c.drawText(((ICoords) coords).toShortString(), p.getX() - currentEdgeSize / 2, p.getY(), paint);
 
                                         } else if (coords instanceof SquareCoords) {
 
+                                            UtilCellDrawing.drawSquareCellEdge(c, this.edgeSize, this.scale, (SquareCoords) coords, Color.BLACK, 3f);
+
                                             Point p = UtilCoordinates.squareCoordsToPixel(currentEdgeSize, (SquareCoords) coords);
-
-                                            //c.drawPoint(/*edgeSize + */p.getX(), /*edgeSize + */p.getY(), paint);
-                                            //Log.d("---->", "point Sel: " + p.getX() + "," + p.getY());
-                                            float x1 = p.getX() - currentEdgeSize / 2;
-                                            float y1 = p.getY() - currentEdgeSize / 2;
-                                            float x2 = p.getX() + currentEdgeSize / 2;
-                                            float y2 = p.getY() + currentEdgeSize / 2;
-                                            c.drawRect(x1, y1, x2, y2, paint2);
-
                                             paint.setTextSize(12);
                                             paint.setColor(Color.BLACK);
-
                                             c.drawText(((ICoords) coords).toShortString(), p.getX() - currentEdgeSize / 2, p.getY(), paint);
                                         }
 

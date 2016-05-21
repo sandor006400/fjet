@@ -16,8 +16,8 @@ public class Game {
 
     // region - Fields
 
-    private final ActionExecutor executor = new ActionExecutor();
-    private Board board;
+    protected final ActionExecutor executor = new ActionExecutor();
+    protected Board board;
 
     // endregion - Fields
 

@@ -2,6 +2,7 @@ package org.avv.fjet.graphics;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.SurfaceHolder;
 
 /**
@@ -53,36 +54,42 @@ public abstract class GameViewThread extends Thread {
     public void run() {
         long timeToWait = System.currentTimeMillis() + this.interval;
 
-        while(running){
-            if (System.currentTimeMillis() > timeToWait) {
+        while(true) {    // Allways runnings
 
-                // Do tasks that must be done before drawing
-                doPreDrawingTasks();
-                Canvas c = null;
+            if (this.running) {
+                if (System.currentTimeMillis() > timeToWait) {
 
-                if (this.holder != null) {
-                    try {
-                        c = holder.lockCanvas(null);
+                    // Do tasks that must be done before drawing
+                    doPreDrawingTasks();
+                    Canvas c = null;
 
-                        synchronized (holder) {
+                    if (this.holder != null) {
+                        try {
+                            c = holder.lockCanvas(null);
+
+                            Log.d("GameViewThread", "holder != null");
+
+                            synchronized (holder) {
+                                if (c != null) {
+                                    Log.d("GameViewThread", "canvas != null");
+                                    cleanCanvas(c);
+
+                                    // Here a drawable objects are drawn
+                                    drawObjects(c);
+                                }
+                            }
+
+                        } finally {
                             if (c != null) {
-                                cleanCanvas(c);
-
-                                // Here a drawable objects are drawn
-                                drawObjects(c);
+                                holder.unlockCanvasAndPost(c);
                             }
                         }
-
-                    } finally {
-                        if (c != null) {
-                            holder.unlockCanvasAndPost(c);
-                        }
                     }
-                }
 
-                // Do tasks that must be done after drawing
-                doPostDrawingTasks();
-                timeToWait = System.currentTimeMillis() + this.interval;
+                    // Do tasks that must be done after drawing
+                    doPostDrawingTasks();
+                    timeToWait = System.currentTimeMillis() + this.interval;
+                }
             }
         }
     }
@@ -91,17 +98,44 @@ public abstract class GameViewThread extends Thread {
      * This method is called in each refresh of a thread.
      * @param c
      */
-    abstract void drawObjects(Canvas c);
+    protected abstract void drawObjects(Canvas c);
 
     /**
      * This method can be used to do additional operations before drawing.
      */
-    abstract void doPreDrawingTasks();
+    protected abstract void doPreDrawingTasks();
 
     /**
      * This method can be used to do additional operations after drawing.
      */
-    abstract void doPostDrawingTasks();
+    protected abstract void doPostDrawingTasks();
+
+    public void onDestroyed(){
+
+        setRunning(false);
+        boolean retry = true;
+        while (retry) {
+            try {
+                join();
+                retry = false;
+
+            } catch (InterruptedException e) {
+
+            }
+        }
+    }
+
+    public void onPause(){
+        setRunning(false);
+    }
+
+    public void onCreate(){
+        setRunning(true);
+    }
+
+    public void onResume(){
+        setRunning(true);
+    }
 
     // endregion - Methods for/from SuperClass/Interfaces
 

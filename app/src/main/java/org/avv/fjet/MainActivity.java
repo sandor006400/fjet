@@ -88,7 +88,7 @@ public class MainActivity extends Activity {
         Log.d("FUUUU", "10 - 3.3f = " + (10 - 3.3f));
         daleChicha();
 
-        this.gameView.run();
+        //this.gameView.run();
     }
 
     @Override
