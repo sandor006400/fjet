@@ -41,6 +41,8 @@ public interface ICoords {
 
     String toShortString();
 
+    String toJsonString();
+
     // endregion - Methods for/from SuperClass/Interfaces
 
     // region - Methods

@@ -19,6 +19,7 @@ public class MoveUnitAction extends Action {
     private Unit unit;
     private ICoords origin;
     private ICoords destination;
+    private ICoords [] pathCoords;  // Coordinates that belong to a Unit movement path
     private Board board;
 
     // endregion - Fields
@@ -50,24 +51,28 @@ public class MoveUnitAction extends Action {
         return this;
     }
 
+    public MoveUnitAction setPathCoords(ICoords [] pathCoords){
+        this.pathCoords = pathCoords;
+        return this;
+    }
+
     // endregion - Getters and Setters
 
     // region - Methods for/from SuperClass/Interfaces
 
     @Override
-    protected Object getExecutionResult() {
+    protected IActionResult getExecutionResult() {
         this.unit.getCell().removeUnit();
         this.unit.setCell(this.board.getCellWithCoords(this.destination));
-        return null;
+        return new MoveUnitActionResult(this.unit, this.pathCoords);
     }
 
     @Override
-    protected Object getExecutionUndoResult() {
+    protected IActionUndoResult getExecutionUndoResult() {
         this.unit.getCell().removeUnit();
         this.unit.setCell(this.board.getCellWithCoords(this.origin));
         return null;
     }
-
 
     // endregion - Methods for/from SuperClass/Interfaces
 
@@ -76,6 +81,26 @@ public class MoveUnitAction extends Action {
     // endregion - Methods
 
     // region - Inner and Anonymous Classes
+
+    public class MoveUnitActionResult implements IActionResult {
+
+        private Unit unit;
+        private ICoords [] pathCoords;
+
+        public MoveUnitActionResult(Unit unit, ICoords [] pathCoords){
+            this.unit = unit;
+            this.pathCoords = pathCoords;
+        }
+
+        public Unit getUnit(){
+            return this.unit;
+        }
+
+        public ICoords [] getPathCoords(){
+            return this.pathCoords;
+        }
+
+    }
 
     // endregion - Inner and Anonymous Classes
 

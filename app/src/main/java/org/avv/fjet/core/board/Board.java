@@ -20,7 +20,7 @@ public class Board {
     // region - Fields
 
     private Map<ICoords, Cell> cellsMap;
-    private Map<ICoords, Unit> unitsMap;
+    private List<Unit> unitsList;
 
     private List<Cell> selectedCells;  // The selected cells
 
@@ -30,7 +30,7 @@ public class Board {
 
     public Board(){
         this.cellsMap = new HashMap<>();
-        this.unitsMap = new HashMap<>();
+        this.unitsList = new ArrayList<>();
         this.selectedCells = new ArrayList<>();
     }
 

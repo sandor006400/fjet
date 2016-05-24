@@ -1,6 +1,7 @@
 package org.avv.fjet.core.board;
 
 import org.avv.fjet.core.board.util.UtilCoordinates;
+import org.avv.fjet.serialization.JsonSerializer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -98,7 +99,8 @@ public class HexCoords implements ICoords {
 
     @Override
     public String toString() {
-        return "HexCoords(" + this.q + "," + this.r + ")";
+        //return "HexCoords(" + this.q + "," + this.r + ")";
+        return JsonSerializer.toJsonString(this);
     }
 
     @Override
@@ -109,6 +111,11 @@ public class HexCoords implements ICoords {
     @Override
     public String toShortString() {
         return "(" + this.q + "," + this.r + ")";
+    }
+
+    @Override
+    public String toJsonString() {
+        return null;
     }
 
     // endregion - Methods

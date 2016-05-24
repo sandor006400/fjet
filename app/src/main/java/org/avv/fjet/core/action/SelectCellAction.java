@@ -48,19 +48,19 @@ public class SelectCellAction extends Action {
     // region - Methods for/from SuperClass/Interfaces
 
     @Override
-    protected Object getExecutionResult() {
+    protected IActionResult getExecutionResult() {
         this.board.deselectCell();
         this.board.selectCells(new ICoords[]{this.coords});
 
         if (this.board.getSelectedCells() != null && this.board.getSelectedCells().size() == 1
                 && this.board.getSelectedCells().get(0).getCoords().equals(this.coords)){
-            return coords.getCopy();
+            return new SelectCellActionResult(coords.getCopy());
         }
         return null;
     }
 
     @Override
-    protected Object getExecutionUndoResult() {
+    protected IActionUndoResult getExecutionUndoResult() {
         // This action is only informative, implementation not required
         return null;
     }
@@ -72,6 +72,20 @@ public class SelectCellAction extends Action {
     // endregion - Methods
 
     // region - Inner and Anonymous Classes
+
+    public class SelectCellActionResult implements IActionResult {
+
+        private ICoords selectedCoords;
+
+        public SelectCellActionResult(ICoords coords){
+            this.selectedCoords = coords;
+        }
+
+        public ICoords getSelectedCoords(){
+            return this.selectedCoords;
+        }
+
+    }
 
     // endregion - Inner and Anonymous Classes
 

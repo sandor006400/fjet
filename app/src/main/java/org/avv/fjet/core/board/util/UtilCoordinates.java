@@ -1,9 +1,7 @@
 package org.avv.fjet.core.board.util;
 
-import android.util.Log;
-
 import org.avv.fjet.core.board.HexCoords;
-import org.avv.fjet.core.board.Point;
+import org.avv.fjet.core.geometry.FJetPoint;
 import org.avv.fjet.core.board.SquareCoords;
 
 /**
@@ -40,7 +38,7 @@ public class UtilCoordinates {
     // region - Methods
 
     /**
-     * Distance between two hexagon grid coordinates.
+     * Manhattan distance between two hexagon grid coordinates.
      * @param coordsA
      * @param coordsB
      * @return
@@ -124,10 +122,10 @@ public class UtilCoordinates {
      * @param coords
      * @return
      */
-    public static Point hexCoordsToPixel(float edgeSize, HexCoords coords){
+    public static FJetPoint hexCoordsToPixel(float edgeSize, HexCoords coords){
         int x = Math.round(edgeSize * SQRT_OF_3 * ((1f / 2f) + (float)coords.getQ() + (float)coords.getR() / 2));
         int y = Math.round(edgeSize * (3f / 2f) * coords.getR() + edgeSize);
-        return new Point(x,y);
+        return new FJetPoint(x,y);
     }
 
     /**
@@ -154,7 +152,7 @@ public class UtilCoordinates {
     }
 
     /**
-     * Distance between two square grid coordinates if the only way to move is thru neighbor
+     * Manhattan distance between two square grid coordinates if the only way to move is thru neighbor
      * coordinates.
      * @param coordsA
      * @param coordsB
@@ -182,7 +180,7 @@ public class UtilCoordinates {
      * @param rows
      * @return
      */
-    // TODO -> Tests pendientes
+    // TODO -> Pending tests
     /*public static SquareCoords squareCoordsFromPixelCoords(int xCoord, int yCoord, int width, int height, int cols, int rows){
         int x = (cols / width) * xCoord;
         int y = (rows / height) * yCoord;
@@ -208,10 +206,10 @@ public class UtilCoordinates {
      * @param coords
      * @return
      */
-    public static Point squareCoordsToPixel(float edgeSize, SquareCoords coords){
+    public static FJetPoint squareCoordsToPixel(float edgeSize, SquareCoords coords){
         int x = Math.round(edgeSize * (float)coords.getX() + (edgeSize / 2f));
         int y = Math.round(edgeSize * (float)coords.getY() + (edgeSize / 2f));
-        return new Point(x,y);
+        return new FJetPoint(x,y);
     }
 
     // endregion - Methods

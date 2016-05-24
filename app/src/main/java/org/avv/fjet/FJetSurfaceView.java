@@ -6,31 +6,30 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.ShapeDrawable;
-import android.os.Handler;
-import android.os.Message;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.widget.HeterogeneousExpandableList;
 
 import org.avv.fjet.core.Game;
 import org.avv.fjet.core.action.Action;
 import org.avv.fjet.core.action.ActionFactory;
+import org.avv.fjet.core.action.ScaleViewAction;
 import org.avv.fjet.core.action.SelectCellAction;
 import org.avv.fjet.core.board.Board;
 import org.avv.fjet.core.board.BoardFactory;
 import org.avv.fjet.core.board.Cell;
 import org.avv.fjet.core.board.HexCoords;
 import org.avv.fjet.core.board.ICoords;
-import org.avv.fjet.core.board.Point;
+import org.avv.fjet.core.geometry.FJetPoint;
 import org.avv.fjet.core.board.SquareCoords;
 import org.avv.fjet.core.board.util.UtilCoordinates;
-import org.avv.fjet.graphics.unit.Animation;
+import org.avv.fjet.core.geometry.FJetRect;
+import org.avv.fjet.graphics.GameAnimation;
 import org.avv.fjet.graphics.util.UtilCellDrawing;
+import org.avv.fjet.serialization.JsonSerializer;
 
-import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -67,7 +66,12 @@ public class FJetSurfaceView extends SurfaceView
     public void init(){
         SurfaceHolder holder = getHolder();
         holder.addCallback(this);
-        Board b = BoardFactory.createBoard(this.type, 10, 10);
+        Board b = BoardFactory.createBoard(getContext(), this.type, 10, 10);
+
+        for (Object cell : b.getCells().values()){
+            Log.d("Cell", JsonSerializer.toJsonString(cell));
+        }
+
         Game g = new Game(b);
         this.thread = new SurfaceViewThread(holder, g);
     }
@@ -114,7 +118,7 @@ public class FJetSurfaceView extends SurfaceView
 
     // region - Methods
 
-    public void processTouchEvent(Point p){
+    public void processTouchEvent(FJetPoint p){
         if (this.thread != null) {
             this.thread.handleTouchEvent(p);
         }
@@ -151,7 +155,7 @@ public class FJetSurfaceView extends SurfaceView
     }
 
     public void initializeThread(){
-        Board b = BoardFactory.createBoard(this.type, 10, 10);
+        Board b = BoardFactory.createBoard(getContext(), this.type, 10, 10);
         Game g = new Game(b);
         this.thread = new SurfaceViewThread(getHolder(), g);
     }
@@ -174,10 +178,10 @@ public class FJetSurfaceView extends SurfaceView
         private final BlockingQueue<Action> actions = new LinkedBlockingQueue<>();
 
 
-        private Point p;
+        private FJetPoint p;
         private ICoords [] coords;
 
-        private Animation anim;
+        private GameAnimation anim;
 
         public SurfaceViewThread(SurfaceHolder holder, Game game){
             this.holder = holder;
@@ -186,15 +190,10 @@ public class FJetSurfaceView extends SurfaceView
             Drawable d1 = getResources().getDrawable( R.drawable.drawable_01, getContext().getTheme() );
             Drawable d2 = getResources().getDrawable( R.drawable.drawable_02, getContext().getTheme() );
             Drawable d3 = getResources().getDrawable( R.drawable.drawable_03, getContext().getTheme() );
-
-            Log.d("GameThread",  "interval -> " + String.valueOf(INTERVAL));
-
-            this.anim = new Animation()
+            this.anim = new GameAnimation()
                     .setDrawables(new Drawable[]{d1, d2, d3})
-                    .setDuration(Animation.Duration.X_TIMES, 300)
+                    .setDuration(GameAnimation.Duration.X_TIMES, 3)
                     .setUpdatesPerFrame(fps, 3);
-
-            Log.d("GameThread",  "dura -> " + String.valueOf(INTERVAL));
         }
 
         @Override
@@ -233,35 +232,30 @@ public class FJetSurfaceView extends SurfaceView
                                     paint2.setColor(Color.GREEN);
                                     paint2.setStyle(Paint.Style.STROKE);
 
-                                    for (Object coords : game.getBoard().getCells().keySet()) {
+                                    for (Object entry : game.getBoard().getCells().entrySet()) {
 
-                                    /*if (((SquareCoords)coords).getX() % 3 == 0){
-                                        paint2.setColor(Color.RED);
+                                        Map.Entry<ICoords,Cell> e = ((Map.Entry<ICoords,Cell>)entry);
 
-                                    } else if (((SquareCoords)coords).getX() % 3 == 1){
-                                        paint2.setColor(Color.GREEN);
+                                        if (e.getKey() instanceof HexCoords) {
 
-                                    } else {
-                                        paint2.setColor(Color.BLUE);
-                                    }*/
+                                            FJetPoint p = UtilCoordinates.hexCoordsToPixel(currentEdgeSize, (HexCoords) e.getKey());
+                                            UtilCellDrawing.drawHexCellEdge(c, this.edgeSize, this.scale, (HexCoords) e.getKey(), Color.BLACK, 3f);
 
-                                        if (coords instanceof HexCoords) {
+                                            if (e.getValue() instanceof Cell){
 
-                                            UtilCellDrawing.drawHexCellEdge(c, this.edgeSize, this.scale, (HexCoords) coords, Color.BLACK, 3f);
-
-                                            Point p = UtilCoordinates.hexCoordsToPixel(currentEdgeSize, (HexCoords) coords);
+                                            }
                                             paint.setTextSize(12);
                                             paint.setColor(Color.BLACK);
-                                            c.drawText(((ICoords) coords).toShortString(), p.getX() - currentEdgeSize / 2, p.getY(), paint);
+                                            c.drawText(((ICoords) e.getKey()).toShortString(), p.getX() - currentEdgeSize / 2, p.getY(), paint);
 
-                                        } else if (coords instanceof SquareCoords) {
+                                        } else if (e.getKey() instanceof SquareCoords) {
 
-                                            UtilCellDrawing.drawSquareCellEdge(c, this.edgeSize, this.scale, (SquareCoords) coords, Color.BLACK, 3f);
+                                            UtilCellDrawing.drawSquareCellEdge(c, this.edgeSize, this.scale, (SquareCoords) e.getKey(), Color.BLACK, 3f);
 
-                                            Point p = UtilCoordinates.squareCoordsToPixel(currentEdgeSize, (SquareCoords) coords);
+                                            FJetPoint p = UtilCoordinates.squareCoordsToPixel(currentEdgeSize, (SquareCoords) e.getKey());
                                             paint.setTextSize(12);
                                             paint.setColor(Color.BLACK);
-                                            c.drawText(((ICoords) coords).toShortString(), p.getX() - currentEdgeSize / 2, p.getY(), paint);
+                                            c.drawText(((ICoords) e.getKey()).toShortString(), p.getX() - currentEdgeSize / 2, p.getY(), paint);
                                         }
 
 
@@ -275,14 +269,10 @@ public class FJetSurfaceView extends SurfaceView
                                             paintSel.setStyle(Paint.Style.STROKE);
                                             paintSel.setStrokeWidth(7);
 
-                                            //Log.d("---->", "coords Sel: " + coords.toString());
-                                            Point p = new Point(0, 0);
+                                            FJetPoint p = new FJetPoint(0, 0);
 
                                             if (coordsSel instanceof HexCoords) {
                                                 p = UtilCoordinates.hexCoordsToPixel(currentEdgeSize, (HexCoords) coordsSel);
-
-                                                //Log.d("---->", "point Sel: " + p.getX() + "," + p.getY());
-                                                //c.drawCircle(/*edgeSize + */p.getX(), /*edgeSize + */p.getY(), edgeSize, paintSel);
                                                 c.drawLine(p.getX(), p.getY() - currentEdgeSize,
                                                         p.getX() + (UtilCoordinates.SQRT_OF_3 * currentEdgeSize / 2), p.getY() - (currentEdgeSize * 0.5f), paintSel);
                                                 c.drawLine(p.getX() + (UtilCoordinates.SQRT_OF_3 * currentEdgeSize / 2), p.getY() - (currentEdgeSize * 0.5f),
@@ -300,7 +290,6 @@ public class FJetSurfaceView extends SurfaceView
                                             } else if (coordsSel instanceof SquareCoords) {
                                                 p = UtilCoordinates.squareCoordsToPixel(currentEdgeSize, (SquareCoords) coordsSel);
 
-                                                //Log.d("---->", "point Sel: " + p.getX() + "," + p.getY());
                                                 float x1 = p.getX() - currentEdgeSize / 2;
                                                 float y1 = p.getY() - currentEdgeSize / 2;
                                                 float x2 = p.getX() + currentEdgeSize / 2;
@@ -323,7 +312,7 @@ public class FJetSurfaceView extends SurfaceView
 
                                             //--------------------------------------------------
 
-                                            anim.draw(c, new Rect(p.getX() - 10, p.getY() - 10, p.getX() + 10, p.getY() + 10));
+                                            anim.draw(c, new FJetRect(p.getX() - 10, p.getY() - 10, 20, 20));
 
                                             //--------------------------------------------------
                                         }
@@ -352,29 +341,29 @@ public class FJetSurfaceView extends SurfaceView
         }
 
         @Override
-        public void receiveActionUndoResult(Object undoResult) {
+        public void receiveActionUndoResult(Action.IActionUndoResult undoResult) {
 
 
 
         }
 
         @Override
-        public void receiveActionResult(Object result) {
+        public void receiveActionResult(Action.IActionResult result) {
 
             if (result != null) {
                 synchronized (this) {
 
-                    if (result instanceof HexCoords) {
-                        //Log.d("--->", "coordenada recibida: " + result.toString());
-                        this.coords = new HexCoords[]{(HexCoords) result};
+                    if (result instanceof SelectCellAction.SelectCellActionResult) {
+                        ICoords coor = ((SelectCellAction.SelectCellActionResult) result).getSelectedCoords();
 
-                    }else if (result instanceof SquareCoords) {
-                        //Log.d("--->", "coordenada recibida: " + result.toString());
-                        this.coords = new SquareCoords[]{(SquareCoords) result};
+                        if (coor instanceof HexCoords){
+                            this.coords = new HexCoords[]{(HexCoords) coor};
+                        } else if (coor instanceof SquareCoords){
+                            this.coords = new SquareCoords[]{(SquareCoords) coor};
+                        }
 
-                    } else if (result.getClass() == Float.class) {
-                        Log.d("--->", "Clase resut: " + result.getClass().getSimpleName());
-                        this.scale = (float)result;
+                    } else if (result instanceof ScaleViewAction.ScaleViewActionResult) {
+                        this.scale = ((ScaleViewAction.ScaleViewActionResult) result).getScale();
                     }
                 }
             }
@@ -399,7 +388,7 @@ public class FJetSurfaceView extends SurfaceView
             return this.edgeSize * this.scale;
         }
 
-        public void handleTouchEvent(Point p) {
+        public void handleTouchEvent(FJetPoint p) {
             SelectCellAction a = (SelectCellAction) ActionFactory.createAction(ActionFactory.SELECT_CELL_ACTION);
 
             if (a != null) {
@@ -445,7 +434,7 @@ public class FJetSurfaceView extends SurfaceView
 
         public void setBoardType(BoardFactory.BoardType type){
             synchronized (this) {
-                Board b = BoardFactory.createBoard(type, 10, 10);
+                Board b = BoardFactory.createBoard(getContext(), type, 10, 10);
                 this.game = new Game(b);
             }
         }

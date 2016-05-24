@@ -36,6 +36,11 @@ public abstract class Action {
         this.id = generateID();
     }
 
+    public Action(Type type, String id){
+        this.type = type;
+        this.id = id;
+    }
+
     // endregion - Constructors
 
     // region - Getters and Setters
@@ -52,9 +57,9 @@ public abstract class Action {
 
     // region - Methods for/from SuperClass/Interfaces
 
-    abstract protected Object getExecutionResult();
+    abstract protected IActionResult getExecutionResult();
 
-    abstract protected Object getExecutionUndoResult();
+    abstract protected IActionUndoResult getExecutionUndoResult();
 
     // endregion - Methods for/from SuperClass/Interfaces
 
@@ -65,7 +70,7 @@ public abstract class Action {
     }
 
     public void execute(){
-        final Object result = getExecutionResult();
+        final IActionResult result = getExecutionResult();
 
         for (ActionObserver observer : this.obsevers){
             observer.receiveActionResult(result);
@@ -73,7 +78,7 @@ public abstract class Action {
     }
 
     public void undo(){
-        final Object undoResult = getExecutionUndoResult();
+        final IActionUndoResult undoResult = getExecutionUndoResult();
 
         for (ActionObserver observer : this.obsevers){
             observer.receiveActionUndoResult(undoResult);
@@ -91,9 +96,17 @@ public abstract class Action {
 
     public interface ActionObserver {
 
-        void receiveActionResult(Object result);
+        void receiveActionResult(IActionResult result);
 
-        void receiveActionUndoResult(Object undoResult);
+        void receiveActionUndoResult(IActionUndoResult undoResult);
+
+    }
+
+    public interface IActionResult {
+
+    }
+
+    public interface IActionUndoResult {
 
     }
 

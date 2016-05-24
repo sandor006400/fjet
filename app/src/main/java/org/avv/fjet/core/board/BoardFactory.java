@@ -1,5 +1,6 @@
 package org.avv.fjet.core.board;
 
+import android.content.Context;
 import android.util.Log;
 
 import org.avv.fjet.core.board.util.UtilCoordinates;
@@ -45,7 +46,7 @@ public class BoardFactory {
 
     // region - Methods
 
-    public static Board createBoard(BoardType t, int width, int height){
+    public static Board createBoard(Context c, BoardType t, int width, int height){
         Board b = new Board();
 
         if (width != 0 && height != 0) {
@@ -58,7 +59,9 @@ public class BoardFactory {
                             ICoords coords = UtilCoordinates.offsetHexCoordsToAxialHexCoords(i, j);
                             b.setCellAndCoords(
                                     coords,
-                                    new Cell(coords));
+                                        new Cell(
+                                                coords,
+                                                TerrainFactory.getInstance(c).getTerrain(Terrain.TerrainType.GRASSLAND)));
                         }
                     }
                     break;
@@ -70,7 +73,9 @@ public class BoardFactory {
                             ICoords coords = new SquareCoords(i, j);
                             b.setCellAndCoords(
                                     coords,
-                                    new Cell(coords));
+                                    new Cell(
+                                            coords,
+                                            TerrainFactory.getInstance(c).getTerrain(Terrain.TerrainType.GRASSLAND)));
                         }
                     }
                     break;

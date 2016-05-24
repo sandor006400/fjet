@@ -1,44 +1,41 @@
-package org.avv.fjet.graphics.unit;
+package org.avv.fjet.graphics.board;
 
 import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 
-import org.avv.fjet.core.geometry.FJetPoint;
 import org.avv.fjet.core.geometry.FJetRect;
-import org.avv.fjet.graphics.GameAnimation;
 import org.avv.fjet.graphics.GameDrawable;
 
 /**
- * Created by Alexander Vorobiev on 17/05/16.
+ * Created by Alexander Vorobiev on 22/05/16.
  */
-public class UnitDrawable extends GameDrawable {
+public class CellDrawable extends GameDrawable {
 
     // region - Constants
-
-    public enum State {
-        ATTACKING,
-
-    }
 
     // endregion - Constants
 
     // region - Fields
 
-    private FJetPoint vector;       // Movement vector
-    private GameAnimation[] animations;
+    private Drawable drawable;
 
     // endregion - Fields
 
     // region - Constructors
 
-    public UnitDrawable(){
+    public CellDrawable(){
         super();
 
-        init();
     }
 
     // endregion - Constructors
 
     // region - Getters and Setters
+
+    public CellDrawable setDrawable(Drawable drawable){
+        this.drawable = drawable;
+        return this;
+    }
 
     // endregion - Getters and Setters
 
@@ -46,17 +43,16 @@ public class UnitDrawable extends GameDrawable {
 
     @Override
     protected void drawInRect(FJetRect drawRect, Canvas c) {
-        // TODO
+
+        if (this.drawable != null){
+            this.drawable.setBounds(drawRect.getRect());
+            this.drawable.draw(c);
+        }
     }
 
     // endregion - Methods for/from SuperClass/Interfaces
 
     // region - Methods
-
-    private void init(){
-        this.vector = new FJetPoint(0,0);
-        this.animations = null;
-    }
 
     // endregion - Methods
 

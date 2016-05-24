@@ -8,11 +8,12 @@ import android.view.SurfaceHolder;
 import org.avv.fjet.core.Game;
 import org.avv.fjet.core.board.HexCoords;
 import org.avv.fjet.core.board.ICoords;
-import org.avv.fjet.core.board.Point;
+import org.avv.fjet.core.geometry.FJetPoint;
 import org.avv.fjet.core.board.SquareCoords;
 import org.avv.fjet.core.board.util.UtilCoordinates;
 import org.avv.fjet.graphics.GameView;
 import org.avv.fjet.graphics.GameViewThread;
+import org.avv.fjet.graphics.board.BoardDrawable;
 import org.avv.fjet.graphics.util.UtilCellDrawing;
 
 /**
@@ -32,15 +33,17 @@ public class GameEngine extends GameViewThread implements GameView.IGameViewObse
     int edgeSize = 30;
 
     private Game game;
+    private BoardDrawable boardDrawable;
 
     // endregion - Fields
 
     // region - Constructors
 
-    protected GameEngine(Game game, SurfaceHolder surfaceHolder) {
+    protected GameEngine(Game game, BoardDrawable boardDrawable, SurfaceHolder surfaceHolder) {
         super(surfaceHolder);
 
         this.game = game;
+        this.boardDrawable = boardDrawable;
     }
 
     // endregion - Constructors
@@ -53,7 +56,10 @@ public class GameEngine extends GameViewThread implements GameView.IGameViewObse
 
     @Override
     public void drawObjects(Canvas c) {
-        Point p;
+
+
+
+        FJetPoint p;
         float currentEdgeSize = this.edgeSize*this.scale;
 
         Paint paint = new Paint();

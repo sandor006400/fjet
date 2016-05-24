@@ -1,19 +1,20 @@
-package org.avv.fjet.graphics.unit;
+package org.avv.fjet.graphics;
 
 import android.graphics.Canvas;
-import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import org.avv.fjet.core.geometry.FJetRect;
+
 /**
  * Created by Alexander Vorobiev on 17/05/16.
  */
-public class Animation {
+public class GameAnimation {
 
     // region - Constants
 
-    private static final String DEBUG_TAG = "Animation";
+    private static final String DEBUG_TAG = "GameAnimation";
 
     public enum Duration {
         INFINITE,
@@ -40,7 +41,7 @@ public class Animation {
 
     // region - Constructors
 
-    public Animation(){
+    public GameAnimation(){
         init();
     }
 
@@ -49,7 +50,7 @@ public class Animation {
     // region - Getters and Setters
 
     @NonNull
-    public Animation setDrawables(Drawable [] drawables){
+    public GameAnimation setDrawables(Drawable [] drawables){
 
         if (drawables != null){
             this.drawables = drawables;
@@ -63,13 +64,18 @@ public class Animation {
      * @param cycles
      * @return
      */
-    public Animation setDuration(Duration duration, int cycles){
+    public GameAnimation setDuration(Duration duration, int cycles){
         this.duration = duration;
-        if (duration == Duration.X_TIMES){
+        if (duration == Duration.X_TIMES
+                || duration == Duration.INFINITE){
             this.cycles = cycles;
-            this.updatesLeft = cycles * this.updatesPerFrame;
+            this.updatesLeft = cycles * this.updatesPerFrame * this.drawables.length;
+
+        } else if (duration == Duration.ONE_TIME){
+            this.cycles = 1;
+            this.updatesLeft = this.updatesPerFrame * this.drawables.length;
         }
-        Log.d(DEBUG_TAG, "setDuration -> updatesLeft: " + String.valueOf(this.updatesLeft));
+        //Log.d(DEBUG_TAG, "setDuration -> updatesLeft: " + String.valueOf(this.updatesLeft));
         return this;
     }
 
@@ -79,17 +85,17 @@ public class Animation {
      * @param animationFPS
      * @return
      */
-    public Animation setUpdatesPerFrame(int gameFPS, int animationFPS){
+    public GameAnimation setUpdatesPerFrame(int gameFPS, int animationFPS){
         int upsPerFrame = Math.round((float)gameFPS / (float)animationFPS);
 
         if (upsPerFrame < MAX_UPDATES_PER_FRAME){
             this.updatesPerFrame = upsPerFrame;
-            this.updatesLeft = cycles * this.updatesPerFrame;
+            this.updatesLeft = cycles * this.updatesPerFrame * this.drawables.length;
         }
-        Log.d(DEBUG_TAG, "setUpdatesPerFrame -> animationFPS: " + String.valueOf(gameFPS)
+        /*Log.d(DEBUG_TAG, "setUpdatesPerFrame -> animationFPS: " + String.valueOf(gameFPS)
                     + " animationFPS: " + String.valueOf(animationFPS)
                     + " updatesPerFrame: " + String.valueOf(upsPerFrame)
-                + " updatesLeft: " + String.valueOf(this.updatesLeft));
+                + " updatesLeft: " + String.valueOf(this.updatesLeft));*/
         return this;
     }
 
@@ -110,12 +116,12 @@ public class Animation {
         this.currentDrawable = 0;
     }
 
-    public void draw(Canvas c, Rect r){
+    public void draw(Canvas c, FJetRect r){
 
         Drawable d = getCurrentDrawable();
 
         if (d != null){
-            d.setBounds(r);
+            d.setBounds(r.getRect());
             d.draw(c);
         }
     }
@@ -130,12 +136,32 @@ public class Animation {
                 return false;
 
             } else {
+
+                if (this.updatesLeft == 0){
+                    //Log.d("update", "duration: " + String.valueOf(this.duration) + " updatesLeft: " + String.valueOf(this.updatesLeft));
+                    //this.updatesLeft = cycles * this.updatesPerFrame * this.drawables.length;
+                    return false;
+                }
                 this.updatesLeft--;
                 return true;
             }
 
         } else {    // This case is INFINITE
-            return true;
+
+            if (this.updatesLeft % this.updatesPerFrame != 0) {
+                this.updatesLeft--;
+                return false;
+
+            } else {
+
+                if (this.updatesLeft == 0){
+                    //Log.d("update", "duration: " + String.valueOf(this.duration) + " updatesLeft: " + String.valueOf(this.updatesLeft));
+                    this.updatesLeft = cycles * this.updatesPerFrame * this.drawables.length;
+                    return false;
+                }
+                this.updatesLeft--;
+                return true;
+            }
         }
     }
 
@@ -150,6 +176,20 @@ public class Animation {
             return this.drawables[this.currentDrawable];
         }
         return null;
+    }
+
+    /**
+     * Reset updatesLeft attribute with updatesPerFrame, the number of drawables and cycles
+     * depending on duration
+     */
+    public void reset(){
+        if (duration == Duration.X_TIMES
+                || duration == Duration.INFINITE){
+            this.updatesLeft = cycles * this.updatesPerFrame * this.drawables.length;
+
+        } else if (duration == Duration.ONE_TIME){
+            this.updatesLeft = this.updatesPerFrame * this.drawables.length;
+        }
     }
 
     // endregion - Methods

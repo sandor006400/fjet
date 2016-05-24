@@ -1,11 +1,13 @@
 package org.avv.fjet.graphics.util;
 
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.PathShape;
 
 import org.avv.fjet.core.board.HexCoords;
-import org.avv.fjet.core.board.Point;
+import org.avv.fjet.core.geometry.FJetPoint;
 import org.avv.fjet.core.board.SquareCoords;
 import org.avv.fjet.core.board.util.UtilCoordinates;
 
@@ -47,23 +49,19 @@ public class UtilCellDrawing {
      */
     public static void drawHexCellEdge(Canvas c, float edgeSize, float scale, HexCoords coords, int color, float strokeWidth){
         float currentEdgeSize = edgeSize * scale;
-        Paint paint = new Paint();
-        paint.setStrokeWidth(strokeWidth * scale);
-        paint.setColor(color);
-        Point p = UtilCoordinates.hexCoordsToPixel(currentEdgeSize, coords);
+        FJetPoint p = UtilCoordinates.hexCoordsToPixel(currentEdgeSize, coords);
+        int halfWidth = Math.round(UtilCoordinates.SQRT_OF_3 * currentEdgeSize / 2);
 
-        c.drawLine(p.getX(), p.getY() - currentEdgeSize,
-                p.getX() + (UtilCoordinates.SQRT_OF_3 * currentEdgeSize / 2), p.getY() - (currentEdgeSize * 0.5f), paint);
-        c.drawLine(p.getX() + (UtilCoordinates.SQRT_OF_3 * currentEdgeSize / 2), p.getY() - (currentEdgeSize * 0.5f),
-                p.getX() + (UtilCoordinates.SQRT_OF_3 * currentEdgeSize / 2), p.getY() + (currentEdgeSize * 0.5f), paint);
-        c.drawLine(p.getX() + (UtilCoordinates.SQRT_OF_3 * currentEdgeSize / 2), p.getY() + (currentEdgeSize * 0.5f),
-                p.getX(), p.getY() + currentEdgeSize, paint);
-        c.drawLine(p.getX(), p.getY() + currentEdgeSize,
-                p.getX() - (UtilCoordinates.SQRT_OF_3 * currentEdgeSize / 2), p.getY() + (currentEdgeSize * 0.5f), paint);
-        c.drawLine(p.getX() - (UtilCoordinates.SQRT_OF_3 * currentEdgeSize / 2), p.getY() + (currentEdgeSize * 0.5f),
-                p.getX() - (UtilCoordinates.SQRT_OF_3 * currentEdgeSize / 2), p.getY() - (currentEdgeSize * 0.5f), paint);
-        c.drawLine(p.getX() - (UtilCoordinates.SQRT_OF_3 * currentEdgeSize / 2), p.getY() - (currentEdgeSize * 0.5f),
-                p.getX(), p.getY() - currentEdgeSize, paint);
+        ShapeDrawable d = getHexDrawable(edgeSize, scale);
+        d.setBounds(
+                p.getX() - halfWidth,
+                p.getY() - (int)edgeSize,
+                p.getX() + halfWidth,
+                p.getY() + (int)edgeSize);
+        d.getPaint().setColor(color);
+        d.getPaint().setStrokeWidth(strokeWidth * scale);
+        d.getPaint().setStyle(Paint.Style.STROKE);
+        d.draw(c);
     }
 
     /**
@@ -80,14 +78,63 @@ public class UtilCellDrawing {
         Paint paint = new Paint();
         paint.setStrokeWidth(strokeWidth * scale);
         paint.setColor(color);
-        Point p = UtilCoordinates.squareCoordsToPixel(currentEdgeSize, coords);
+        FJetPoint p = UtilCoordinates.squareCoordsToPixel(currentEdgeSize, coords);
 
-        float x1 = p.getX() - currentEdgeSize / 2;
-        float y1 = p.getY() - currentEdgeSize / 2;
-        float x2 = p.getX() + currentEdgeSize / 2;
-        float y2 = p.getY() + currentEdgeSize / 2;
+        ShapeDrawable d = getSquareDrawable(edgeSize, scale);
+        d.setBounds(
+                p.getX() - Math.round(currentEdgeSize / 2),
+                p.getY() - Math.round(currentEdgeSize / 2),
+                p.getX() + Math.round(currentEdgeSize / 2),
+                p.getY() + Math.round(currentEdgeSize / 2));
+        d.getPaint().setColor(color);
+        d.getPaint().setStrokeWidth(strokeWidth * scale);
+        d.getPaint().setStyle(Paint.Style.STROKE);
+        d.draw(c);
+    }
 
-        c.drawRect(x1, y1, x2, y2, paint);
+    public static ShapeDrawable getHexDrawable(float edgeSize, float scale){
+        float currentEdgeSize = edgeSize * scale;
+        Path path = createHexCellPath(edgeSize, scale);
+        float width = UtilCoordinates.SQRT_OF_3 * currentEdgeSize;
+        PathShape shape = new PathShape(path, width, currentEdgeSize * 2);
+        return new ShapeDrawable(shape);
+    }
+
+    public static Path createHexCellPath(float edgeSize, float scale){
+        float currentEdgeSize = edgeSize * scale;
+        Path path = new Path();
+        float width = UtilCoordinates.SQRT_OF_3 * currentEdgeSize;
+
+        path.moveTo(width / 2, 0);
+        path.lineTo(width, currentEdgeSize * 0.5f);
+        path.lineTo(width, currentEdgeSize * 1.5f);
+        path.lineTo(width / 2, currentEdgeSize * 2.0f);
+        path.lineTo(0, currentEdgeSize * 1.5f);
+        path.lineTo(0, currentEdgeSize * 0.5f);
+        path.close();
+
+        return path;
+    }
+
+    public static ShapeDrawable getSquareDrawable(float edgeSize, float scale){
+        float currentEdgeSize = edgeSize * scale;
+        Path path = createSquareCellPath(edgeSize, scale);
+
+        PathShape shape = new PathShape(path, currentEdgeSize, currentEdgeSize);
+        return new ShapeDrawable(shape);
+    }
+
+    public static Path createSquareCellPath(float edgeSize, float scale){
+        float currentEdgeSize = edgeSize * scale;
+        Path path = new Path();
+
+        path.moveTo(0, 0);
+        path.lineTo(currentEdgeSize, 0);
+        path.lineTo(currentEdgeSize, currentEdgeSize);
+        path.lineTo(0, currentEdgeSize);
+        path.close();
+
+        return path;
     }
 
     // endregion - Methods

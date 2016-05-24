@@ -1,20 +1,17 @@
 package org.avv.fjet;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 
 import org.avv.fjet.core.action.Action;
 import org.avv.fjet.core.action.ScaleViewAction;
 import org.avv.fjet.core.board.BoardFactory;
-import org.avv.fjet.core.board.Point;
+import org.avv.fjet.core.geometry.FJetPoint;
 
 public class MainActivity extends Activity {
 
@@ -112,7 +109,7 @@ public class MainActivity extends Activity {
 
             float x = ev.getX() - this.gameView.getLeft();
             float y = ev.getY() - this.gameView.getTop();
-            this.gameView.processTouchEvent(new Point((int) x, (int) y));
+            this.gameView.processTouchEvent(new FJetPoint((int) x, (int) y));
 
             if (r.contains((int)ev.getX(), (int)ev.getY())){
                 return true;

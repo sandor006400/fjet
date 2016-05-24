@@ -1,12 +1,12 @@
-package org.avv.fjet.core.board;
+package org.avv.fjet.core.geometry;
 
 /**
  * Created by Alexander Vladimirovich Vorobiev
  * At 03/04/2016
  * -------------------------------------------
- * Point wrapper
+ * FJetPoint wrapper
  */
-public class Point {
+public class FJetPoint {
 
     // region - Constants
 
@@ -21,7 +21,7 @@ public class Point {
 
     // region - Constructors
 
-    public Point(int x, int y){
+    public FJetPoint(int x, int y){
         this.x = x;
         this.y = y;
     }
@@ -52,14 +52,14 @@ public class Point {
 
     @Override
     public String toString() {
-        return "Point(" + this.x + "," + this.y + ")";
+        return "FJetPoint(" + this.x + "," + this.y + ")";
     }
 
     @Override
     public boolean equals(Object o) {
-        return o instanceof Point
-                && ((Point)o).getX() == this.getX()
-                && ((Point)o).getY() == this.getY();
+        return o instanceof FJetPoint
+                && ((FJetPoint)o).getX() == this.getX()
+                && ((FJetPoint)o).getY() == this.getY();
     }
 
     // endregion - Methods

@@ -1,5 +1,7 @@
 package org.avv.fjet.core.action;
 
+import org.avv.fjet.core.board.ICoords;
+
 /**
  * Created by Alexander Vorobiev on 4/05/16.
  */
@@ -35,12 +37,12 @@ public class ScaleViewAction extends Action {
     // region - Methods for/from SuperClass/Interfaces
 
     @Override
-    protected Object getExecutionResult() {
-        return this.scale;
+    protected IActionResult getExecutionResult() {
+        return new ScaleViewActionResult(this.scale);
     }
 
     @Override
-    protected Object getExecutionUndoResult() {
+    protected IActionUndoResult getExecutionUndoResult() {
         return null;
     }
 
@@ -52,6 +54,20 @@ public class ScaleViewAction extends Action {
     // endregion - Methods
 
     // region - Inner and Anonymous Classes
+
+    public class ScaleViewActionResult implements IActionResult {
+
+        private float scale;
+
+        public ScaleViewActionResult(float scale){
+            this.scale = scale;
+        }
+
+        public float getScale(){
+            return this.scale;
+        }
+
+    }
 
     // endregion - Inner and Anonymous Classes
 
