@@ -1,7 +1,8 @@
 package org.avv.fjet.core.board;
 
 import org.avv.fjet.core.board.util.UtilCoordinates;
-import org.avv.fjet.serialization.JsonSerializer;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +16,23 @@ import java.util.List;
 public class SquareCoords implements ICoords {
 
     // region - Constants
+
+    enum Attributes {
+
+        X("x"),
+        Y("y");
+
+        private final String name;
+
+        Attributes(final String name){
+            this.name = name;
+        }
+
+        @Override
+        public String toString() {
+            return name;
+        }
+    }
 
     private static final SquareCoords [] NEIGHBORS = {
             new SquareCoords(0, -1),
@@ -91,7 +109,8 @@ public class SquareCoords implements ICoords {
     @Override
     public String toString() {
         //return "SquareCoords(" + this.x + "," + this.y + ")";
-        return JsonSerializer.toJsonString(this);
+        //return JsonSerializable.toJsonString(this);
+        return this.toJsonString();
     }
 
     @Override
@@ -104,14 +123,20 @@ public class SquareCoords implements ICoords {
         return "(" + this.x + "," + this.y + ")";
     }
 
-    @Override
-    public String toJsonString() {
-        return null;
-    }
-
     // endregion - Methods for/from SuperClass/Interfaces
 
     // region - Methods
+
+    public String toJsonString() {
+        JSONObject jsonObj = new JSONObject();
+        try {
+            jsonObj.put(Attributes.X.toString(), this.x);
+            jsonObj.put(Attributes.Y.toString(), this.y);
+        } catch (JSONException e){
+
+        }
+        return jsonObj.toString();
+    }
 
     // endregion - Methods
 

@@ -1,6 +1,9 @@
 package org.avv.fjet.core.board;
 
 import org.avv.fjet.core.unit.Unit;
+import org.avv.fjet.serialization.JsonSerializable;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,6 +17,23 @@ import java.util.Map;
 public class Board {
 
     // region - Constants
+
+    enum Attributes {
+
+        CELLS_MAP("cellsMap"),
+        UNITS_LIST("unitsList");
+
+        private final String name;
+
+        Attributes(final String name){
+            this.name = name;
+        }
+
+        @Override
+        public String toString() {
+            return name;
+        }
+    }
 
     // endregion - Constants
 
@@ -63,6 +83,12 @@ public class Board {
 
     // region - Methods for/from SuperClass/Interfaces
 
+
+    @Override
+    public String toString() {
+        return this.toJsonString();
+    }
+
     // endregion - Methods for/from SuperClass/Interfaces
 
     // region - Methods
@@ -85,6 +111,17 @@ public class Board {
 
     public void deselectCell(){
         this.selectedCells.clear();
+    }
+
+    public String toJsonString() {
+        JSONObject jsonObj = new JSONObject();
+        try {
+            jsonObj.put(Attributes.CELLS_MAP.toString(), this.cellsMap);
+            jsonObj.put(Attributes.UNITS_LIST.toString(), this.unitsList);
+        } catch (JSONException e){
+
+        }
+        return jsonObj.toString();
     }
 
     // endregion - Methods

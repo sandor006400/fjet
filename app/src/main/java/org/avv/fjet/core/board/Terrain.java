@@ -2,12 +2,33 @@ package org.avv.fjet.core.board;
 
 import android.graphics.drawable.Drawable;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * Created by Alexander Vorobiev on 22/05/16.
  */
 public class Terrain {
 
     // region - Constants
+
+    enum Attributes {
+
+        TERRAIN_TYPE("terrainType"),
+        MOVEMENT_COST("movementCost"),
+        DEFENSE_COEFFICENT("defenseCoefficent");
+
+        private final String name;
+
+        Attributes(final String name){
+            this.name = name;
+        }
+
+        @Override
+        public String toString() {
+            return name;
+        }
+    }
 
     public enum TerrainType {
         COAST,
@@ -71,9 +92,26 @@ public class Terrain {
 
     // region - Methods for/from SuperClass/Interfaces
 
+    @Override
+    public String toString() {
+        return this.toJsonString();
+    }
+
     // endregion - Methods for/from SuperClass/Interfaces
 
     // region - Methods
+
+    private String toJsonString(){
+        JSONObject jsonObj = new JSONObject();
+        try {
+            // Only one attribute is necesary to sava: TerrainType, because the scpecific
+            // terrain object can be obtained using TerrainFactory
+            jsonObj.put(Attributes.TERRAIN_TYPE.toString(), this.type);
+        } catch (JSONException e){
+
+        }
+        return jsonObj.toString();
+    }
 
     // endregion - Methods
 

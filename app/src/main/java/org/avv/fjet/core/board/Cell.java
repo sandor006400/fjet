@@ -1,7 +1,8 @@
 package org.avv.fjet.core.board;
 
 import org.avv.fjet.core.unit.Unit;
-import org.avv.fjet.serialization.JsonSerializer;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.UUID;
 
@@ -89,6 +90,11 @@ public class Cell {
 
     // region - Methods for/from SuperClass/Interfaces
 
+    @Override
+    public String toString() {
+        return this.toJsonString();
+    }
+
     // endregion - Methods for/from SuperClass/Interfaces
 
     // region - Methods
@@ -97,17 +103,18 @@ public class Cell {
         return UUID.randomUUID().toString();
     }
 
-    /*public static String toJsonString(Cell cell){
+    public String toJsonString() {
         JSONObject jsonObj = new JSONObject();
         try {
-            jsonObj.put(Attributes.ID.toString(), cell.coords.toJsonString());
-            jsonObj.put(Attributes.UNIT.toString(), cell.unit.toJsonString());
-            jsonObj.put(Attributes.COORDS, cell.coords.toJsonString());
-            jsonObj.put(Attributes.TERRAIN, cell.terrain.toJsonString());
+            jsonObj.put(Attributes.ID.toString(), this.id);
+            jsonObj.put(Attributes.UNIT.toString(), this.unit);
+            jsonObj.put(Attributes.COORDS.toString(), this.coords);
+            jsonObj.put(Attributes.TERRAIN.toString(), this.terrain);
         } catch (JSONException e){
 
         }
-    }*/
+        return jsonObj.toString();
+    }
 
     // endregion - Methods
 

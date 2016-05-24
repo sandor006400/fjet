@@ -27,7 +27,7 @@ import org.avv.fjet.core.board.util.UtilCoordinates;
 import org.avv.fjet.core.geometry.FJetRect;
 import org.avv.fjet.graphics.GameAnimation;
 import org.avv.fjet.graphics.util.UtilCellDrawing;
-import org.avv.fjet.serialization.JsonSerializer;
+import org.avv.fjet.serialization.JsonSerializable;
 
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
@@ -68,9 +68,11 @@ public class FJetSurfaceView extends SurfaceView
         holder.addCallback(this);
         Board b = BoardFactory.createBoard(getContext(), this.type, 10, 10);
 
-        for (Object cell : b.getCells().values()){
-            Log.d("Cell", JsonSerializer.toJsonString(cell));
-        }
+        /*for (Object cell : b.getCells().values()){
+//            Log.d("Cell", JsonSerializable.toJsonString(cell));
+            Log.d("Cell", cell.toString());
+        }*/
+        Log.d("Board", b.toString());
 
         Game g = new Game(b);
         this.thread = new SurfaceViewThread(holder, g);

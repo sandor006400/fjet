@@ -1,7 +1,8 @@
 package org.avv.fjet.core.board;
 
 import org.avv.fjet.core.board.util.UtilCoordinates;
-import org.avv.fjet.serialization.JsonSerializer;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +16,23 @@ import java.util.List;
 public class HexCoords implements ICoords {
 
     // region - Constants
+
+    enum Attributes {
+
+        Q("q"),
+        R("r");
+
+        private final String name;
+
+        Attributes(final String name){
+            this.name = name;
+        }
+
+        @Override
+        public String toString() {
+            return name;
+        }
+    }
 
     private static final HexCoords [] NEIGHBORS = {
             new HexCoords(0, -1), new HexCoords(1, -1),
@@ -63,9 +81,20 @@ public class HexCoords implements ICoords {
         return neighbors;
     }
 
-    // endregion - Methods for/from SuperClass/Interfaces
+    @Override
+    public String toString() {
+        return this.toJsonString();
+    }
 
-    // region - Methods
+    @Override
+    public ICoords getCopy() {
+        return new HexCoords(this.q, this.r);
+    }
+
+    @Override
+    public String toShortString() {
+        return "(" + this.q + "," + this.r + ")";
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -97,25 +126,19 @@ public class HexCoords implements ICoords {
         return neighbors.toArray(new HexCoords[neighbors.size()]);
     }
 
-    @Override
-    public String toString() {
-        //return "HexCoords(" + this.q + "," + this.r + ")";
-        return JsonSerializer.toJsonString(this);
-    }
+    // endregion - Methods for/from SuperClass/Interfaces
 
-    @Override
-    public ICoords getCopy() {
-        return new HexCoords(this.q, this.r);
-    }
+    // region - Methods
 
-    @Override
-    public String toShortString() {
-        return "(" + this.q + "," + this.r + ")";
-    }
-
-    @Override
     public String toJsonString() {
-        return null;
+        JSONObject jsonObj = new JSONObject();
+        try {
+            jsonObj.put(Attributes.Q.toString(), this.q);
+            jsonObj.put(Attributes.R.toString(), this.r);
+        } catch (JSONException e){
+
+        }
+        return jsonObj.toString();
     }
 
     // endregion - Methods

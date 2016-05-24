@@ -1,7 +1,5 @@
 package org.avv.fjet.serialization;
 
-import android.util.Log;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -11,7 +9,7 @@ import java.lang.reflect.Modifier;
 /**
  * Created by Alexander Vorobiev on 24/05/16.
  */
-public class JsonSerializer {
+public abstract class JsonSerializable {
 
     // region - Constants
 
@@ -36,7 +34,8 @@ public class JsonSerializer {
     // region - Methods
 
     /**
-     * Method that serielizes an object to JSON format string. Source: http://www.rgagnon.com/javadetails/java-get-fields-and-values-from-an-object.html
+     * Method that serielizes an object to JSON format string using reflexion to get objects attributes.
+     * Source: http://www.rgagnon.com/javadetails/java-get-fields-and-values-from-an-object.html
      * @param object
      * @return
      */
@@ -45,7 +44,7 @@ public class JsonSerializer {
         Field[] fields = objectClass.getDeclaredFields();
         JSONObject jsonObject = new JSONObject();
 
-        //Log.d("JsonSerializer", "class name: " + String.valueOf(objectClass.getName()) + " fields: " + String.valueOf(fields.length));
+        //Log.d("JsonSerializable", "class name: " + String.valueOf(objectClass.getName()) + " fields: " + String.valueOf(fields.length));
         try {
             for(int i = 0; i < fields.length; i++){
 
@@ -53,10 +52,10 @@ public class JsonSerializer {
                 if (!fields[i].isSynthetic()
                         && !fields[i].isEnumConstant()
                         && !Modifier.isFinal(fields[i].getModifiers())){
-                    Log.d("attribute ->", fields[i].getName());
+                    //Log.d("attribute ->", fields[i].getName());
                     fields[i].setAccessible(true);
                     Object value = fields[i].get(object);
-                    Log.d("value ->", value.toString());
+                    //Log.d("value ->", value.toString());
                     jsonObject.put(
                             fields[i].getName(),
                             value.toString());
