@@ -1,7 +1,6 @@
 package org.avv.fjet.core.unit;
 
 import org.avv.fjet.core.board.Cell;
-import org.avv.fjet.serialization.JsonSerializable;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -47,8 +46,12 @@ public class Unit {
         this.id = generateID();
     }
 
-    public Unit(String id){
-        this.id = id;
+    /**
+     * Creates a Unit using json with Unit data
+     * @param jsonString
+     */
+    public Unit(String jsonString){
+        initWithJsonString(jsonString);
     }
 
     // endregion - Constructors
@@ -73,6 +76,20 @@ public class Unit {
 
 
     @Override
+    public boolean equals(Object o) {
+
+        if (o == null){
+            return false;
+
+        } else if (o instanceof Unit){
+            return ((Unit)o).id.equals(this.id);
+
+        } else {
+            return false;
+        }
+    }
+
+    @Override
     public String toString() {
         return this.toJsonString();
     }
@@ -94,6 +111,16 @@ public class Unit {
 
     private String generateID(){
         return UUID.randomUUID().toString();
+    }
+
+    private void initWithJsonString(String jsonString){
+        try {
+            JSONObject jsonObject = new JSONObject(jsonString);
+            this.id = jsonObject.getString(Attributes.ID.toString());
+
+        } catch (JSONException e) {
+
+        }
     }
 
     // endregion - Methods

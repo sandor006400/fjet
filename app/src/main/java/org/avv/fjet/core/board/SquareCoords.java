@@ -55,6 +55,14 @@ public class SquareCoords implements ICoords {
         this.y = y;
     }
 
+    /**
+     * Creates a SquareCoords using json with SquareCoords data
+     * @param jsonString
+     */
+    public SquareCoords(String jsonString){
+        initWithJsonString(jsonString);
+    }
+
     // endregion - Constructors
 
     // region - Getters and Setters
@@ -109,7 +117,7 @@ public class SquareCoords implements ICoords {
     @Override
     public String toString() {
         //return "SquareCoords(" + this.x + "," + this.y + ")";
-        //return JsonSerializable.toJsonString(this);
+        //return JsonSerializer.toJsonString(this);
         return this.toJsonString();
     }
 
@@ -136,6 +144,17 @@ public class SquareCoords implements ICoords {
 
         }
         return jsonObj.toString();
+    }
+
+    private void initWithJsonString(String jsonString){
+        try {
+            JSONObject jsonObject = new JSONObject(jsonString);
+            this.x = jsonObject.getInt(Attributes.X.toString());
+            this.y = jsonObject.getInt(Attributes.Y.toString());
+
+        } catch (JSONException e) {
+
+        }
     }
 
     // endregion - Methods

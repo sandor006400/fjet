@@ -17,11 +17,6 @@ public class BoardFactory {
 
     private static final String DEBUG_TAG = "BoardFactory";
 
-    public enum BoardType {
-        HEX_CELLS,
-        SQUARE_CELLS
-    }
-
     // endregion - Constants
 
     // region - Fields
@@ -46,14 +41,13 @@ public class BoardFactory {
 
     // region - Methods
 
-    public static Board createBoard(Context c, BoardType t, int width, int height){
-        Board b = new Board();
+    public static Board createBoard(Context c, Board.BoardType t, int width, int height){
+        Board b = new Board(t);
 
         if (width != 0 && height != 0) {
             switch (t) {
 
                 case HEX_CELLS:
-                    //Log.d(DEBUG_TAG, "createBoard, HEX_CELLS");
                     for (int i = 0; i < height; i++){
                         for (int j = 0; j < width; j++){
                             ICoords coords = UtilCoordinates.offsetHexCoordsToAxialHexCoords(i, j);
@@ -67,7 +61,6 @@ public class BoardFactory {
                     break;
 
                 case SQUARE_CELLS:
-                    //Log.d(DEBUG_TAG, "createBoard, SQUARE_CELLS");
                     for (int i = 0; i < height; i++){
                         for (int j = 0; j < width; j++){
                             ICoords coords = new SquareCoords(i, j);

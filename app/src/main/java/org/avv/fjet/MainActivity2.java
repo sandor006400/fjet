@@ -52,7 +52,7 @@ public class MainActivity2 extends Activity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        Board b = BoardFactory.createBoard(this, BoardFactory.BoardType.HEX_CELLS, 10, 10);
+        Board b = BoardFactory.createBoard(this, Board.BoardType.HEX_CELLS, 10, 10);
         Game g = new Game(b);
 
         this.gameView = new GameView(this);

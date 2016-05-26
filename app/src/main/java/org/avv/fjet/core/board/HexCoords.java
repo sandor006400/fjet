@@ -55,6 +55,14 @@ public class HexCoords implements ICoords {
         this.r = r;
     }
 
+    /**
+     * Creates a HexCoords using json with HexCoords data
+     * @param jsonString
+     */
+    public HexCoords(String jsonString){
+        initWithJsonString(jsonString);
+    }
+
     // endregion - Constructors
 
     // region - Getters and Setters
@@ -139,6 +147,17 @@ public class HexCoords implements ICoords {
 
         }
         return jsonObj.toString();
+    }
+
+    private void initWithJsonString(String jsonString){
+        try {
+            JSONObject jsonObject = new JSONObject(jsonString);
+            this.q = jsonObject.getInt(Attributes.Q.toString());
+            this.r = jsonObject.getInt(Attributes.R.toString());
+
+        } catch (JSONException e) {
+
+        }
     }
 
     // endregion - Methods

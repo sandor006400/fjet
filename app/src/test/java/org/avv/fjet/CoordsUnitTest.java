@@ -121,7 +121,19 @@ public class CoordsUnitTest {
         assertArrayEquals(rangeNCoords, coords.getCoordsInRangeArray(N));
 
     }
+/*
+    @Test
+    public void test_SquareCoordsJsonSerialization() throws Exception {
+        SquareCoords result = new SquareCoords(3,4);
+        String coordsJson = result.toJsonString();
 
+        SquareCoords newCoords = new SquareCoords(coordsJson);
+
+        System.out.print("New square coords: " + newCoords);
+
+        assertEquals(result, new SquareCoords(coordsJson));
+    }
+*/
     // endregion - HexCoords tests
 
     // region - UtilCoordinates tests
@@ -187,6 +199,18 @@ public class CoordsUnitTest {
         HexCoords result = new HexCoords(3,4);
         assertEquals(result, UtilCoordinates.roundHexCoords(3.232243f, 3.62321f));
     }
+/*
+    @Test
+    public void test_HexCoordsJsonSerialization() throws Exception {
+        HexCoords result = new HexCoords(3,4);
+        String coordsJson = result.toJsonString();
+
+        HexCoords newCoords = new HexCoords(coordsJson);
+
+        System.out.print("New hex coords: " + newCoords);
+        assertEquals(result, newCoords);
+    }
+*/
 
     // endregion - UtilCoordinates tests
 

@@ -27,7 +27,6 @@ import org.avv.fjet.core.board.util.UtilCoordinates;
 import org.avv.fjet.core.geometry.FJetRect;
 import org.avv.fjet.graphics.GameAnimation;
 import org.avv.fjet.graphics.util.UtilCellDrawing;
-import org.avv.fjet.serialization.JsonSerializable;
 
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
@@ -46,7 +45,7 @@ public class FJetSurfaceView extends SurfaceView
 
     // region - Fields
 
-    private BoardFactory.BoardType type = BoardFactory.BoardType.HEX_CELLS;
+    private Board.BoardType type = Board.BoardType.HEX_CELLS;
     private SurfaceViewThread thread;
 
     // endregion - Fields
@@ -68,10 +67,6 @@ public class FJetSurfaceView extends SurfaceView
         holder.addCallback(this);
         Board b = BoardFactory.createBoard(getContext(), this.type, 10, 10);
 
-        /*for (Object cell : b.getCells().values()){
-//            Log.d("Cell", JsonSerializable.toJsonString(cell));
-            Log.d("Cell", cell.toString());
-        }*/
         Log.d("Board", b.toString());
 
         Game g = new Game(b);
@@ -133,7 +128,7 @@ public class FJetSurfaceView extends SurfaceView
         }
     }
 
-    public void setCellType(BoardFactory.BoardType type){
+    public void setCellType(Board.BoardType type){
         this.type = type;
         this.thread.setBoardType(type);
     }
@@ -154,6 +149,10 @@ public class FJetSurfaceView extends SurfaceView
                 e.printStackTrace();
             }
         }
+    }
+
+    public String getBoardJson(){
+        return this.thread.game.getBoard().toJsonString();
     }
 
     public void initializeThread(){
@@ -397,14 +396,14 @@ public class FJetSurfaceView extends SurfaceView
                 this.p = p;
                 ICoords coords = null;
 
-                if (type == BoardFactory.BoardType.HEX_CELLS) {
+                if (type == Board.BoardType.HEX_CELLS) {
                     //Log.d("Screen coords -> ", p.toString());
                     coords = UtilCoordinates.hexCoordsFromPixel(
                             p.getX(),
                             p.getY(),
                             thread.edgeSize * this.scale);
 
-                } else if (type == BoardFactory.BoardType.SQUARE_CELLS) {
+                } else if (type == Board.BoardType.SQUARE_CELLS) {
                     coords = UtilCoordinates.squareCoordsFromPixelCoords(
                             p.getX(),
                             p.getY(),
@@ -434,7 +433,7 @@ public class FJetSurfaceView extends SurfaceView
             }
         }
 
-        public void setBoardType(BoardFactory.BoardType type){
+        public void setBoardType(Board.BoardType type){
             synchronized (this) {
                 Board b = BoardFactory.createBoard(getContext(), type, 10, 10);
                 this.game = new Game(b);

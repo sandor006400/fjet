@@ -1,6 +1,7 @@
 package org.avv.fjet;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +11,7 @@ import android.widget.Button;
 
 import org.avv.fjet.core.action.Action;
 import org.avv.fjet.core.action.ScaleViewAction;
+import org.avv.fjet.core.board.Board;
 import org.avv.fjet.core.board.BoardFactory;
 import org.avv.fjet.core.geometry.FJetPoint;
 
@@ -17,10 +19,25 @@ public class MainActivity extends Activity {
 
     private FJetSurfaceView gameView;
 
+    private static final String GENERAL_SP = "PREFS";
+
+    private static final String PREF_BOARD = "BOARD";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        SharedPreferences prefs = getSharedPreferences(GENERAL_SP, MODE_PRIVATE);
+        String jsonBoard = prefs.getString(PREF_BOARD, "");
+
+        if (jsonBoard != null && !jsonBoard.equals("")){
+            Board b = new Board(jsonBoard, this);
+            String bJson = b.toJsonString();
+            Log.d("Board leido !!!", jsonBoard);
+            Log.d("Board generado !!!", bJson);
+            Log.d("Board generado es igual al string = ", String.valueOf(bJson.equals(jsonBoard)));
+        }
 
         this.gameView = (FJetSurfaceView) findViewById(R.id.surfaceView);
 
@@ -61,7 +78,7 @@ public class MainActivity extends Activity {
         bH.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                gameView.setCellType(BoardFactory.BoardType.HEX_CELLS);
+                gameView.setCellType(Board.BoardType.HEX_CELLS);
                 //gameView.initializeThread();
             }
         });
@@ -70,7 +87,7 @@ public class MainActivity extends Activity {
         bS.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                gameView.setCellType(BoardFactory.BoardType.SQUARE_CELLS);
+                gameView.setCellType(Board.BoardType.SQUARE_CELLS);
                 //gameView.initializeThread();
             }
         });
@@ -94,6 +111,15 @@ public class MainActivity extends Activity {
 
         //this.gameView.
         this.gameView.stop();
+
+        String jsonBoard = this.gameView.getBoardJson();
+
+        Log.d("Board", jsonBoard);
+
+        SharedPreferences prefs = getSharedPreferences(GENERAL_SP, MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(PREF_BOARD, jsonBoard);
+        editor.commit();
     }
 
     @Override
