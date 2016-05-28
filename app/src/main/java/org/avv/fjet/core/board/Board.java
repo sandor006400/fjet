@@ -3,6 +3,7 @@ package org.avv.fjet.core.board;
 import android.content.Context;
 
 import org.avv.fjet.core.unit.Unit;
+import org.avv.fjet.serialization.JsonSerializable;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -250,10 +251,6 @@ public class Board {
     // endregion - Methods
 
     // region - Inner and Anonymous Classes
-
-    interface IBoardState {
-
-    }
 
     // endregion - Inner and Anonymous Classes
 

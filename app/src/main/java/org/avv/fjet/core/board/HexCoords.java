@@ -1,6 +1,7 @@
 package org.avv.fjet.core.board;
 
 import org.avv.fjet.core.board.util.UtilCoordinates;
+import org.avv.fjet.serialization.JsonSerializable;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -13,7 +14,7 @@ import java.util.List;
  * -------------------------------------------
  * Hexagonal cell axial coordinates
  */
-public class HexCoords implements ICoords {
+public class HexCoords extends JsonSerializable implements ICoords {
 
     // region - Constants
 
@@ -132,6 +133,18 @@ public class HexCoords implements ICoords {
             }
         }
         return neighbors.toArray(new HexCoords[neighbors.size()]);
+    }
+
+    @Override
+    public void initWithJson(String json) {
+        try {
+            JSONObject jsonObject = new JSONObject(json);
+            this.q = jsonObject.getInt("q");
+            this.r = jsonObject.getInt("r");
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     // endregion - Methods for/from SuperClass/Interfaces

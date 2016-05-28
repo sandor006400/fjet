@@ -1,9 +1,11 @@
 package org.avv.fjet.core.board;
 
 import org.avv.fjet.core.board.util.UtilCoordinates;
+import org.avv.fjet.serialization.JsonSerializable;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +15,7 @@ import java.util.List;
  * -------------------------------------------
  * Square cell coordinates
  */
-public class SquareCoords implements ICoords {
+public class SquareCoords extends JsonSerializable implements ICoords {
 
     // region - Constants
 
@@ -129,6 +131,18 @@ public class SquareCoords implements ICoords {
     @Override
     public String toShortString() {
         return "(" + this.x + "," + this.y + ")";
+    }
+
+    @Override
+    public void initWithJson(String json) {
+        try {
+            JSONObject jsonObject = new JSONObject(json);
+            this.x = jsonObject.getInt("x");
+            this.y = jsonObject.getInt("y");
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     // endregion - Methods for/from SuperClass/Interfaces

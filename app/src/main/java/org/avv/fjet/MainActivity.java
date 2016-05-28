@@ -31,13 +31,13 @@ public class MainActivity extends Activity {
         SharedPreferences prefs = getSharedPreferences(GENERAL_SP, MODE_PRIVATE);
         String jsonBoard = prefs.getString(PREF_BOARD, "");
 
-        if (jsonBoard != null && !jsonBoard.equals("")){
+        /*if (jsonBoard != null && !jsonBoard.equals("")){
             Board b = new Board(jsonBoard, this);
             String bJson = b.toJsonString();
             Log.d("Board leido !!!", jsonBoard);
             Log.d("Board generado !!!", bJson);
             Log.d("Board generado es igual al string = ", String.valueOf(bJson.equals(jsonBoard)));
-        }
+        }*/
 
         this.gameView = (FJetSurfaceView) findViewById(R.id.surfaceView);
 

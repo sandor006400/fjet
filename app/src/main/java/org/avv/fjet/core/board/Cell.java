@@ -3,6 +3,7 @@ package org.avv.fjet.core.board;
 import android.content.Context;
 
 import org.avv.fjet.core.unit.Unit;
+import org.avv.fjet.serialization.JsonSerializable;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -15,6 +16,10 @@ import java.util.UUID;
 public class Cell {
 
     // region - Constants
+
+    enum CoordsType {
+        H, S
+    }
 
     enum Attributes {
 
@@ -103,10 +108,18 @@ public class Cell {
         return this.unitId;
     }
 
+    public CellData getCellData(){
+        CellData data = new CellData();
+        data.id = this.id;
+        data.coords = this.coords;
+        data.terrainType = this.terrain.getType();
+        data.unitId = this.unit.getId();
+        return data;
+    }
+
     // endregion - Getters and Setters
 
     // region - Methods for/from SuperClass/Interfaces
-
 
     @Override
     public boolean equals(Object o) {
@@ -203,6 +216,37 @@ public class Cell {
     // endregion - Methods
 
     // region - Inner and Anonymous Classes
+
+    public class CellData extends JsonSerializable {
+
+        public String id;
+        public String unitId;
+        public ICoords coords;
+        public CoordsType coordsType;
+        public Terrain.TerrainType terrainType;
+
+        @Override
+        public void initWithJson(String json) {
+            try {
+                JSONObject jsonObject = new JSONObject(json);
+                this.id = jsonObject.getString("id");
+                this.unitId = jsonObject.getString("unitId");
+                this.coordsType = CoordsType.valueOf(jsonObject.getString("coordsType"));
+
+                if (coordsType == CoordsType.H){
+                    this.coords = new HexCoords(jsonObject.getString("coords"));
+
+                } else if (coordsType == CoordsType.S){
+                    this.coords = new SquareCoords(jsonObject.getString("coords"));
+                }
+                this.terrainType = Terrain.TerrainType.valueOf(jsonObject.getString("terrainType"));
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
 
     // endregion - Inner and Anonymous Classes
 

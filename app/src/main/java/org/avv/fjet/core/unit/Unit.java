@@ -1,6 +1,11 @@
 package org.avv.fjet.core.unit;
 
 import org.avv.fjet.core.board.Cell;
+import org.avv.fjet.core.board.HexCoords;
+import org.avv.fjet.core.board.ICoords;
+import org.avv.fjet.core.board.SquareCoords;
+import org.avv.fjet.core.board.Terrain;
+import org.avv.fjet.serialization.JsonSerializable;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -126,6 +131,24 @@ public class Unit {
     // endregion - Methods
 
     // region - Inner and Anonymous Classes
+
+
+    public class UnitData extends JsonSerializable {
+
+        public String id;
+
+        @Override
+        public void initWithJson(String json) {
+            try {
+                JSONObject jsonObject = new JSONObject(json);
+                this.id = jsonObject.getString("id");
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
 
     // endregion - Inner and Anonymous Classes
 
