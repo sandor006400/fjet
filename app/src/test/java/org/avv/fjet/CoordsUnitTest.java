@@ -125,7 +125,7 @@ public class CoordsUnitTest {
     @Test
     public void test_SquareCoordsJsonSerialization() throws Exception {
         SquareCoords result = new SquareCoords(3,4);
-        String coordsJson = result.toJsonString();
+        String coordsJson = result.toJson();
 
         SquareCoords newCoords = new SquareCoords(coordsJson);
 
@@ -203,7 +203,7 @@ public class CoordsUnitTest {
     @Test
     public void test_HexCoordsJsonSerialization() throws Exception {
         HexCoords result = new HexCoords(3,4);
-        String coordsJson = result.toJsonString();
+        String coordsJson = result.toJson();
 
         HexCoords newCoords = new HexCoords(coordsJson);
 

@@ -19,23 +19,6 @@ public class Unit {
 
     // region - Constants
 
-    enum Attributes {
-
-        ID("id"),
-        CELL("cell");
-
-        private final String name;
-
-        Attributes(final String name){
-            this.name = name;
-        }
-
-        @Override
-        public String toString() {
-            return name;
-        }
-    }
-
     // endregion - Constants
 
     // region - Fields
@@ -53,10 +36,10 @@ public class Unit {
 
     /**
      * Creates a Unit using json with Unit data
-     * @param jsonString
+     * @param data
      */
-    public Unit(String jsonString){
-        initWithJsonString(jsonString);
+    public Unit(UnitData data){
+
     }
 
     // endregion - Constructors
@@ -96,18 +79,7 @@ public class Unit {
 
     @Override
     public String toString() {
-        return this.toJsonString();
-    }
-
-    public String toJsonString() {
-        JSONObject jsonObj = new JSONObject();
-        try {
-            jsonObj.put(Attributes.ID.toString(), this.id);
-            jsonObj.put(Attributes.CELL.toString(), this.cell);
-        } catch (JSONException e){
-
-        }
-        return jsonObj.toString();
+        return this.id;
     }
 
     // endregion - Methods for/from SuperClass/Interfaces
@@ -118,14 +90,10 @@ public class Unit {
         return UUID.randomUUID().toString();
     }
 
-    private void initWithJsonString(String jsonString){
-        try {
-            JSONObject jsonObject = new JSONObject(jsonString);
-            this.id = jsonObject.getString(Attributes.ID.toString());
-
-        } catch (JSONException e) {
-
-        }
+    public UnitData getUnitData(){
+        UnitData data = new UnitData();
+        data.id = this.id;
+        return data;
     }
 
     // endregion - Methods
@@ -133,11 +101,28 @@ public class Unit {
     // region - Inner and Anonymous Classes
 
 
-    public class UnitData extends JsonSerializable {
+    static public class UnitData {
 
         public String id;
 
-        @Override
+        public UnitData(){
+
+        }
+
+        public UnitData(String json){
+            initWithJson(json);
+        }
+
+        public String toJson(){
+            JSONObject jsonObject = new JSONObject();
+            try {
+                jsonObject.put("id", this.id);
+            } catch (JSONException e) {
+
+            }
+            return jsonObject.toString();
+        }
+
         public void initWithJson(String json) {
             try {
                 JSONObject jsonObject = new JSONObject(json);

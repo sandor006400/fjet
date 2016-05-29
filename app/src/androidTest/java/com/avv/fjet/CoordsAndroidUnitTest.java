@@ -41,7 +41,7 @@ public class CoordsAndroidUnitTest extends InstrumentationTestCase {
 
     @Test
     public void hexCoords_jsonSerialization(){
-        String jsonCoords = hexCoords.toJsonString();
+        String jsonCoords = hexCoords.toJson();
         HexCoords newCoords = new HexCoords(jsonCoords);
 
         assertThat(hexCoords, is(newCoords));
@@ -49,7 +49,7 @@ public class CoordsAndroidUnitTest extends InstrumentationTestCase {
 
     @Test
     public void squareCoords_jsonSerialization(){
-        String jsonCoords = squareCoords.toJsonString();
+        String jsonCoords = squareCoords.toJson();
         SquareCoords newCoords = new SquareCoords(jsonCoords);
 
         assertThat(squareCoords, is(newCoords));

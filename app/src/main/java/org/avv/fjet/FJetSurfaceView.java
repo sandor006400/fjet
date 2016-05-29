@@ -55,7 +55,6 @@ public class FJetSurfaceView extends SurfaceView
     public FJetSurfaceView(Context context, AttributeSet attrs){
         super(context, attrs);
 
-
     }
 
     // endregion - Constructors
@@ -66,6 +65,8 @@ public class FJetSurfaceView extends SurfaceView
         SurfaceHolder holder = getHolder();
         holder.addCallback(this);
         Board b = BoardFactory.createBoard(getContext(), this.type, 10, 10);
+
+        Log.d("BoardJson", b.getBoardData().toJson());
 
         Log.d("Board", b.toString());
 
@@ -152,7 +153,7 @@ public class FJetSurfaceView extends SurfaceView
     }
 
     public String getBoardJson(){
-        return this.thread.game.getBoard().toJsonString();
+        return this.thread.game.getBoard().getBoardData().toJson();
     }
 
     public void initializeThread(){

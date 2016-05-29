@@ -4,6 +4,7 @@ import android.content.Context;
 
 import org.avv.fjet.core.unit.Unit;
 import org.avv.fjet.serialization.JsonSerializable;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -19,25 +20,6 @@ public class Cell {
 
     enum CoordsType {
         H, S
-    }
-
-    enum Attributes {
-
-        ID("id"),
-        UNIT_ID("unitId"),
-        COORDS("coords"),
-        TERRAIN("terrain");
-
-        private final String name;
-
-        Attributes(final String name){
-            this.name = name;
-        }
-
-        @Override
-        public String toString() {
-            return name;
-        }
     }
 
     // endregion - Constants
@@ -68,12 +50,20 @@ public class Cell {
         this.unitId = null;
     }
 
+    public Cell(CellData data, Context c){
+        this.id = data.id;
+        this.unitId = data.unitId;
+        this.terrain = TerrainFactory.getInstance(c).getTerrain(data.terrainType);
+        this.coords = data.coords;
+    }
+
     /**
      * Creates a Cell using json with Cell data
-     * @param jsonString
+     * @param data
+     * @param c
      */
-    public Cell(String jsonString, Context c, Board.BoardType t){
-        initWithJsonString(jsonString, c, t);
+    public Cell(Board.BoardData data, Context c){
+
     }
 
     // endregion - Constructors
@@ -112,8 +102,16 @@ public class Cell {
         CellData data = new CellData();
         data.id = this.id;
         data.coords = this.coords;
+        if (this.coords instanceof HexCoords){
+            data.coordsType = CoordsType.H;
+
+        } else if (this.coords instanceof SquareCoords){
+            data.coordsType = CoordsType.S;
+        }
         data.terrainType = this.terrain.getType();
-        data.unitId = this.unit.getId();
+        if (this.unit != null) {
+            data.unitId = this.unit.getId();
+        }
         return data;
     }
 
@@ -138,7 +136,7 @@ public class Cell {
 
     @Override
     public String toString() {
-        return this.toJsonString();
+        return this.id;
     }
 
     // endregion - Methods for/from SuperClass/Interfaces
@@ -149,75 +147,11 @@ public class Cell {
         return UUID.randomUUID().toString();
     }
 
-    public String toJsonString() {
-        JSONObject jsonObj = new JSONObject();
-        try {
-            jsonObj.put(Attributes.ID.toString(), this.id);
-
-            if (this.unit != null) {
-                jsonObj.put(Attributes.UNIT_ID.toString(), this.unit.getId());
-            }
-            jsonObj.put(Attributes.COORDS.toString(), this.coords);
-            jsonObj.put(Attributes.TERRAIN.toString(), this.terrain.getType().name());
-
-        } catch (JSONException e){
-
-        }
-        return jsonObj.toString();
-    }
-
-    private void initWithJsonString(String jsonString, Context c, Board.BoardType t){
-        JSONObject jsonObject = null;
-        try {
-            jsonObject = new JSONObject(jsonString);
-
-        } catch (JSONException e) {
-
-        }
-
-        if (jsonObject != null) {
-            try {
-                this.id = jsonObject.getString(Attributes.ID.toString());
-
-            } catch (JSONException e) {
-                this.id = generateID();
-            }
-
-            try {
-                this.unitId = jsonObject.getString(Attributes.UNIT_ID.toString());
-
-            } catch (JSONException e) {
-                this.unitId = null;
-            }
-
-            try {
-                if (t == Board.BoardType.HEX_CELLS) {
-                    this.coords = new HexCoords(jsonObject.getString(Attributes.COORDS.toString()));
-
-                } else if (t == Board.BoardType.SQUARE_CELLS){
-                    this.coords = new SquareCoords(jsonObject.getString(Attributes.COORDS.toString()));
-                }
-
-            } catch (JSONException e) {
-                this.unitId = null;
-            }
-
-            try {
-                this.terrain = TerrainFactory.getInstance(c).getTerrain(
-                        Terrain.TerrainType.valueOf(
-                                jsonObject.getString(Attributes.TERRAIN.toString())));
-
-            } catch (JSONException e) {
-                this.terrain = null;
-            }
-        }
-    }
-
     // endregion - Methods
 
     // region - Inner and Anonymous Classes
 
-    public class CellData extends JsonSerializable {
+    public static class CellData {
 
         public String id;
         public String unitId;
@@ -225,27 +159,94 @@ public class Cell {
         public CoordsType coordsType;
         public Terrain.TerrainType terrainType;
 
-        @Override
-        public void initWithJson(String json) {
+        public CellData(){
+
+        }
+
+        public CellData(String json){
+            initWithJson(json);
+        }
+
+        public String toJson(){
+            JSONObject jsonObject = new JSONObject();
+
             try {
-                JSONObject jsonObject = new JSONObject(json);
-                this.id = jsonObject.getString("id");
-                this.unitId = jsonObject.getString("unitId");
-                this.coordsType = CoordsType.valueOf(jsonObject.getString("coordsType"));
-
-                if (coordsType == CoordsType.H){
-                    this.coords = new HexCoords(jsonObject.getString("coords"));
-
-                } else if (coordsType == CoordsType.S){
-                    this.coords = new SquareCoords(jsonObject.getString("coords"));
+                jsonObject.put("id", this.id);
+                if (this.unitId != null) {
+                    jsonObject.put("unitId", this.unitId);
                 }
-                this.terrainType = Terrain.TerrainType.valueOf(jsonObject.getString("terrainType"));
+                jsonObject.put("coords", this.coords.toJson());
+                jsonObject.put("coordsType", this.coordsType);
+                jsonObject.put("terrainType", this.terrainType);
+
+            } catch (JSONException e) {
+
+            }
+            return jsonObject.toString();
+        }
+
+        public void initWithJson(String json) {
+            JSONObject jsonObject = null;
+            try {
+                jsonObject = new JSONObject(json);
 
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+
+            if (jsonObject != null) {
+                try {
+                    this.id = jsonObject.getString("id");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    this.unitId = jsonObject.getString("unitId");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    this.coordsType = CoordsType.valueOf(jsonObject.getString("coordsType"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    if (coordsType == CoordsType.H) {
+                        this.coords = new HexCoords(jsonObject.getString("coords"));
+
+                    } else if (coordsType == CoordsType.S) {
+                        this.coords = new SquareCoords(jsonObject.getString("coords"));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    this.terrainType = Terrain.TerrainType.valueOf(jsonObject.getString("terrainType"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
+        @Override
+        public boolean equals(Object o) {
+            if (o == null){
+                return false;
+
+            } else if (o instanceof CellData) {
+                return ((CellData)o).coords == this.coords
+                        && ((CellData)o).id.equals(this.id)
+                        && ((CellData)o).terrainType == this.terrainType
+                        && ((CellData)o).unitId.equals(this.unitId)
+                        && ((CellData)o).coordsType == this.coordsType;
+            } else {
+                return false;
+            }
+        }
     }
 
     // endregion - Inner and Anonymous Classes

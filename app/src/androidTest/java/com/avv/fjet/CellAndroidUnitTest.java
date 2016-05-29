@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.InstrumentationTestCase;
 import android.test.suitebuilder.annotation.SmallTest;
+import android.util.Log;
 
 import org.avv.fjet.core.board.Board;
 import org.avv.fjet.core.board.Cell;
@@ -50,12 +51,24 @@ public class CellAndroidUnitTest extends InstrumentationTestCase {
         cell = new Cell(coords, terrain);
     }
 
-    @Test
+    /*@Test
     public void cell_jsonSerialization() throws Exception {
-        String json = cell.toJsonString();
+        Cell.CellData data = cell.getCellData();
+        String json = data.toJson();
+
+        Cell.CellData newCellData = new Cell.CellData();
         Cell newCell = new Cell(json, c, Board.BoardType.HEX_CELLS);
 
         assertEquals(cell, newCell);
+    }*/
+
+    @Test
+    public void cell_jsonSerialization() throws Exception {
+        Cell.CellData data = cell.getCellData();
+        String json = data.toJson();
+        Cell.CellData newCellData = new Cell.CellData();
+
+        assertEquals(data, newCellData);
     }
 
     // endregion - Methods

@@ -1,11 +1,9 @@
 package org.avv.fjet.core.board;
 
 import org.avv.fjet.core.board.util.UtilCoordinates;
-import org.avv.fjet.serialization.JsonSerializable;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +13,7 @@ import java.util.List;
  * -------------------------------------------
  * Square cell coordinates
  */
-public class SquareCoords extends JsonSerializable implements ICoords {
+public class SquareCoords implements ICoords {
 
     // region - Constants
 
@@ -62,7 +60,7 @@ public class SquareCoords extends JsonSerializable implements ICoords {
      * @param jsonString
      */
     public SquareCoords(String jsonString){
-        initWithJsonString(jsonString);
+        initWithJson(jsonString);
     }
 
     // endregion - Constructors
@@ -119,8 +117,8 @@ public class SquareCoords extends JsonSerializable implements ICoords {
     @Override
     public String toString() {
         //return "SquareCoords(" + this.x + "," + this.y + ")";
-        //return JsonSerializer.toJsonString(this);
-        return this.toJsonString();
+        //return JsonSerializer.toJson(this);
+        return this.toJson();
     }
 
     @Override
@@ -133,7 +131,6 @@ public class SquareCoords extends JsonSerializable implements ICoords {
         return "(" + this.x + "," + this.y + ")";
     }
 
-    @Override
     public void initWithJson(String json) {
         try {
             JSONObject jsonObject = new JSONObject(json);
@@ -149,7 +146,7 @@ public class SquareCoords extends JsonSerializable implements ICoords {
 
     // region - Methods
 
-    public String toJsonString() {
+    public String toJson() {
         JSONObject jsonObj = new JSONObject();
         try {
             jsonObj.put(Attributes.X.toString(), this.x);

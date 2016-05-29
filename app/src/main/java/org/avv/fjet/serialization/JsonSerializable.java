@@ -58,7 +58,7 @@ public abstract class JsonSerializable {
      * @param object
      * @return
      */
-    private static String toJsonString(final Object object){
+    private String toJsonString(final Object object){
         Class<? extends Object> objectClass = object.getClass();
         Field[] fields = objectClass.getDeclaredFields();
         JSONObject jsonObject = new JSONObject();
@@ -106,7 +106,7 @@ public abstract class JsonSerializable {
         return jsonObject.toString();
     }
 
-    static private JSONArray getJSONArrayFromArray(Object [] array){
+    private JSONArray getJSONArrayFromArray(Object [] array){
         JSONArray jsonArray = new JSONArray();
 
         for (int i = 0; i < array.length; i++) {

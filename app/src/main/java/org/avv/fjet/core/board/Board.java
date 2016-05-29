@@ -9,6 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -21,24 +22,6 @@ import java.util.Map;
 public class Board {
 
     // region - Constants
-
-    enum Attributes {
-
-        TYPE("type"),
-        CELLS("cells"),
-        UNITS("units");
-
-        private final String name;
-
-        Attributes(final String name){
-            this.name = name;
-        }
-
-        @Override
-        public String toString() {
-            return name;
-        }
-    }
 
     public enum BoardType {
         HEX_CELLS,
@@ -68,10 +51,12 @@ public class Board {
 
     /**
      * Creates a Board using json with Board data
-     * @param jsonString
+     * @param data
+     * @param c
      */
-    public Board(String jsonString, Context c){
-        initWithJsonString(jsonString, c);
+    public Board(BoardData data, Context c){
+        init();
+        initWithData(data, c);
     }
 
     // endregion - Constructors
@@ -110,7 +95,7 @@ public class Board {
 
     @Override
     public String toString() {
-        return this.toJsonString();
+        return "Board(" + this.type + ")";
     }
 
     // endregion - Methods for/from SuperClass/Interfaces
@@ -143,98 +128,6 @@ public class Board {
         this.selectedCells.clear();
     }
 
-    public String toJsonString() {
-        JSONObject jsonObj = new JSONObject();
-        try {
-            jsonObj.put(Attributes.TYPE.toString(), this.type);
-
-            String [] cells = new String[this.cellsMap.values().size()];
-            int i = 0;
-
-            // Serilizing cells
-            for (Cell c : this.cellsMap.values()){
-                cells[i++] = c.toString();
-            }
-            jsonObj.put(
-                    Attributes.CELLS.toString(),
-                    new JSONArray(cells));
-
-            // Srializing units
-            String [] units = new String[this.unitsMap.values().size()];
-            i = 0;
-
-            for (Unit u : this.unitsMap.values()){
-                units[i++] = u.toString();
-            }
-            jsonObj.put(
-                    Attributes.UNITS.toString(),
-                    new JSONArray(units));
-
-        } catch (JSONException e){
-
-        }
-        return jsonObj.toString();
-    }
-
-    private void initWithJsonString(String jsonString, Context c){
-        init();
-
-        JSONObject jsonObject = null;
-        try {
-            jsonObject = new JSONObject(jsonString);
-
-        } catch (JSONException e) {
-
-        }
-
-        if (jsonObject != null) {
-
-            try {
-                this.type = BoardType.valueOf(
-                        jsonObject.getString(Attributes.TYPE.toString()));
-
-            } catch (JSONException e) {
-
-            }
-
-            if (this.type != null) {
-                try {
-                    JSONArray jsonCellsArray = jsonObject.getJSONArray(Attributes.CELLS.toString());;
-
-                    for (int i = 0; i < jsonCellsArray.length(); i++) {
-                        String jsonCell = jsonCellsArray.getString(i);
-                        Cell cell = new Cell(jsonCell, c, this.type);
-                        this.cellsMap.put(
-                                cell.getCoords(),
-                                cell);
-                    }
-
-                } catch (JSONException e) {
-
-                }
-
-                try {
-                    JSONObject jsonUnitsMap = jsonObject.getJSONObject(Attributes.UNITS.toString());
-                    Iterator<String> i = jsonUnitsMap.keys();
-
-                    while (i.hasNext()) {
-                        String jsonUnitId = i.next();
-                        String jsonUnit = jsonUnitsMap.getString(jsonUnitId);
-                        this.unitsMap.put(
-                                jsonUnitId,
-                                new Unit(jsonUnit));
-                    }
-
-                } catch (JSONException e) {
-
-                }
-
-                // Associates cells and units
-                assignUnitsToCells();
-            }
-        }
-    }
-
     /**
      * Used while json deserialization takes place to assign Units with Cells
      */
@@ -248,9 +141,108 @@ public class Board {
         }
     }
 
+    public BoardData getBoardData(){
+        BoardData data = new BoardData();
+        List<Cell.CellData> cellsList = new ArrayList<>();
+        for (Cell c: this.cellsMap.values()){
+            cellsList.add(c.getCellData());
+        }
+        data.cells = Arrays.copyOf(cellsList.toArray(), cellsList.size(), Cell.CellData[].class);
+        List<Unit.UnitData> unitsList = new ArrayList<>();
+        for (Unit u: this.unitsMap.values()){
+            unitsList.add(u.getUnitData());
+        }
+        data.units = Arrays.copyOf(unitsList.toArray(), unitsList.size(), Unit.UnitData[].class);
+        return data;
+    }
+
+    private void initWithData(BoardData data, Context c){
+        for (int i = 0; i < data.cells.length; i++){
+            Cell cell = new Cell(data.cells[i], c);
+            this.cellsMap.put(cell.getCoords(), cell);
+        }
+
+        for (int i = 0; i < data.units.length; i++){
+            Unit unit = new Unit(data.units[i]);
+            this.unitsMap.put(unit.getId(), unit);
+        }
+    }
+
     // endregion - Methods
 
     // region - Inner and Anonymous Classes
+
+    static public class BoardData {
+
+        private Cell.CellData[] cells;
+        private Unit.UnitData[] units;
+
+        public BoardData(){
+
+        }
+
+        public BoardData(String json){
+            initWithJson(json);
+        }
+
+        public String toJson(){
+            JSONObject jsonObject = new JSONObject();
+
+            try {
+                JSONArray jsonArrayCells = new JSONArray();
+                for (int i = 0; i < this.cells.length; i++) {
+                    jsonArrayCells.put(this.cells[i].toJson());
+                }
+                jsonObject.put("cells", jsonArrayCells);
+
+                JSONArray jsonArrayUnits = new JSONArray();
+                for (int i = 0; i < this.units.length; i++) {
+                    jsonArrayUnits.put(this.units[i].toJson());
+                }
+                jsonObject.put("units", jsonArrayUnits);
+
+            } catch (JSONException e) {
+
+            }
+            return jsonObject.toString();
+        }
+
+        public void initWithJson(String json) {
+            JSONObject jsonObject = null;
+            try {
+                jsonObject = new JSONObject(json);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            if (jsonObject != null) {
+                try {
+                    JSONArray cellsArray = jsonObject.getJSONArray("cells");
+                    this.cells = new Cell.CellData[cellsArray.length()];
+
+                    for (int i = 0; i < cellsArray.length(); i++) {
+                        Cell.CellData cellData = new Cell.CellData(cellsArray.getString(i));
+                        this.cells[i] = cellData;
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    JSONArray unitsArray = jsonObject.getJSONArray("units");
+                    this.units = new Unit.UnitData[unitsArray.length()];
+
+                    for (int i = 0; i < unitsArray.length(); i++) {
+                        Unit.UnitData unitData = new Unit.UnitData(unitsArray.getString(i));
+                        this.units[i] = unitData;
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+    }
 
     // endregion - Inner and Anonymous Classes
 
