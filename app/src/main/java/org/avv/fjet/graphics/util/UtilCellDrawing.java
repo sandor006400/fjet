@@ -55,9 +55,9 @@ public class UtilCellDrawing {
         ShapeDrawable d = getHexDrawable(edgeSize, scale);
         d.setBounds(
                 p.getX() - halfWidth,
-                p.getY() - (int)edgeSize,
+                p.getY() - (int)currentEdgeSize,
                 p.getX() + halfWidth,
-                p.getY() + (int)edgeSize);
+                p.getY() + (int)currentEdgeSize);
         d.getPaint().setColor(color);
         d.getPaint().setStrokeWidth(strokeWidth * scale);
         d.getPaint().setStyle(Paint.Style.STROKE);
