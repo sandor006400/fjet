@@ -56,9 +56,6 @@ public class GameEngine extends GameViewThread implements GameView.IGameViewObse
 
     @Override
     public void drawObjects(Canvas c) {
-
-
-
         FJetPoint p;
         float currentEdgeSize = this.edgeSize*this.scale;
 

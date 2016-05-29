@@ -166,6 +166,8 @@ public class Board {
             Unit unit = new Unit(data.units[i]);
             this.unitsMap.put(unit.getId(), unit);
         }
+
+        assignUnitsToCells();
     }
 
     // endregion - Methods
