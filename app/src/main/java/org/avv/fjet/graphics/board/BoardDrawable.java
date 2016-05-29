@@ -1,7 +1,9 @@
 package org.avv.fjet.graphics.board;
 
 import android.graphics.Canvas;
+import android.util.Log;
 
+import org.avv.fjet.core.geometry.FJetPoint;
 import org.avv.fjet.core.geometry.FJetRect;
 import org.avv.fjet.graphics.unit.UnitDrawable;
 
@@ -24,7 +26,6 @@ public class BoardDrawable {
     // region - Fields
 
     private FJetRect boardBounds;   // Board bounds in screen coordinates
-    private FJetRect viewBounds;    // View bounds in screen coordinates
     private float scale;            // BoardDrawable current scale
 
     private Map<String, CellDrawable> cellDrawablesMap;
@@ -45,11 +46,6 @@ public class BoardDrawable {
 
     public BoardDrawable setBoardBounds(FJetRect bounds){
         this.boardBounds = bounds;
-        return this;
-    }
-
-    public BoardDrawable setViewBounds(FJetRect bounds){
-        this.viewBounds = bounds;
         return this;
     }
 
@@ -79,14 +75,13 @@ public class BoardDrawable {
 
         // Drawing cell drawables
         for (CellDrawable cD : this.cellDrawablesMap.values()){
-            cD.draw(this.boardBounds, this.viewBounds, this.scale, c);
+            cD.draw(this.boardBounds, this.scale, c);
         }
 
         // Drawing unit drawables
         for (UnitDrawable uD : this.unitDrawablesMap.values()){
-            uD.draw(this.boardBounds, this.viewBounds, this.scale, c);
+            uD.draw(this.boardBounds, this.scale, c);
         }
-
     }
 
     // endregion - Methods for/from SuperClass/Interfaces
@@ -95,7 +90,6 @@ public class BoardDrawable {
 
     private void init(){
         this.scale = DEFAULT_SCALE;
-        this.viewBounds = new FJetRect(0, 0, 0, 0);
         this.boardBounds = new FJetRect(0, 0, 0, 0);
         this.cellDrawablesMap = new HashMap<>();
         this.unitDrawablesMap = new HashMap<>();

@@ -33,6 +33,11 @@ public class FJetRect {
 
     // region - Methods for/from SuperClass/Interfaces
 
+    @Override
+    public String toString() {
+        return this.rect.toString();
+    }
+
     // endregion - Methods for/from SuperClass/Interfaces
 
     // region - Methods

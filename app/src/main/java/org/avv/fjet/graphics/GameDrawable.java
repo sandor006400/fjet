@@ -1,6 +1,7 @@
 package org.avv.fjet.graphics;
 
 import android.graphics.Canvas;
+import android.util.Log;
 
 import org.avv.fjet.core.geometry.FJetPoint;
 import org.avv.fjet.core.geometry.FJetRect;
@@ -32,6 +33,15 @@ public abstract class GameDrawable {
 
     // region - Getters and Setters
 
+    public void setSize(FJetPoint size){
+        Log.d("Size -> " , size.toString());
+        this.size = size;
+    }
+
+    public void setPosition(FJetPoint position){
+        this.position = position;
+    }
+
     // endregion - Getters and Setters
 
     // region - Methods for/from SuperClass/Interfaces
@@ -51,28 +61,30 @@ public abstract class GameDrawable {
      * Method used to decide if the drawable must be drawn, to calculate a drawRect and call
      * drawing method using new drawRect
      * @param boardBounds -> in screen coords
-     * @param viewBounds -> in screen coords
      * @param scale
      * @param c
      */
-    public void draw(FJetRect boardBounds, FJetRect viewBounds, float scale, Canvas c){
+    public void draw(FJetRect boardBounds, float scale, Canvas c){
 
-        if (drawableIntersectsViewBounds(viewBounds, boardBounds)){
+        if (drawableIntersectsViewBounds(boardBounds)){
 
             // Updating drawRect
             updateDrawRect(boardBounds.getX(), boardBounds.getY(), scale);
 
             // Finally, drawing GameDrawable using canvas and drawRect
             drawInRect(this.drawRect, c);
+
+            Log.d("Rect ->", this.drawRect.toString());
         }
     }
 
     private void init(){
         this.position = new FJetPoint(0,0);
         this.size = new FJetPoint(0,0);
+        this.drawRect = new FJetRect(0, 0, 0, 0);
     }
 
-    public boolean drawableIntersectsViewBounds(FJetRect viewBounds, FJetRect boardBounds){
+    public boolean drawableIntersectsViewBounds(FJetRect boardBounds){
 
         // TODO -> optimization func, calculates if GameDrawable intersects the container View
         return true;
@@ -80,10 +92,10 @@ public abstract class GameDrawable {
 
     public void updateDrawRect(int offsetX, int offsetY, float scale){
         this.drawRect.setAttributes(
-                Math.round(((float)this.position.getX() * scale) - ((float)this.size.getX() * scale) + offsetX),
-                Math.round(((float)this.position.getY() * scale) - ((float)this.size.getY() * scale) + offsetY),
-                Math.round(((float)this.position.getX() * scale) + ((float)this.size.getX() * scale) + offsetX),
-                Math.round(((float)this.position.getY() * scale) + ((float)this.size.getY() * scale) + offsetY));
+                Math.round(((float)this.position.getX() * scale) - ((float)this.size.getX() / 2 * scale) + offsetX),
+                Math.round(((float)this.position.getY() * scale) - ((float)this.size.getY() / 2 * scale) + offsetY),
+                Math.round((float)this.size.getX() * scale),
+                Math.round((float)this.size.getY() * scale));
     }
 
     // endregion - Methods

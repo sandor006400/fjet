@@ -5,6 +5,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.PathShape;
+import android.util.Log;
 
 import org.avv.fjet.core.board.HexCoords;
 import org.avv.fjet.core.geometry.FJetPoint;

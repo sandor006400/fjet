@@ -3,6 +3,7 @@ package org.avv.fjet.core.board.util;
 import org.avv.fjet.core.board.HexCoords;
 import org.avv.fjet.core.geometry.FJetPoint;
 import org.avv.fjet.core.board.SquareCoords;
+import org.avv.fjet.core.geometry.FJetRect;
 
 /**
  * Created by Alexander Vladimirovich Vorobiev
@@ -210,6 +211,16 @@ public class UtilCoordinates {
         int x = Math.round(edgeSize * (float)coords.getX() + (edgeSize / 2f));
         int y = Math.round(edgeSize * (float)coords.getY() + (edgeSize / 2f));
         return new FJetPoint(x,y);
+    }
+
+    /**
+     * Calculates a size for HexCoords
+     * @param edgeSize
+     * @return
+     */
+    public static FJetPoint calculateHexCellSize(int edgeSize){
+        int width = Math.round(edgeSize * SQRT_OF_3);
+        return new FJetPoint(width, edgeSize * 2);
     }
 
     // endregion - Methods

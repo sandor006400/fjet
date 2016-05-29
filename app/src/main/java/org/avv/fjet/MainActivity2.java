@@ -11,6 +11,7 @@ import org.avv.fjet.core.board.Board;
 import org.avv.fjet.core.board.BoardFactory;
 import org.avv.fjet.graphics.GameView;
 import org.avv.fjet.graphics.board.BoardDrawable;
+import org.avv.fjet.graphics.board.BoardDrawableFactory;
 
 /**
  * Created by Alexander Vorobiev on 21/05/16.
@@ -52,11 +53,12 @@ public class MainActivity2 extends Activity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        Board b = BoardFactory.createBoard(this, Board.BoardType.HEX_CELLS, 10, 10);
+        Board b = BoardFactory.createBoard(this, Board.BoardType.HEX_CELLS, 2, 2);
         Game g = new Game(b);
+        BoardDrawable boardDrawable = BoardDrawableFactory.getInstance().createBoardDrawable(b, 300, 300, 50);
 
         this.gameView = new GameView(this);
-        this.gameEngine = new GameEngine(g, new BoardDrawable(), this.gameView.getHolder());
+        this.gameEngine = new GameEngine(g, boardDrawable, this.gameView.getHolder());
         this.gameEngine.setFPS(1);
 
         this.gameEngine.onCreate();

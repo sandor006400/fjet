@@ -3,6 +3,7 @@ package org.avv.fjet;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.util.Log;
 import android.view.SurfaceHolder;
 
 import org.avv.fjet.core.Game;
@@ -30,7 +31,7 @@ public class GameEngine extends GameViewThread implements GameView.IGameViewObse
     // region - Fields
 
     float scale = DEFAULT_SCALE;
-    int edgeSize = 30;
+    int edgeSize = 50;
 
     private Game game;
     private BoardDrawable boardDrawable;
@@ -57,11 +58,15 @@ public class GameEngine extends GameViewThread implements GameView.IGameViewObse
     @Override
     public void drawObjects(Canvas c) {
         FJetPoint p;
-        float currentEdgeSize = this.edgeSize*this.scale;
+        float currentEdgeSize = this.edgeSize * this.scale;
 
         Paint paint = new Paint();
         paint.setStrokeWidth(3);
         paint.setColor(Color.BLACK);
+
+
+        Log.d("----->", "draw");
+        this.boardDrawable.draw(c);
 
         for (Object coords : game.getBoard().getCells().keySet()) {
 
