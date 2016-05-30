@@ -55,7 +55,7 @@ public class BoardFactory {
                                     coords,
                                         new Cell(
                                                 coords,
-                                                TerrainFactory.getInstance(c).getTerrain(Terrain.TerrainType.GRASSLAND)));
+                                                TerrainFactory.getInstance(c).getRandomTerrain()));
                         }
                     }
                     break;
@@ -68,7 +68,7 @@ public class BoardFactory {
                                     coords,
                                     new Cell(
                                             coords,
-                                            TerrainFactory.getInstance(c).getTerrain(Terrain.TerrainType.GRASSLAND)));
+                                            TerrainFactory.getInstance(c).getRandomTerrain()));
                         }
                     }
                     break;

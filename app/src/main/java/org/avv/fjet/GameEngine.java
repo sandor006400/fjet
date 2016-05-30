@@ -31,7 +31,7 @@ public class GameEngine extends GameViewThread implements GameView.IGameViewObse
     // region - Fields
 
     float scale = DEFAULT_SCALE;
-    int edgeSize = 50;
+    int edgeSize = 80;
 
     private Game game;
     private BoardDrawable boardDrawable;
