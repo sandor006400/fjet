@@ -16,7 +16,7 @@ import org.avv.fjet.graphics.board.BoardDrawableFactory;
 /**
  * Created by Alexander Vorobiev on 21/05/16.
  */
-public class MainActivity2 extends Activity {
+public class GameActivity extends Activity {
 
     // region - Constants
 
@@ -43,7 +43,7 @@ public class MainActivity2 extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Log.d("MainActivity2", "onCreate");
+        Log.d("GameActivity", "onCreate");
 
         // Hiding title
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -72,7 +72,7 @@ public class MainActivity2 extends Activity {
     protected void onDestroy() {
         super.onDestroy();
 
-        Log.d("MainActivity2", "OnDestroy");
+        Log.d("GameActivity", "OnDestroy");
         this.gameEngine.onDestroyed();
     }
 
@@ -80,7 +80,7 @@ public class MainActivity2 extends Activity {
     protected void onResume() {
         super.onResume();
 
-        Log.d("MainActivity2", "onResume");
+        Log.d("GameActivity", "onResume");
 
         this.gameEngine.onResume();
     }
@@ -89,7 +89,7 @@ public class MainActivity2 extends Activity {
     protected void onPause() {
         super.onPause();
 
-        Log.d("MainActivity2", "onPause");
+        Log.d("GameActivity", "onPause");
 
         this.gameEngine.onPause();
     }
