@@ -1,8 +1,7 @@
 package org.avv.fjet.graphics.board;
 
-import android.util.Log;
+import android.graphics.Path;
 
-import org.avv.fjet.core.action.SelectCellAction;
 import org.avv.fjet.core.board.Board;
 import org.avv.fjet.core.board.Cell;
 import org.avv.fjet.core.board.HexCoords;
@@ -13,6 +12,7 @@ import org.avv.fjet.core.geometry.FJetPoint;
 import org.avv.fjet.core.geometry.FJetRect;
 import org.avv.fjet.core.unit.Unit;
 import org.avv.fjet.graphics.unit.UnitDrawable;
+import org.avv.fjet.graphics.util.UtilCellDrawing;
 
 /**
  * Created by Alexander Vorobiev on 29/05/16.
@@ -79,7 +79,8 @@ public class BoardDrawableFactory {
                 cellDrawable.setPosition(UtilCoordinates.hexCoordsToPixel(edgeSize, (HexCoords)coords));
 
             } else if (coords instanceof SquareCoords) {
-                // TODO : calculate a rect for SquareCoords
+                cellDrawable.setSize(new FJetPoint(edgeSize, edgeSize));
+                cellDrawable.setPosition(UtilCoordinates.squareCoordsToPixel(edgeSize, (SquareCoords) coords));
             }
             boardDrawable.addCellDrawable(((Cell) cell).getId(), cellDrawable);
         }

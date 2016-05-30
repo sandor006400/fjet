@@ -53,7 +53,7 @@ public class GameActivity extends Activity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        Board b = BoardFactory.createBoard(this, Board.BoardType.HEX_CELLS, 2, 2);
+        Board b = BoardFactory.createBoard(this, Board.BoardType.SQUARE_CELLS, 12, 30);
         Game g = new Game(b);
         BoardDrawable boardDrawable = BoardDrawableFactory.getInstance().createBoardDrawable(b, 300, 300, 50);
 

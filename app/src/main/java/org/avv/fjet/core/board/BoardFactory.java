@@ -48,8 +48,8 @@ public class BoardFactory {
             switch (t) {
 
                 case HEX_CELLS:
-                    for (int i = 0; i < height; i++){
-                        for (int j = 0; j < width; j++){
+                    for (int i = 0; i < width; i++){
+                        for (int j = 0; j < height; j++){
                             ICoords coords = UtilCoordinates.offsetHexCoordsToAxialHexCoords(i, j);
                             b.setCellAndCoords(
                                     coords,
