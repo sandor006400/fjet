@@ -61,8 +61,8 @@ public class BoardFactory {
                     break;
 
                 case SQUARE_CELLS:
-                    for (int i = 0; i < height; i++){
-                        for (int j = 0; j < width; j++){
+                    for (int i = 0; i < width; i++){
+                        for (int j = 0; j < height; j++){
                             ICoords coords = new SquareCoords(i, j);
                             b.setCellAndCoords(
                                     coords,
