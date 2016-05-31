@@ -1,5 +1,7 @@
 package org.avv.fjet.core.action;
 
+import org.avv.fjet.graphics.board.BoardDrawable;
+
 /**
  * Created by Alexander Vorobiev on 4/05/16.
  */
@@ -12,6 +14,7 @@ public class ScaleViewAction extends Action {
     // region - Fields
 
     private float scale;
+    private BoardDrawable boardDrawable;
 
     // endregion - Fields
 
@@ -30,12 +33,20 @@ public class ScaleViewAction extends Action {
         return this;
     }
 
+    public Action setBoardDrawable(BoardDrawable boardDrawable){
+        this.boardDrawable = boardDrawable;
+        return this;
+    }
+
     // endregion - Getters and Setters
 
     // region - Methods for/from SuperClass/Interfaces
 
     @Override
     protected IActionResult getExecutionResult() {
+        if (this.boardDrawable != null){
+            this.boardDrawable.setScale(this.scale);
+        }
         return new ScaleViewActionResult(this.scale);
     }
 

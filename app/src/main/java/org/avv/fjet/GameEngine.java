@@ -88,7 +88,7 @@ public class GameEngine extends GameViewThread implements GameView.IGameViewObse
         paint.setStrokeWidth(3);
         paint.setColor(Color.BLACK);
 
-        for (Object coords : game.getBoard().getCells().keySet()) {
+        /*for (Object coords : game.getBoard().getCells().keySet()) {
 
             if (coords instanceof HexCoords) {
                 //UtilCellDrawing.drawHexCellEdge(c, this.edgeSize, this.scale,
@@ -107,7 +107,7 @@ public class GameEngine extends GameViewThread implements GameView.IGameViewObse
                     ((ICoords) coords).toShortString(),
                     p.getX() - currentEdgeSize / 2 + this.boardDrawable.getOffset().getX(),
                     p.getY() + this.boardDrawable.getOffset().getY(), paint);
-        }
+        }*/
 
         drawSelectedCells(c);
     }

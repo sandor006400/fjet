@@ -4,12 +4,13 @@ import android.content.Context;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.View;
 
 /**
  * Created by Alexander Vorobiev on 31/05/16.
  */
-public class FJetTouchListener extends GestureDetector implements View.OnTouchListener {
+public class FJetTouchListener implements View.OnTouchListener {
 
     // region - Constants
 
@@ -18,13 +19,16 @@ public class FJetTouchListener extends GestureDetector implements View.OnTouchLi
     // region - Fields
 
     private IFjetTouchListenerDelegate delegate;
+    private GestureDetector gestureListener;
+    private ScaleGestureDetector scaleGestureDetector;
 
     // endregion - Fields
 
     // region - Constructors
 
     public FJetTouchListener(IFjetTouchListenerDelegate delegate, Context c){
-        super(c, new FJetGestureListener(delegate));
+        this.gestureListener = new GestureDetector(c, new FJetGestureListener(delegate));
+        this.scaleGestureDetector = new ScaleGestureDetector(c, new FJetScaleGestureListener(delegate));
         this.delegate = delegate;
     }
 
@@ -43,7 +47,9 @@ public class FJetTouchListener extends GestureDetector implements View.OnTouchLi
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         Log.d("------->", "onTouch");
-        return onTouchEvent(event);
+        this.gestureListener.onTouchEvent(event);
+        this.scaleGestureDetector.onTouchEvent(event);
+        return true;
     }
 
     // endregion - Methods for/from SuperClass/Interfaces
@@ -67,6 +73,8 @@ public class FJetTouchListener extends GestureDetector implements View.OnTouchLi
         void onLongPress(MotionEvent e);
 
         boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY);
+
+        boolean onScale(ScaleGestureDetector detector);
 
     }
 
@@ -116,6 +124,21 @@ public class FJetTouchListener extends GestureDetector implements View.OnTouchLi
                     && this.delegate.onFling(e1, e2, velocityX, velocityY);
         }
 
+    }
+
+    static private class FJetScaleGestureListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
+
+        private IFjetTouchListenerDelegate delegate;
+
+        public FJetScaleGestureListener(IFjetTouchListenerDelegate delegate){
+            this.delegate = delegate;
+        }
+
+        @Override
+        public boolean onScale(ScaleGestureDetector detector) {
+            return this.delegate != null
+                    && this.delegate.onScale(detector);
+        }
     }
 
     // endregion - Inner and Anonymous Classes
