@@ -1,12 +1,15 @@
 package org.avv.fjet.touch;
 
+import android.content.Context;
+import android.util.Log;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
 /**
  * Created by Alexander Vorobiev on 31/05/16.
  */
-public class FJetTouchListener implements View.OnTouchListener {
+public class FJetTouchListener extends GestureDetector implements View.OnTouchListener {
 
     // region - Constants
 
@@ -20,7 +23,8 @@ public class FJetTouchListener implements View.OnTouchListener {
 
     // region - Constructors
 
-    public FJetTouchListener(IFjetTouchListenerDelegate delegate){
+    public FJetTouchListener(IFjetTouchListenerDelegate delegate, Context c){
+        super(c, new FJetGestureListener(delegate));
         this.delegate = delegate;
     }
 
@@ -38,12 +42,8 @@ public class FJetTouchListener implements View.OnTouchListener {
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        if (this.delegate != null) {
-            return this.delegate.processTouchEvent(event);
-
-        } else {
-            return false;
-        }
+        Log.d("------->", "onTouch");
+        return onTouchEvent(event);
     }
 
     // endregion - Methods for/from SuperClass/Interfaces
@@ -56,7 +56,66 @@ public class FJetTouchListener implements View.OnTouchListener {
 
     public interface IFjetTouchListenerDelegate{
 
-        boolean processTouchEvent(MotionEvent event);
+        boolean onDown(MotionEvent e);
+
+        void onShowPress(MotionEvent e);
+
+        boolean onSingleTapUp(MotionEvent e);
+
+        boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY);
+
+        void onLongPress(MotionEvent e);
+
+        boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY);
+
+    }
+
+    static private class FJetGestureListener implements GestureDetector.OnGestureListener {
+
+        private IFjetTouchListenerDelegate delegate;
+
+        public FJetGestureListener(IFjetTouchListenerDelegate delegate){
+            this.delegate = delegate;
+        }
+
+        @Override
+        public boolean onDown(MotionEvent e) {
+            return this.delegate != null
+                    && this.delegate.onDown(e);
+        }
+
+        @Override
+        public void onShowPress(MotionEvent e) {
+            if (this.delegate != null){
+                this.delegate.onShowPress(e);
+            }
+        }
+
+        @Override
+        public boolean onSingleTapUp(MotionEvent e) {
+            return this.delegate != null
+                    && this.delegate.onSingleTapUp(e);
+        }
+
+        @Override
+        public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+            return this.delegate != null
+                    && this.delegate.onScroll(e1, e2, distanceX, distanceY);
+        }
+
+        @Override
+        public void onLongPress(MotionEvent e) {
+            if (this.delegate != null) {
+                this.delegate.onLongPress(e);
+            }
+        }
+
+        @Override
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+            return this.delegate != null
+                    && this.delegate.onFling(e1, e2, velocityX, velocityY);
+        }
+
     }
 
     // endregion - Inner and Anonymous Classes

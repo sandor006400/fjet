@@ -1,13 +1,16 @@
 package org.avv.fjet.graphics.board;
 
 import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 
 import org.avv.fjet.core.geometry.FJetPoint;
 import org.avv.fjet.core.geometry.FJetRect;
 import org.avv.fjet.graphics.unit.UnitDrawable;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -63,6 +66,10 @@ public class BoardDrawable {
         this.unitDrawablesMap.put(unitId, unitDrawable);
     }
 
+    public FJetPoint getOffset(){
+        return new FJetPoint(this.boardBounds.getX(), this.boardBounds.getY());
+    }
+
     // endregion - Getters and Setters
 
     // region - Methods for/from SuperClass/Interfaces
@@ -82,6 +89,8 @@ public class BoardDrawable {
         for (UnitDrawable uD : this.unitDrawablesMap.values()){
             uD.draw(this.boardBounds, this.scale, c);
         }
+
+
     }
 
     // endregion - Methods for/from SuperClass/Interfaces
@@ -95,8 +104,20 @@ public class BoardDrawable {
         this.unitDrawablesMap = new HashMap<>();
     }
 
-    public void setOffset(int x, int y){
+    public void setOffsetTo(int x, int y){
         this.boardBounds.offsetTo(x, y);
+    }
+
+    public void setOffsetTo(FJetPoint offset){
+        this.boardBounds.offsetTo(offset);
+    }
+
+    public void setOffset(int x, int y){
+        this.boardBounds.offsetBy(x, y);
+    }
+
+    public void setOffset(FJetPoint offset){
+        this.boardBounds.offsetBy(offset);
     }
 
     // endregion - Methods

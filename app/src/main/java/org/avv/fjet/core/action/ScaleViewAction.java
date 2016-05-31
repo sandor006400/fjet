@@ -1,7 +1,5 @@
 package org.avv.fjet.core.action;
 
-import org.avv.fjet.core.board.ICoords;
-
 /**
  * Created by Alexander Vorobiev on 4/05/16.
  */

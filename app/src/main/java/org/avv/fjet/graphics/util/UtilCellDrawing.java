@@ -49,6 +49,20 @@ public class UtilCellDrawing {
      * @param strokeWidth
      */
     public static void drawHexCellEdge(Canvas c, float edgeSize, float scale, HexCoords coords, int color, float strokeWidth){
+        drawHexCellEdge(c, edgeSize, scale, coords, color, strokeWidth, new FJetPoint(0, 0));
+    }
+
+    /**
+     * Draws the edge of hexagonal cell with coords in canvas with offset
+     * @param c
+     * @param edgeSize
+     * @param scale
+     * @param coords
+     * @param color
+     * @param strokeWidth
+     * @param offset
+     */
+    public static void drawHexCellEdge(Canvas c, float edgeSize, float scale, HexCoords coords, int color, float strokeWidth, FJetPoint offset){
         float currentEdgeSize = edgeSize * scale;
         FJetPoint p = UtilCoordinates.hexCoordsToPixel(currentEdgeSize, coords);
         int halfWidth = Math.round(UtilCoordinates.SQRT_OF_3 * currentEdgeSize / 2);
@@ -59,6 +73,7 @@ public class UtilCellDrawing {
                 p.getY() - (int)currentEdgeSize,
                 p.getX() + halfWidth,
                 p.getY() + (int)currentEdgeSize);
+        d.getBounds().offset(offset.getX(), offset.getY());
         d.getPaint().setColor(color);
         d.getPaint().setStrokeWidth(strokeWidth * scale);
         d.getPaint().setStyle(Paint.Style.STROKE);
@@ -74,7 +89,21 @@ public class UtilCellDrawing {
      * @param color
      * @param strokeWidth
      */
-    public static void drawSquareCellEdge(Canvas c, float edgeSize, float scale, SquareCoords coords, int color, float strokeWidth){
+    public static void drawSquareCellEdge(Canvas c, float edgeSize, float scale, SquareCoords coords, int color, float strokeWidth) {
+        drawSquareCellEdge(c, edgeSize, scale, coords, color, strokeWidth, new FJetPoint(0,0));
+    }
+
+    /**
+     * Draws the edge of square cell with coords in canvas
+     * @param c
+     * @param edgeSize
+     * @param scale
+     * @param coords
+     * @param color
+     * @param strokeWidth
+     * @param offset
+     */
+    public static void drawSquareCellEdge(Canvas c, float edgeSize, float scale, SquareCoords coords, int color, float strokeWidth, FJetPoint offset){
         float currentEdgeSize = edgeSize * scale;
         Paint paint = new Paint();
         paint.setStrokeWidth(strokeWidth * scale);
@@ -87,6 +116,7 @@ public class UtilCellDrawing {
                 p.getY() - Math.round(currentEdgeSize / 2),
                 p.getX() + Math.round(currentEdgeSize / 2),
                 p.getY() + Math.round(currentEdgeSize / 2));
+        d.getBounds().offset(offset.getX(), offset.getY());
         d.getPaint().setColor(color);
         d.getPaint().setStrokeWidth(strokeWidth * scale);
         d.getPaint().setStyle(Paint.Style.STROKE);

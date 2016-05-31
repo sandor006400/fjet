@@ -15,10 +15,10 @@ public class ActionFactory {
     public static final int ATTACK_ACTION = 10000;
 
     // Selection Actions 20000-29999
-
     public static final int SELECT_CELL_ACTION = 20000;
 
     // Other Actions 30000-39999
+    public static final int SCROLL_BOARD_VIEW_ACTION = 30000;
 
     // endregion - Constants
 
@@ -61,6 +61,9 @@ public class ActionFactory {
 
             case SELECT_CELL_ACTION:
                 return new SelectCellAction();
+
+            case SCROLL_BOARD_VIEW_ACTION:
+                return new ScrollBoardViewAction();
 
             default:
                 return createAction(action);

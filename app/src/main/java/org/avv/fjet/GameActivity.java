@@ -27,6 +27,7 @@ public class GameActivity extends Activity {
 
     private GameView gameView;
     private GameEngine gameEngine;
+    private FJetTouchListener touchListener;
 
     // endregion - Fields
 
@@ -54,7 +55,7 @@ public class GameActivity extends Activity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        Board b = BoardFactory.createBoard(this, Board.BoardType.SQUARE_CELLS, 8, 12);
+        Board b = BoardFactory.createBoard(this, Board.BoardType.SQUARE_CELLS, 20, 20);
         Game g = new Game(b);
         BoardDrawable boardDrawable = BoardDrawableFactory.getInstance().createBoardDrawable(b, 300, 300, 80);
 
@@ -62,7 +63,7 @@ public class GameActivity extends Activity {
         this.gameEngine = new GameEngine(g, boardDrawable, this.gameView.getHolder());
         this.gameEngine.setFPS(1);
 
-        FJetTouchListener touchListener = new FJetTouchListener(this.gameEngine);
+        this.touchListener = new FJetTouchListener(this.gameEngine, this);
         this.gameView.setOnTouchListener(touchListener);
 
         this.gameEngine.onCreate();
