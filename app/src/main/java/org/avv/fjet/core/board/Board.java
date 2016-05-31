@@ -2,6 +2,7 @@ package org.avv.fjet.core.board;
 
 import android.content.Context;
 
+import org.avv.fjet.core.action.Action;
 import org.avv.fjet.core.unit.Unit;
 import org.avv.fjet.serialization.JsonSerializable;
 import org.json.JSONArray;
@@ -88,10 +89,13 @@ public class Board {
         return this.unitsMap;
     }
 
+    public BoardType getType(){
+        return this.type;
+    }
+
     // endregion - Getters and Setters
 
     // region - Methods for/from SuperClass/Interfaces
-
 
     @Override
     public String toString() {
@@ -143,6 +147,8 @@ public class Board {
 
     public BoardData getBoardData(){
         BoardData data = new BoardData();
+        data.type = this.type;
+
         List<Cell.CellData> cellsList = new ArrayList<>();
         for (Cell c: this.cellsMap.values()){
             cellsList.add(c.getCellData());
@@ -157,6 +163,8 @@ public class Board {
     }
 
     private void initWithData(BoardData data, Context c){
+        this.type = data.type;
+
         for (int i = 0; i < data.cells.length; i++){
             Cell cell = new Cell(data.cells[i], c);
             this.cellsMap.put(cell.getCoords(), cell);
@@ -166,7 +174,6 @@ public class Board {
             Unit unit = new Unit(data.units[i]);
             this.unitsMap.put(unit.getId(), unit);
         }
-
         assignUnitsToCells();
     }
 
@@ -176,6 +183,7 @@ public class Board {
 
     static public class BoardData {
 
+        private BoardType type;
         private Cell.CellData[] cells;
         private Unit.UnitData[] units;
 
@@ -191,6 +199,8 @@ public class Board {
             JSONObject jsonObject = new JSONObject();
 
             try {
+                jsonObject.put("type", this.type);
+
                 JSONArray jsonArrayCells = new JSONArray();
                 for (int i = 0; i < this.cells.length; i++) {
                     jsonArrayCells.put(this.cells[i].toJson());
@@ -219,6 +229,12 @@ public class Board {
             }
 
             if (jsonObject != null) {
+                try {
+                    this.type = BoardType.valueOf(jsonObject.getString("type"));
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 try {
                     JSONArray cellsArray = jsonObject.getJSONArray("cells");
                     this.cells = new Cell.CellData[cellsArray.length()];

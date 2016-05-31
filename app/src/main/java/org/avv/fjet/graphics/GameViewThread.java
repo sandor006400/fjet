@@ -2,15 +2,17 @@ package org.avv.fjet.graphics;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.util.Log;
+import android.os.HandlerThread;
 import android.view.SurfaceHolder;
 
 /**
  * Created by Alexander Vorobiev on 11/05/16.
  */
-public abstract class GameViewThread extends Thread {
+public abstract class GameViewThread extends HandlerThread {
 
     // region - Constants
+
+    private static final String GAME_VIEW_THREAD_NAME = "GameViewThread";
 
     private static final long DEFAULT_FPS = 60;
     private static final long MAX_FPS = 200;
@@ -28,6 +30,7 @@ public abstract class GameViewThread extends Thread {
     // region - Constructors
 
     protected GameViewThread(SurfaceHolder surfaceHolder){
+        super(GAME_VIEW_THREAD_NAME);
         this.holder = surfaceHolder;
     }
 
@@ -53,6 +56,9 @@ public abstract class GameViewThread extends Thread {
     @Override
     public void run() {
         long timeToWait = System.currentTimeMillis() + this.interval;
+
+        // Initial tasks
+        doInitialTasks();
 
         while(true) {    // Allways runnings
 
@@ -106,6 +112,11 @@ public abstract class GameViewThread extends Thread {
      * This method can be used to do additional operations after drawing.
      */
     protected abstract void doPostDrawingTasks();
+
+    /**
+     * Do tasks when the tread starts to run.
+     */
+    protected abstract void doInitialTasks();
 
     public void onDestroyed(){
 

@@ -48,10 +48,6 @@ public class CellDrawable extends GameDrawable {
         if (this.drawable != null){
             this.drawable.setBounds(drawRect.getRect());
             this.drawable.draw(c);
-
-            //Log.d("Bounds Cell -> ", this.drawable.getBounds().toString());
-            Log.d("Bounds Cell -> ", "width: " + String.valueOf(this.drawable.getBounds().width())
-                + " height: " + String.valueOf(this.drawable.getBounds().height()));
         }
     }
 

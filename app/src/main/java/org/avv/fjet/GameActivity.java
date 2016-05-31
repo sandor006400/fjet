@@ -12,6 +12,7 @@ import org.avv.fjet.core.board.BoardFactory;
 import org.avv.fjet.graphics.GameView;
 import org.avv.fjet.graphics.board.BoardDrawable;
 import org.avv.fjet.graphics.board.BoardDrawableFactory;
+import org.avv.fjet.touch.FJetTouchListener;
 
 /**
  * Created by Alexander Vorobiev on 21/05/16.
@@ -60,6 +61,9 @@ public class GameActivity extends Activity {
         this.gameView = new GameView(this);
         this.gameEngine = new GameEngine(g, boardDrawable, this.gameView.getHolder());
         this.gameEngine.setFPS(1);
+
+        FJetTouchListener touchListener = new FJetTouchListener(this.gameEngine);
+        this.gameView.setOnTouchListener(touchListener);
 
         this.gameEngine.onCreate();
         this.gameView.setObserver(this.gameEngine);

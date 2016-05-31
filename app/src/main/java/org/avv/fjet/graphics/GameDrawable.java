@@ -34,7 +34,6 @@ public abstract class GameDrawable {
     // region - Getters and Setters
 
     public void setSize(FJetPoint size){
-        Log.d("Size -> " , size.toString());
         this.size = size;
     }
 
@@ -73,8 +72,6 @@ public abstract class GameDrawable {
 
             // Finally, drawing GameDrawable using canvas and drawRect
             drawInRect(this.drawRect, c);
-
-            Log.d("Rect ->", this.drawRect.toString());
         }
     }
 
