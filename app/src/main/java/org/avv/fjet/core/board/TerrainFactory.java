@@ -6,8 +6,6 @@ import android.graphics.drawable.Drawable;
 import org.avv.fjet.R;
 
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Random;
@@ -63,78 +61,78 @@ public class TerrainFactory {
         if (c != null) {
 
             // Coast
-            Drawable cD = c.getResources().getDrawable(R.drawable.tex_terrain_01, c.getTheme());
-            Terrain cT = new Terrain(Terrain.TerrainType.COAST, cD, 1.0f, 1.0f);
+            Drawable cD = c.getResources().getDrawable(R.drawable.tex_sq_terrain_01, c.getTheme());
+            Terrain cT = new Terrain(Terrain.TerrainType.COAST, cD, cD, 1.0f, 1.0f);
             this.terrainsMap.put(Terrain.TerrainType.COAST.ordinal(), cT);
 
             // Atoll
-            Drawable aD = c.getResources().getDrawable(R.drawable.tex_terrain_02, c.getTheme());
-            Terrain aT = new Terrain(Terrain.TerrainType.ATOLL, aD, 1.0f, 1.0f);
+            Drawable aD = c.getResources().getDrawable(R.drawable.tex_sq_terrain_02, c.getTheme());
+            Terrain aT = new Terrain(Terrain.TerrainType.ATOLL, aD, aD, 1.0f, 1.0f);
             this.terrainsMap.put(Terrain.TerrainType.ATOLL.ordinal(), aT);
 
             // Desert
-            Drawable dD = c.getResources().getDrawable(R.drawable.tex_terrain_03, c.getTheme());
-            Terrain dT = new Terrain(Terrain.TerrainType.DESERT, dD, 1.0f, 1.0f);
+            Drawable dD = c.getResources().getDrawable(R.drawable.tex_sq_terrain_03, c.getTheme());
+            Terrain dT = new Terrain(Terrain.TerrainType.DESERT, dD, dD, 1.0f, 1.0f);
             this.terrainsMap.put(Terrain.TerrainType.DESERT.ordinal(), dT);
 
             // Flood
-            Drawable fD = c.getResources().getDrawable(R.drawable.tex_terrain_04, c.getTheme());
-            Terrain fT = new Terrain(Terrain.TerrainType.FLOOD, fD, 1.0f, 1.0f);
+            Drawable fD = c.getResources().getDrawable(R.drawable.tex_sq_terrain_04, c.getTheme());
+            Terrain fT = new Terrain(Terrain.TerrainType.FLOOD, fD, fD, 1.0f, 1.0f);
             this.terrainsMap.put(Terrain.TerrainType.FLOOD.ordinal(), fT);
 
             // Forest
-            Drawable foD = c.getResources().getDrawable(R.drawable.tex_terrain_05, c.getTheme());
-            Terrain foT = new Terrain(Terrain.TerrainType.FOREST, foD, 1.0f, 1.0f);
+            Drawable foD = c.getResources().getDrawable(R.drawable.tex_sq_terrain_05, c.getTheme());
+            Terrain foT = new Terrain(Terrain.TerrainType.FOREST, foD, foD, 1.0f, 1.0f);
             this.terrainsMap.put(Terrain.TerrainType.FOREST.ordinal(), foT);
 
             // Grassland
-            Drawable gD = c.getResources().getDrawable(R.drawable.tex_terrain_06, c.getTheme());
-            Terrain gT = new Terrain(Terrain.TerrainType.GRASSLAND, gD, 1.0f, 1.0f);
+            Drawable gD = c.getResources().getDrawable(R.drawable.tex_sq_terrain_06, c.getTheme());
+            Terrain gT = new Terrain(Terrain.TerrainType.GRASSLAND, gD, gD, 1.0f, 1.0f);
             this.terrainsMap.put(Terrain.TerrainType.GRASSLAND.ordinal(), gT);
 
             // Grassland
-            Drawable hD = c.getResources().getDrawable(R.drawable.tex_terrain_07, c.getTheme());
-            Terrain hT = new Terrain(Terrain.TerrainType.HILL, hD, 1.0f, 1.0f);
+            Drawable hD = c.getResources().getDrawable(R.drawable.tex_sq_terrain_07, c.getTheme());
+            Terrain hT = new Terrain(Terrain.TerrainType.HILL, hD, hD, 1.0f, 1.0f);
             this.terrainsMap.put(Terrain.TerrainType.HILL.ordinal(), hT);
 
             // Ice
-            Drawable iD = c.getResources().getDrawable(R.drawable.tex_terrain_08, c.getTheme());
-            Terrain iT = new Terrain(Terrain.TerrainType.ICE, iD, 1.0f, 1.0f);
+            Drawable iD = c.getResources().getDrawable(R.drawable.tex_sq_terrain_08, c.getTheme());
+            Terrain iT = new Terrain(Terrain.TerrainType.ICE, iD, iD, 1.0f, 1.0f);
             this.terrainsMap.put(Terrain.TerrainType.ICE.ordinal(), iT);
 
             // Jungle
-            Drawable jD = c.getResources().getDrawable(R.drawable.tex_terrain_09, c.getTheme());
-            Terrain jT = new Terrain(Terrain.TerrainType.JUNGLE, jD, 1.0f, 1.0f);
+            Drawable jD = c.getResources().getDrawable(R.drawable.tex_sq_terrain_09, c.getTheme());
+            Terrain jT = new Terrain(Terrain.TerrainType.JUNGLE, jD, jD, 1.0f, 1.0f);
             this.terrainsMap.put(Terrain.TerrainType.JUNGLE.ordinal(), jT);
 
             // Lakes
-            Drawable lD = c.getResources().getDrawable(R.drawable.tex_terrain_10, c.getTheme());
-            Terrain lT = new Terrain(Terrain.TerrainType.LAKES, lD, 1.0f, 1.0f);
+            Drawable lD = c.getResources().getDrawable(R.drawable.tex_sq_terrain_10, c.getTheme());
+            Terrain lT = new Terrain(Terrain.TerrainType.LAKES, lD, lD, 1.0f, 1.0f);
             this.terrainsMap.put(Terrain.TerrainType.LAKES.ordinal(), lT);
 
             // Marsh
-            Drawable mD = c.getResources().getDrawable(R.drawable.tex_terrain_11, c.getTheme());
-            Terrain mT = new Terrain(Terrain.TerrainType.MARSH, mD, 1.0f, 1.0f);
+            Drawable mD = c.getResources().getDrawable(R.drawable.tex_sq_terrain_11, c.getTheme());
+            Terrain mT = new Terrain(Terrain.TerrainType.MARSH, mD, mD, 1.0f, 1.0f);
             this.terrainsMap.put(Terrain.TerrainType.MARSH.ordinal(), mT);
 
             // Mountain
-            Drawable moD = c.getResources().getDrawable(R.drawable.tex_terrain_12, c.getTheme());
-            Terrain moT = new Terrain(Terrain.TerrainType.MOUNTAIN, moD, 1.0f, 1.0f);
+            Drawable moD = c.getResources().getDrawable(R.drawable.tex_sq_terrain_12, c.getTheme());
+            Terrain moT = new Terrain(Terrain.TerrainType.MOUNTAIN, moD, moD, 1.0f, 1.0f);
             this.terrainsMap.put(Terrain.TerrainType.MOUNTAIN.ordinal(), moT);
 
             // Oasis
-            Drawable oD = c.getResources().getDrawable(R.drawable.tex_terrain_13, c.getTheme());
-            Terrain oT = new Terrain(Terrain.TerrainType.OASIS, oD, 1.0f, 1.0f);
+            Drawable oD = c.getResources().getDrawable(R.drawable.tex_sq_terrain_13, c.getTheme());
+            Terrain oT = new Terrain(Terrain.TerrainType.OASIS, oD, oD, 1.0f, 1.0f);
             this.terrainsMap.put(Terrain.TerrainType.OASIS.ordinal(), oT);
 
             // Ocean
-            Drawable ocD = c.getResources().getDrawable(R.drawable.tex_terrain_13, c.getTheme());
-            Terrain ocT = new Terrain(Terrain.TerrainType.OCEAN, ocD, 1.0f, 1.0f);
+            Drawable ocD = c.getResources().getDrawable(R.drawable.tex_sq_terrain_13, c.getTheme());
+            Terrain ocT = new Terrain(Terrain.TerrainType.OCEAN, ocD, ocD, 1.0f, 1.0f);
             this.terrainsMap.put(Terrain.TerrainType.OCEAN.ordinal(), ocT);
 
             // Plains
-            Drawable pD = c.getResources().getDrawable(R.drawable.tex_terrain_14, c.getTheme());
-            Terrain pT = new Terrain(Terrain.TerrainType.PLAINS, pD, 1.0f, 1.0f);
+            Drawable pD = c.getResources().getDrawable(R.drawable.tex_sq_terrain_14, c.getTheme());
+            Terrain pT = new Terrain(Terrain.TerrainType.PLAINS, pD, pD, 1.0f, 1.0f);
             this.terrainsMap.put(Terrain.TerrainType.PLAINS.ordinal(), pT);
 
         }

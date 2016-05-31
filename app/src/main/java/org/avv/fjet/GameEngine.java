@@ -91,13 +91,13 @@ public class GameEngine extends GameViewThread implements GameView.IGameViewObse
         for (Object coords : game.getBoard().getCells().keySet()) {
 
             if (coords instanceof HexCoords) {
-                UtilCellDrawing.drawHexCellEdge(c, this.edgeSize, this.scale,
-                        (HexCoords) coords, Color.BLACK, 3f, this.boardDrawable.getOffset());
+                //UtilCellDrawing.drawHexCellEdge(c, this.edgeSize, this.scale,
+                //        (HexCoords) coords, Color.BLACK, 3f, this.boardDrawable.getOffset());
                 p = UtilCoordinates.hexCoordsToPixel(currentEdgeSize, (HexCoords) coords);
 
             } else {
-                UtilCellDrawing.drawSquareCellEdge(c, this.edgeSize, this.scale,
-                        (SquareCoords) coords, Color.BLACK, 3f, this.boardDrawable.getOffset());
+                //UtilCellDrawing.drawSquareCellEdge(c, this.edgeSize, this.scale,
+                //        (SquareCoords) coords, Color.BLACK, 3f, this.boardDrawable.getOffset());
                 p = UtilCoordinates.squareCoordsToPixel(currentEdgeSize, (SquareCoords) coords);
             }
             paint.setTextSize(13);

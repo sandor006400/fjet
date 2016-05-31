@@ -2,9 +2,6 @@ package org.avv.fjet.core.board;
 
 import android.graphics.drawable.Drawable;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 /**
  * Created by Alexander Vorobiev on 22/05/16.
  */
@@ -34,20 +31,22 @@ public class Terrain {
 
     // region - Fields
 
-    private Drawable drawable;
+    private Drawable drawableSq;    // Drawable for square Cells
+    private Drawable drawableHe;    // Drawable for hex Cells
     private TerrainType type;
     private float movementCost;
-    private float defenseCoefficent;
+    private float defenseCoefficient;
 
     // endregion - Fields
 
     // region - Constructors
 
-    public Terrain(TerrainType type, Drawable drawable, float movementCost, float defenseCoefficent){
+    public Terrain(TerrainType type, Drawable drawableSq, Drawable drawableHe, float movementCost, float defenseCoefficient){
         this.type = type;
-        this.drawable = drawable;
+        this.drawableSq = drawableSq;
+        this.drawableHe = drawableHe;
         this.movementCost = movementCost;
-        this.defenseCoefficent = defenseCoefficent;
+        this.defenseCoefficient = defenseCoefficient;
     }
 
     // endregion - Constructors
@@ -58,16 +57,20 @@ public class Terrain {
         return this.type;
     }
 
-    public Drawable getDrawable(){
-        return this.drawable;
+    public Drawable getDrawableSq(){
+        return this.drawableSq;
+    }
+
+    public Drawable getDrawableHe(){
+        return this.drawableHe;
     }
 
     public float getMovementCost(){
         return this.movementCost;
     }
 
-    public  float getDefenseCoefficent(){
-        return this.defenseCoefficent;
+    public  float getDefenseCoefficient(){
+        return this.defenseCoefficient;
     }
 
     // endregion - Getters and Setters
