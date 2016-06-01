@@ -51,7 +51,7 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Log.d("FUUUU", "boton Pinchado...");
-                ScaleViewAction a = new ScaleViewAction(Action.Type.INFORMATIVE);
+                ScaleViewAction a = new ScaleViewAction();
                 a.setScale(0.7f);
                 gameView.processAction(a);
             }
@@ -61,7 +61,7 @@ public class MainActivity extends Activity {
         b100.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ScaleViewAction a = new ScaleViewAction(Action.Type.INFORMATIVE);
+                ScaleViewAction a = new ScaleViewAction();
                 a.setScale(1.0f);
                 gameView.processAction(a);
             }
@@ -71,7 +71,7 @@ public class MainActivity extends Activity {
         b130.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ScaleViewAction a = new ScaleViewAction(Action.Type.INFORMATIVE);
+                ScaleViewAction a = new ScaleViewAction();
                 a.setScale(1.3f);
                 gameView.processAction(a);
             }

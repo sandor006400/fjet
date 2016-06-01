@@ -58,6 +58,10 @@ public class BoardDrawable {
         }
     }
 
+    public float getScale(){
+        return this.scale;
+    }
+
     public void addCellDrawable(String cellId, CellDrawable cellDrawable){
         this.cellDrawablesMap.put(cellId, cellDrawable);
     }

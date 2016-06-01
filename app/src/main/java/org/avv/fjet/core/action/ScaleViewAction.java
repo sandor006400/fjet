@@ -1,5 +1,7 @@
 package org.avv.fjet.core.action;
 
+import android.util.Log;
+
 import org.avv.fjet.graphics.board.BoardDrawable;
 
 /**
@@ -20,20 +22,21 @@ public class ScaleViewAction extends Action {
 
     // region - Constructors
 
-    public ScaleViewAction(Type type) {
-        super(type);
+    public ScaleViewAction() {
+        super(Type.INFORMATIVE);
     }
 
     // endregion - Constructors
 
     // region - Getters and Setters
 
-    public Action setScale(float scale){
+    public ScaleViewAction setScale(float scale){
+        Log.d("------------>", "Scale: " + String.valueOf(scale));
         this.scale = scale;
         return this;
     }
 
-    public Action setBoardDrawable(BoardDrawable boardDrawable){
+    public ScaleViewAction setBoardDrawable(BoardDrawable boardDrawable){
         this.boardDrawable = boardDrawable;
         return this;
     }
@@ -45,7 +48,9 @@ public class ScaleViewAction extends Action {
     @Override
     protected IActionResult getExecutionResult() {
         if (this.boardDrawable != null){
-            this.boardDrawable.setScale(this.scale);
+            float finalScale = this.scale*this.boardDrawable.getScale();
+            Log.d("------------>", "FinalScale: " + String.valueOf(finalScale));
+            this.boardDrawable.setScale(finalScale);
         }
         return new ScaleViewActionResult(this.scale);
     }

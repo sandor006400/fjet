@@ -19,6 +19,7 @@ public class ActionFactory {
 
     // Other Actions 30000-39999
     public static final int SCROLL_BOARD_VIEW_ACTION = 30000;
+    public static final int SCALE_BOARD_VIEW_ACTION = 30001;
 
     // endregion - Constants
 
@@ -64,6 +65,9 @@ public class ActionFactory {
 
             case SCROLL_BOARD_VIEW_ACTION:
                 return new ScrollBoardViewAction();
+
+            case SCALE_BOARD_VIEW_ACTION:
+                return new ScaleViewAction();
 
             default:
                 return createAction(action);

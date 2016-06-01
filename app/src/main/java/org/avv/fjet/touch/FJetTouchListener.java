@@ -18,6 +18,8 @@ public class FJetTouchListener implements View.OnTouchListener {
 
     // region - Fields
 
+    private int touchesCount = 0;
+
     private IFjetTouchListenerDelegate delegate;
     private GestureDetector gestureListener;
     private ScaleGestureDetector scaleGestureDetector;
@@ -46,7 +48,7 @@ public class FJetTouchListener implements View.OnTouchListener {
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        Log.d("------->", "onTouch");
+        Log.d("------->", "onTouch, num of pointers: " + String.valueOf(this.touchesCount));
         this.gestureListener.onTouchEvent(event);
         this.scaleGestureDetector.onTouchEvent(event);
         return true;
