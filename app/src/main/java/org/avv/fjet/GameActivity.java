@@ -1,8 +1,12 @@
 package org.avv.fjet;
 
 import android.app.Activity;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -70,7 +74,14 @@ public class GameActivity extends Activity {
         this.gameView.setObserver(this.gameEngine);
 
         // Setting a content view
-        setContentView(this.gameView);
+        //setContentView(this.gameView);
+        setContentView(R.layout.activity_main_2);
+
+        View v  = findViewById(R.id.surfaceView);
+        ViewGroup parent = (ViewGroup) v.getParent();
+        int index = parent.indexOfChild(v);
+        parent.removeView(v);
+        parent.addView(this.gameView, index);
     }
 
     @Override
@@ -102,6 +113,13 @@ public class GameActivity extends Activity {
     // endregion - Methods for/from SuperClass/Interfaces
 
     // region - Methods
+
+    private Point getWindowSize(){
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        return size;
+    }
 
     // endregion - Methods
 

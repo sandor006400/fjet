@@ -16,13 +16,15 @@ public class UnitDrawable extends GameDrawable {
 
     public enum State {
         ATTACKING,
-
+        WAITING,
+        MOVING
     }
 
     // endregion - Constants
 
     // region - Fields
 
+    private State currentState = State.WAITING;
     private FJetPoint vector;       // Movement vector
     private GameAnimation[] animations;
 
@@ -40,13 +42,20 @@ public class UnitDrawable extends GameDrawable {
 
     // region - Getters and Setters
 
+    public void addAnimation(State state, GameAnimation animation){
+        this.animations[state.ordinal()] = animation;
+    }
+
     // endregion - Getters and Setters
 
     // region - Methods for/from SuperClass/Interfaces
 
     @Override
     protected void drawInRect(FJetRect drawRect, Canvas c) {
-        // TODO
+
+        if (this.animations[this.currentState.ordinal()] != null){
+            this.animations[this.currentState.ordinal()].draw(c, drawRect);
+        }
     }
 
     // endregion - Methods for/from SuperClass/Interfaces
@@ -55,7 +64,7 @@ public class UnitDrawable extends GameDrawable {
 
     private void init(){
         this.vector = new FJetPoint(0,0);
-        this.animations = null;
+        this.animations = new GameAnimation[State.values().length];
     }
 
     // endregion - Methods

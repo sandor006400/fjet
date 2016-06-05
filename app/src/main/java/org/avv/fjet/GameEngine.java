@@ -176,7 +176,7 @@ public class GameEngine extends GameViewThread implements GameView.IGameViewObse
         if (this.handler != null) {
             Message msg = this.handler.obtainMessage();
             msg.what = TOUCH_EVENT_TAP_UP;
-            msg.obj = e;
+            msg.obj = new FJetPoint((int)e.getX(), (int)e.getY());
             this.handler.sendMessage(msg);
         }
         return true;
@@ -192,7 +192,7 @@ public class GameEngine extends GameViewThread implements GameView.IGameViewObse
             msg.obj = new FJetPoint((int)-distanceX, (int)-distanceY);
             this.handler.sendMessage(msg);
         }
-        return false;
+        return true;
     }
 
     @Override
@@ -269,7 +269,7 @@ public class GameEngine extends GameViewThread implements GameView.IGameViewObse
 
                 case TOUCH_EVENT_TAP_UP:
                     Log.d("handleMessage", "TOUCH_EVENT");
-                    Action action = getActionWithEvent((MotionEvent)msg.obj);
+                    Action action = getSelectAction((FJetPoint)msg.obj);
                     GameEngine.this.addActionToQueue(action);
                     break;
 
@@ -287,45 +287,34 @@ public class GameEngine extends GameViewThread implements GameView.IGameViewObse
             }
         }
 
-        private Action getActionWithEvent(MotionEvent event){
-            switch (event.getAction()) {
+        private Action getSelectAction(FJetPoint p){
+            SelectCellAction a = (SelectCellAction) ActionFactory.createAction(
+                    ActionFactory.SELECT_CELL_ACTION);
 
-                case MotionEvent.ACTION_DOWN:
-                    return null;
+            if (a != null) {
+                ICoords coords = null;
+                FJetPoint offset = boardDrawable.getOffset();
 
-                case MotionEvent.ACTION_UP:
-                    SelectCellAction a = (SelectCellAction) ActionFactory.createAction(
-                            ActionFactory.SELECT_CELL_ACTION);
-                    FJetPoint point = new FJetPoint((int) event.getX(), (int) event.getY());
+                if (game.getBoard().getType() == Board.BoardType.HEX_CELLS) {
+                    coords = UtilCoordinates.hexCoordsFromPixel(
+                            p.getX() - offset.getX(),
+                            p.getY() - offset.getY(),
+                            edgeSize* boardDrawable.getScale());
 
-                    if (a != null) {
-                        ICoords coords = null;
-                        FJetPoint offset = boardDrawable.getOffset();
+                } else if (game.getBoard().getType() == Board.BoardType.SQUARE_CELLS) {
+                    coords = UtilCoordinates.squareCoordsFromPixelCoords(
+                            p.getX() - offset.getX(),
+                            p.getY()- offset.getY(),
+                            edgeSize * boardDrawable.getScale());
+                }
 
-                        if (game.getBoard().getType() == Board.BoardType.HEX_CELLS) {
-                            coords = UtilCoordinates.hexCoordsFromPixel(
-                                    point.getX() - offset.getX(),
-                                    point.getY() - offset.getY(),
-                                    edgeSize* boardDrawable.getScale());
-
-                        } else if (game.getBoard().getType() == Board.BoardType.SQUARE_CELLS) {
-                            coords = UtilCoordinates.squareCoordsFromPixelCoords(
-                                    point.getX() - offset.getX(),
-                                    point.getY()- offset.getY(),
-                                    edgeSize * boardDrawable.getScale());
-                        }
-
-                        if (coords != null) {
-                            a.setBoard(game.getBoard())
-                                    .setCoords(coords)
-                                    .setObserver(GameEngine.this);
-                        }
-                    }
-                    return a;
-
-                default:
-                    return null;
+                if (coords != null) {
+                    a.setBoard(game.getBoard())
+                            .setCoords(coords)
+                            .setObserver(GameEngine.this);
+                }
             }
+            return a;
         }
 
         private Action getScrollAction(FJetPoint p) {
