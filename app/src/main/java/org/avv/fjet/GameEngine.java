@@ -23,6 +23,7 @@ import org.avv.fjet.core.board.ICoords;
 import org.avv.fjet.core.geometry.FJetPoint;
 import org.avv.fjet.core.board.SquareCoords;
 import org.avv.fjet.core.board.util.UtilCoordinates;
+import org.avv.fjet.core.rule.IGameRules;
 import org.avv.fjet.graphics.GameView;
 import org.avv.fjet.graphics.GameViewThread;
 import org.avv.fjet.graphics.board.BoardDrawable;
@@ -45,6 +46,8 @@ public class GameEngine extends GameViewThread implements GameView.IGameViewObse
     static final int TOUCH_EVENT_TAP_DOWN = 2;
     static final int TOUCH_EVENT_SCROLL = 3;
     static final int TOUCH_EVENT_SCALE = 4;
+    static final int TOUCH_EVENT_LONG_PRESS = 5;
+    static final int TOUCH_EVENT_SHOW_PRESS = 6;
 
     // endregion - Constants
 
@@ -56,17 +59,19 @@ public class GameEngine extends GameViewThread implements GameView.IGameViewObse
     private final BlockingQueue<Action> actions;
     private Game game;
     private BoardDrawable boardDrawable;
+    private IGameRules gameRules;
 
     // endregion - Fields
 
     // region - Constructors
 
-    public GameEngine(Game game, BoardDrawable boardDrawable, SurfaceHolder surfaceHolder) {
+    public GameEngine(Game game, BoardDrawable boardDrawable, SurfaceHolder surfaceHolder, IGameRules rules) {
         super(surfaceHolder);
 
         this.actions = new LinkedBlockingQueue<>();
         this.game = game;
         this.boardDrawable = boardDrawable;
+        this.gameRules = rules;
     }
 
     // endregion - Constructors
@@ -80,37 +85,6 @@ public class GameEngine extends GameViewThread implements GameView.IGameViewObse
     @Override
     public void drawObjects(Canvas c) {
         this.boardDrawable.draw(c);
-
-
-
-        FJetPoint p;
-        float currentEdgeSize = this.edgeSize * this.scale;
-
-        Paint paint = new Paint();
-        paint.setStrokeWidth(3);
-        paint.setColor(Color.BLACK);
-
-        /*for (Object coords : game.getBoard().getCells().keySet()) {
-
-            if (coords instanceof HexCoords) {
-                //UtilCellDrawing.drawHexCellEdge(c, this.edgeSize, this.scale,
-                //        (HexCoords) coords, Color.BLACK, 3f, this.boardDrawable.getOffset());
-                p = UtilCoordinates.hexCoordsToPixel(currentEdgeSize, (HexCoords) coords);
-
-            } else {
-                //UtilCellDrawing.drawSquareCellEdge(c, this.edgeSize, this.scale,
-                //        (SquareCoords) coords, Color.BLACK, 3f, this.boardDrawable.getOffset());
-                p = UtilCoordinates.squareCoordsToPixel(currentEdgeSize, (SquareCoords) coords);
-            }
-            paint.setTextSize(13);
-            paint.setColor(Color.BLACK);
-            paint.setTypeface(Typeface.DEFAULT_BOLD);
-            c.drawText(
-                    ((ICoords) coords).toShortString(),
-                    p.getX() - currentEdgeSize / 2 + this.boardDrawable.getOffset().getX(),
-                    p.getY() + this.boardDrawable.getOffset().getY(), paint);
-        }*/
-
         drawSelectedCells(c);
     }
 
@@ -129,12 +103,12 @@ public class GameEngine extends GameViewThread implements GameView.IGameViewObse
 
     @Override
     protected void doPostDrawingTasks() {
-        //Log.d("GameEngine", "doPostDrawingTasks -> " + String.valueOf(System.currentTimeMillis()));
+
     }
 
     @Override
     protected void doInitialTasks() {
-        Log.d("----------->", "doInitialTasks");
+
     }
 
     @Override
@@ -146,11 +120,8 @@ public class GameEngine extends GameViewThread implements GameView.IGameViewObse
 
     @Override
     public void receiveActionResult(Action.IActionResult result) {
-        Log.d("---->", "ActionResut received!!!!!");
 
-        if (result instanceof SelectCellAction.SelectCellActionResult){
 
-        }
     }
 
     @Override
@@ -161,12 +132,26 @@ public class GameEngine extends GameViewThread implements GameView.IGameViewObse
     @Override
     public boolean onDown(MotionEvent e) {
         Log.d("--->", "onDown");
+
+        if (this.handler != null) {
+            Message msg = this.handler.obtainMessage();
+            msg.what = TOUCH_EVENT_TAP_DOWN;
+            msg.obj = new FJetPoint((int)e.getX(), (int)e.getY());
+            this.handler.sendMessage(msg);
+        }
         return true;
     }
 
     @Override
     public void onShowPress(MotionEvent e) {
         Log.d("--->", "onShowPress");
+
+        if (this.handler != null) {
+            Message msg = this.handler.obtainMessage();
+            msg.what = TOUCH_EVENT_SHOW_PRESS;
+            msg.obj = new FJetPoint((int)e.getX(), (int)e.getY());
+            this.handler.sendMessage(msg);
+        }
     }
 
     @Override
@@ -198,6 +183,13 @@ public class GameEngine extends GameViewThread implements GameView.IGameViewObse
     @Override
     public void onLongPress(MotionEvent e) {
         Log.d("--->", "onLongPress");
+
+        if (this.handler != null) {
+            Message msg = this.handler.obtainMessage();
+            msg.what = TOUCH_EVENT_LONG_PRESS;
+            msg.obj = new FJetPoint((int)e.getX(), (int)e.getY());
+            this.handler.sendMessage(msg);
+        }
     }
 
     @Override
@@ -232,7 +224,6 @@ public class GameEngine extends GameViewThread implements GameView.IGameViewObse
     }
 
     private void drawSelectedCells(Canvas c){
-        FJetPoint p;
         float currentEdgeSize = this.edgeSize * this.boardDrawable.getScale();
 
         Paint paint = new Paint();
@@ -267,10 +258,46 @@ public class GameEngine extends GameViewThread implements GameView.IGameViewObse
         public void handleMessage(Message msg) {
             switch (msg.what){
 
+                case TOUCH_EVENT_TAP_DOWN:
+                    Log.d("handleMessage", "TOUCH_EVENT");
+                    ICoords tapDownCoords = getCoordsFromPoint((FJetPoint)msg.obj);
+
+                    if (GameEngine.this.gameRules != null) {
+                        Action action = GameEngine.this.gameRules.getActionWithOnTapDown(tapDownCoords);
+                        action.setObserver(GameEngine.this);
+
+                        if (action != null) {
+                            GameEngine.this.addActionToQueue(action);
+                        }
+                    }
+                    break;
+
+                case TOUCH_EVENT_LONG_PRESS:
+                    Log.d("handleMessage", "TOUCH_EVENT");
+                    ICoords longPressCoords = getCoordsFromPoint((FJetPoint)msg.obj);
+
+                    if (GameEngine.this.gameRules != null) {
+                        Action action = GameEngine.this.gameRules.getActionWithOnLongPress(longPressCoords);
+                        action.setObserver(GameEngine.this);
+
+                        if (action != null) {
+                            GameEngine.this.addActionToQueue(action);
+                        }
+                    }
+                    break;
+
                 case TOUCH_EVENT_TAP_UP:
                     Log.d("handleMessage", "TOUCH_EVENT");
-                    Action action = getSelectAction((FJetPoint)msg.obj);
-                    GameEngine.this.addActionToQueue(action);
+                    ICoords tapUpCoords = getCoordsFromPoint((FJetPoint)msg.obj);
+
+                    if (GameEngine.this.gameRules != null) {
+                        Action action = GameEngine.this.gameRules.getActionWithOnTapUp(tapUpCoords);
+                        action.setObserver(GameEngine.this);
+
+                        if (action != null) {
+                            GameEngine.this.addActionToQueue(action);
+                        }
+                    }
                     break;
 
                 case TOUCH_EVENT_SCROLL:
@@ -287,34 +314,23 @@ public class GameEngine extends GameViewThread implements GameView.IGameViewObse
             }
         }
 
-        private Action getSelectAction(FJetPoint p){
-            SelectCellAction a = (SelectCellAction) ActionFactory.createAction(
-                    ActionFactory.SELECT_CELL_ACTION);
+        private ICoords getCoordsFromPoint(FJetPoint p){
+            ICoords coords = null;
+            FJetPoint offset = boardDrawable.getOffset();
 
-            if (a != null) {
-                ICoords coords = null;
-                FJetPoint offset = boardDrawable.getOffset();
+            if (game.getBoard().getType() == Board.BoardType.HEX_CELLS) {
+                coords = UtilCoordinates.hexCoordsFromPixel(
+                        p.getX() - offset.getX(),
+                        p.getY() - offset.getY(),
+                        edgeSize * boardDrawable.getScale());
 
-                if (game.getBoard().getType() == Board.BoardType.HEX_CELLS) {
-                    coords = UtilCoordinates.hexCoordsFromPixel(
-                            p.getX() - offset.getX(),
-                            p.getY() - offset.getY(),
-                            edgeSize* boardDrawable.getScale());
-
-                } else if (game.getBoard().getType() == Board.BoardType.SQUARE_CELLS) {
-                    coords = UtilCoordinates.squareCoordsFromPixelCoords(
-                            p.getX() - offset.getX(),
-                            p.getY()- offset.getY(),
-                            edgeSize * boardDrawable.getScale());
-                }
-
-                if (coords != null) {
-                    a.setBoard(game.getBoard())
-                            .setCoords(coords)
-                            .setObserver(GameEngine.this);
-                }
+            } else if (game.getBoard().getType() == Board.BoardType.SQUARE_CELLS) {
+                coords = UtilCoordinates.squareCoordsFromPixelCoords(
+                        p.getX() - offset.getX(),
+                        p.getY()- offset.getY(),
+                        edgeSize * boardDrawable.getScale());
             }
-            return a;
+            return coords;
         }
 
         private Action getScrollAction(FJetPoint p) {

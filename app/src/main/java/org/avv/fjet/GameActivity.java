@@ -59,12 +59,12 @@ public class GameActivity extends Activity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        Board b = BoardFactory.createBoard(this, Board.BoardType.SQUARE_CELLS, 30, 30);
+        Board b = BoardFactory.createBoard(this, Board.BoardType.SQUARE_CELLS, 50, 50);
         Game g = new Game(b);
         BoardDrawable boardDrawable = BoardDrawableFactory.getInstance().createBoardDrawable(b, 300, 300, 80);
 
         this.gameView = new GameView(this);
-        this.gameEngine = new GameEngine(g, boardDrawable, this.gameView.getHolder());
+        this.gameEngine = new GameEngine(g, boardDrawable, this.gameView.getHolder(), null);
         this.gameEngine.setFPS(1);
 
         this.touchListener = new FJetTouchListener(this.gameEngine, this);
