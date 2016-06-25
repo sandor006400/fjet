@@ -39,7 +39,7 @@ public class Unit {
      * @param data
      */
     public Unit(UnitData data){
-
+        this.id = data.id;
     }
 
     // endregion - Constructors

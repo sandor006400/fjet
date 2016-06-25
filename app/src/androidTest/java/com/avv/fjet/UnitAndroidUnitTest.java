@@ -36,14 +36,6 @@ public class UnitAndroidUnitTest extends InstrumentationTestCase {
         unit = new Unit();
     }
 
-    @Test
-    public void unit_jsonSerialization(){
-        String json = unit.toJsonString();
-        Unit newUnit = new Unit(json);
-
-        //assertThat(unit, is(newUnit));
-        assertEquals(unit, newUnit);
-    }
 
     // endregion - Methods
 

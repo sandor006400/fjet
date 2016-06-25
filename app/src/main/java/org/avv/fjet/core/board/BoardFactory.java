@@ -41,34 +41,26 @@ public class BoardFactory {
 
     // region - Methods
 
-    public static Board createBoard(Context c, Board.BoardType t, int width, int height){
+    public static Board createBoard(Context c, Board.BoardType t, Terrain [][] terrains){
         Board b = new Board(t);
 
-        if (width != 0 && height != 0) {
+        if (terrains.length > 0 && terrains[0].length > 0) {
             switch (t) {
 
                 case HEX_CELLS:
-                    for (int i = 0; i < width; i++){
-                        for (int j = 0; j < height; j++){
+                    for (int i = 0; i < terrains.length; i++){
+                        for (int j = 0; j < terrains[0].length; j++){
                             ICoords coords = UtilCoordinates.offsetHexCoordsToAxialHexCoords(i, j);
-                            b.setCellAndCoords(
-                                    coords,
-                                        new Cell(
-                                                coords,
-                                                TerrainFactory.getInstance(c).getRandomTerrain()));
+                            b.setCellAndCoords(coords, new Cell(coords, terrains[i][j]));
                         }
                     }
                     break;
 
                 case SQUARE_CELLS:
-                    for (int i = 0; i < width; i++){
-                        for (int j = 0; j < height; j++){
+                    for (int i = 0; i < terrains.length; i++){
+                        for (int j = 0; j < terrains[0].length; j++){
                             ICoords coords = new SquareCoords(i, j);
-                            b.setCellAndCoords(
-                                    coords,
-                                    new Cell(
-                                            coords,
-                                            TerrainFactory.getInstance(c).getRandomTerrain()));
+                            b.setCellAndCoords(coords, new Cell(coords, terrains[i][j]));
                         }
                     }
                     break;

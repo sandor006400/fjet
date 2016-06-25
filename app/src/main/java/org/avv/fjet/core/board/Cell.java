@@ -50,20 +50,16 @@ public class Cell {
         this.unitId = null;
     }
 
-    public Cell(CellData data, Context c){
-        this.id = data.id;
-        this.unitId = data.unitId;
-        this.terrain = TerrainFactory.getInstance(c).getTerrain(data.terrainType);
-        this.coords = data.coords;
-    }
-
     /**
      * Creates a Cell using json with Cell data
      * @param data
      * @param c
      */
-    public Cell(Board.BoardData data, Context c){
-
+    public Cell(CellData data, Context c){
+        this.id = data.id;
+        this.unitId = data.unitId;
+        this.terrain = TerrainFactory.getInstance(c).getTerrain(data.terrainType);
+        this.coords = data.coords;
     }
 
     // endregion - Constructors

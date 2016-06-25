@@ -15,7 +15,6 @@ import org.avv.fjet.core.action.Action;
 import org.avv.fjet.core.action.ActionFactory;
 import org.avv.fjet.core.action.ScaleViewAction;
 import org.avv.fjet.core.action.ScrollBoardViewAction;
-import org.avv.fjet.core.action.SelectCellAction;
 import org.avv.fjet.core.board.Board;
 import org.avv.fjet.core.board.Cell;
 import org.avv.fjet.core.board.HexCoords;
@@ -23,7 +22,7 @@ import org.avv.fjet.core.board.ICoords;
 import org.avv.fjet.core.geometry.FJetPoint;
 import org.avv.fjet.core.board.SquareCoords;
 import org.avv.fjet.core.board.util.UtilCoordinates;
-import org.avv.fjet.core.rule.IGameRules;
+import org.avv.fjet.core.rule.GameRules;
 import org.avv.fjet.graphics.GameView;
 import org.avv.fjet.graphics.GameViewThread;
 import org.avv.fjet.graphics.board.BoardDrawable;
@@ -59,13 +58,13 @@ public class GameEngine extends GameViewThread implements GameView.IGameViewObse
     private final BlockingQueue<Action> actions;
     private Game game;
     private BoardDrawable boardDrawable;
-    private IGameRules gameRules;
+    private GameRules gameRules;
 
     // endregion - Fields
 
     // region - Constructors
 
-    public GameEngine(Game game, BoardDrawable boardDrawable, SurfaceHolder surfaceHolder, IGameRules rules) {
+    public GameEngine(Game game, BoardDrawable boardDrawable, SurfaceHolder surfaceHolder, GameRules rules) {
         super(surfaceHolder);
 
         this.actions = new LinkedBlockingQueue<>();

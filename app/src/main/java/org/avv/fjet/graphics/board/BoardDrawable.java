@@ -1,7 +1,11 @@
 package org.avv.fjet.graphics.board;
 
 import android.graphics.Canvas;
+import android.graphics.Path;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.PathShape;
 import android.util.Log;
 
 import org.avv.fjet.core.geometry.FJetPoint;
@@ -93,8 +97,7 @@ public class BoardDrawable {
         for (UnitDrawable uD : this.unitDrawablesMap.values()){
             uD.draw(this.boardBounds, this.scale, c);
         }
-
-
+        
     }
 
     // endregion - Methods for/from SuperClass/Interfaces

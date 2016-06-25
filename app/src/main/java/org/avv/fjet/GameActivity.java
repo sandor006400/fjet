@@ -13,6 +13,8 @@ import android.view.WindowManager;
 import org.avv.fjet.core.Game;
 import org.avv.fjet.core.board.Board;
 import org.avv.fjet.core.board.BoardFactory;
+import org.avv.fjet.core.board.Terrain;
+import org.avv.fjet.core.board.TerrainFactory;
 import org.avv.fjet.graphics.GameView;
 import org.avv.fjet.graphics.board.BoardDrawable;
 import org.avv.fjet.graphics.board.BoardDrawableFactory;
@@ -59,7 +61,15 @@ public class GameActivity extends Activity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        Board b = BoardFactory.createBoard(this, Board.BoardType.SQUARE_CELLS, 50, 50);
+        Terrain[][] terrains = new Terrain[50][50];
+
+        for (int i = 0; i < terrains.length; i++){
+            for (int j = 0; j < terrains[0].length; j++){
+                terrains[i][j] = TerrainFactory.getInstance(this).getRandomTerrain();
+            }
+        }
+
+        Board b = BoardFactory.createBoard(this, Board.BoardType.SQUARE_CELLS, terrains);
         Game g = new Game(b);
         BoardDrawable boardDrawable = BoardDrawableFactory.getInstance().createBoardDrawable(b, 300, 300, 80);
 

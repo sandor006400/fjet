@@ -10,6 +10,7 @@ import org.avv.fjet.core.board.Board;
 import org.avv.fjet.core.board.BoardFactory;
 import org.avv.fjet.core.board.Cell;
 import org.avv.fjet.core.board.ICoords;
+import org.avv.fjet.core.board.Terrain;
 import org.avv.fjet.core.board.TerrainFactory;
 import org.avv.fjet.core.unit.Unit;
 import org.junit.Before;
@@ -53,24 +54,19 @@ public class BoardAndroidUnitTest extends InstrumentationTestCase {
         if (tF != null) {
             Log.d("TF", "TF no es nulo");
         }
+        Terrain [][] terrains = new Terrain[10][10];
+
+        for (int i = 0; i < terrains.length; i++){
+            for (int j = 0; j < terrains[0].length; j++){
+                terrains[i][j] = TerrainFactory.getInstance(c).getRandomTerrain();
+            }
+        }
+
         hexBoard = BoardFactory.createBoard(c,
-                Board.BoardType.HEX_CELLS, 10, 10);
+                Board.BoardType.HEX_CELLS, terrains);
 
         squareBoard = BoardFactory.createBoard(c,
-                Board.BoardType.SQUARE_CELLS, 10, 10);
-    }
-
-    @Test
-    public void hexBoard_jsonSerialization(){
-        String jsonBoard = hexBoard.toJsonString();
-        Board newBoard = new Board(jsonBoard, c);
-
-        Map<ICoords, Cell> cellsMap = newBoard.getCells();
-        Map<String, Unit> unitsMap = newBoard.getUnits();
-
-        //assertThat(jsonBoard, is());
-        assertEquals(hexBoard.getCells(), cellsMap);
-        assertEquals(hexBoard.getUnits(), unitsMap);
+                Board.BoardType.SQUARE_CELLS, terrains);
     }
 
     // endregion - Methods
