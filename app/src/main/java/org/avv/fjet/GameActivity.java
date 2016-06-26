@@ -9,11 +9,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 
 import org.avv.fjet.core.Game;
 import org.avv.fjet.core.board.Board;
 import org.avv.fjet.core.board.BoardFactory;
 import org.avv.fjet.core.board.Cell;
+import org.avv.fjet.core.board.HexCoords;
+import org.avv.fjet.core.board.ICoords;
 import org.avv.fjet.core.board.SquareCoords;
 import org.avv.fjet.core.board.Terrain;
 import org.avv.fjet.core.board.TerrainFactory;
@@ -99,6 +102,22 @@ public class GameActivity extends Activity {
         int index = parent.indexOfChild(v);
         parent.removeView(v);
         parent.addView(this.gameView, index);
+
+        Button button = (Button)findViewById(R.id.button1);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pruebecillaSquareCoords();
+            }
+        });
+
+        Button button2 = (Button)findViewById(R.id.button2);
+        button2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pruebecillaHexCoords();
+            }
+        });
     }
 
     @Override
@@ -117,7 +136,7 @@ public class GameActivity extends Activity {
 
         this.gameEngine.onResume();
 
-        pruebecilla();
+
     }
 
     @Override
@@ -140,20 +159,27 @@ public class GameActivity extends Activity {
         return size;
     }
 
-    private void pruebecilla(){
-        SquareCoords[] rangeNCoords = {
+    private void pruebecillaSquareCoords(){
+        /*SquareCoords[] rangeNCoords = {
                 new SquareCoords(3,2),
                 new SquareCoords(2,3), new SquareCoords(3,3), new SquareCoords(4,3),
                 new SquareCoords(1,4), new SquareCoords(2,4), new SquareCoords(3,4), new SquareCoords(4,4), new SquareCoords(5,4),
                 new SquareCoords(2,5), new SquareCoords(3,5), new SquareCoords(4,5),
                 new SquareCoords(3,6)
-        };
+        };*/
+        Log.d("-----------", "------------------------------------");
+        Log.d("----------->", "SQUARE COORDS TEST");
+        long antes = System.currentTimeMillis();
+        Log.d("----------->", "ANTES: " + antes);
+        SquareCoords coords = new SquareCoords(200,300);
+        ICoords[] rangeNCoords = coords.getCoordsInRangeArray(20);
+        Log.d("----------->", "TOTAL COORDENADAS: " + rangeNCoords.length);
 
         List<Cell> cells = new ArrayList<>();
         Terrain t = TerrainFactory.getInstance(this).getTerrain(Terrain.TerrainType.GRASSLAND);   // Al cells must have the same movement cost
 
-        for (SquareCoords coords : rangeNCoords){
-            cells.add(new Cell(coords, t));
+        for (ICoords c : rangeNCoords){
+            cells.add(new Cell(c, t));
         }
         FJetCellsGraph graph = new FJetCellsGraph(cells);
 
@@ -161,6 +187,42 @@ public class GameActivity extends Activity {
         // Destination -> coords(4,4) -> index: 7
         List<Cell> path = UtilPathFindingAlgorithms.aStar(cells.get(1), cells.get(7), graph);
         Log.d("---->", path.toString());
+        long despues = System.currentTimeMillis();
+        Log.d("----------->", "DESPUES: " + despues);
+        Log.d("----------->", "TOTAL EN SEGUNDOS: " + ((despues - antes) / 1000.0f));
+    }
+
+    private void pruebecillaHexCoords(){
+        /*SquareCoords[] rangeNCoords = {
+                new SquareCoords(3,2),
+                new SquareCoords(2,3), new SquareCoords(3,3), new SquareCoords(4,3),
+                new SquareCoords(1,4), new SquareCoords(2,4), new SquareCoords(3,4), new SquareCoords(4,4), new SquareCoords(5,4),
+                new SquareCoords(2,5), new SquareCoords(3,5), new SquareCoords(4,5),
+                new SquareCoords(3,6)
+        };*/
+        Log.d("-----------", "------------------------------------");
+        Log.d("----------->", "HEX COORDS TEST");
+        long antes = System.currentTimeMillis();
+        Log.d("----------->", "ANTES: " + antes);
+        HexCoords coords = new HexCoords(200,300);
+        ICoords[] rangeNCoords = coords.getCoordsInRangeArray(20);
+        Log.d("----------->", "TOTAL COORDENADAS: " + rangeNCoords.length);
+
+        List<Cell> cells = new ArrayList<>();
+        Terrain t = TerrainFactory.getInstance(this).getTerrain(Terrain.TerrainType.GRASSLAND);   // Al cells must have the same movement cost
+
+        for (ICoords c : rangeNCoords){
+            cells.add(new Cell(c, t));
+        }
+        FJetCellsGraph graph = new FJetCellsGraph(cells);
+
+        // Origin -> coords(2,3) -> index: 1
+        // Destination -> coords(4,4) -> index: 7
+        List<Cell> path = UtilPathFindingAlgorithms.aStar(cells.get(1), cells.get(7), graph);
+        Log.d("---->", path.toString());
+        long despues = System.currentTimeMillis();
+        Log.d("----------->", "DESPUES: " + despues);
+        Log.d("----------->", "TOTAL EN SEGUNDOS: " + ((despues - antes) / 1000.0f));
     }
 
     // endregion - Methods

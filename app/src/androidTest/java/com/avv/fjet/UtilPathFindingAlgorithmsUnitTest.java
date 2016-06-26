@@ -4,17 +4,12 @@ import android.content.Context;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.InstrumentationTestCase;
 import android.test.suitebuilder.annotation.SmallTest;
-import android.util.Log;
-
-import org.avv.fjet.core.board.Board;
-import org.avv.fjet.core.board.BoardFactory;
 import org.avv.fjet.core.board.Cell;
 import org.avv.fjet.core.board.SquareCoords;
 import org.avv.fjet.core.board.Terrain;
 import org.avv.fjet.core.board.TerrainFactory;
 import org.avv.fjet.graph.FJetCellsGraph;
 import org.avv.fjet.graph.UtilPathFindingAlgorithms;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 

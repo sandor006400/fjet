@@ -94,6 +94,27 @@ public class Board {
         return cells;
     }
 
+    /**
+     * Returns the cells with ids
+     * @param ids
+     * @return
+     */
+    public List<Cell> getCellsWithIds(String [] ids){
+        List<Cell> cells = new ArrayList<>();
+
+        for (Map.Entry<ICoords, Cell> entry : this.cellsMap.entrySet()){
+            boolean found = false;
+
+            for (int i = 0; i < ids.length && !found; i++) {
+                if (entry.getValue().getId().equals(ids[i])) {
+                    cells.add(entry.getValue());
+                    found = true;
+                }
+            }
+        }
+        return cells;
+    }
+
     public void setCellAndCoords(ICoords coords, Cell cell){
         this.cellsMap.put(coords, cell);
     }
@@ -146,6 +167,14 @@ public class Board {
             if (selectedCell != null) {
                 this.selectedCells.add(selectedCell);
             }
+        }
+    }
+
+    public void selectCells(String [] cellIds){
+        List<Cell> selectedCells = getCellsWithIds(cellIds);
+
+        if (selectedCells != null) {
+            this.selectedCells.addAll(selectedCells);
         }
     }
 
