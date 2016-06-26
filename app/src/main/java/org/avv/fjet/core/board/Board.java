@@ -73,6 +73,27 @@ public class Board {
         return null;
     }
 
+    /**
+     * Returns the cells with coords
+     * @param coords
+     * @return
+     */
+    public List<Cell> getCellsWithCoords(ICoords [] coords){
+        List<Cell> cells = new ArrayList<>();
+
+        for (Map.Entry<ICoords, Cell> entry : this.cellsMap.entrySet()){
+            boolean found = false;
+
+            for (int i = 0; i < coords.length && !found; i++) {
+                if (entry.getKey().equals(coords[i])) {
+                    cells.add(entry.getValue());
+                    found = true;
+                }
+            }
+        }
+        return cells;
+    }
+
     public void setCellAndCoords(ICoords coords, Cell cell){
         this.cellsMap.put(coords, cell);
     }

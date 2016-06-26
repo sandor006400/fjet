@@ -97,7 +97,7 @@ public class BoardDrawable {
         for (UnitDrawable uD : this.unitDrawablesMap.values()){
             uD.draw(this.boardBounds, this.scale, c);
         }
-        
+
     }
 
     // endregion - Methods for/from SuperClass/Interfaces
