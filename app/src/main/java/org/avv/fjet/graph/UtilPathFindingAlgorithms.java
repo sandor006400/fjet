@@ -2,9 +2,15 @@ package org.avv.fjet.graph;
 
 import org.avv.fjet.core.board.Board;
 import org.avv.fjet.core.board.Cell;
+import org.avv.fjet.core.board.HexCoords;
 import org.avv.fjet.core.board.ICoords;
+import org.avv.fjet.core.board.SquareCoords;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Queue;
 
 /**
  * Created by Alexander Vorobiev on 22/05/16.
@@ -40,11 +46,76 @@ public class UtilPathFindingAlgorithms {
         return null;
     }
 
-    public static List<Cell> aStar(Cell origin, Cell destination, Board board){
+    /**
+     * This algorithm implementation is based on A* implementations from:
+     * http://www.redblobgames.com/pathfinding/a-star/implementation.html
+     * @param origin
+     * @param destination
+     * @param cellsGraph
+     * @return
+     */
+    public static List<Cell> aStar(Cell origin, Cell destination, FJetCellsGraph cellsGraph){
+        Map<String, String> cameFrom = new HashMap<String, String>();
+        Map<String, Double> costSoFar = new HashMap<String, Double>();
 
-        // TODO : see http://www.redblobgames.com/pathfinding/a-star/implementation.html
+        PriorityQueue<Cell> frontier = new PriorityQueue<>();
+        frontier.enqueue(origin, 0.0d);
 
+        cameFrom.put(origin.getId(), origin.getId());
+        costSoFar.put(origin.getId(), 0.0);
+
+        while(frontier.getElements().size() > 0) {
+            Cell current = frontier.dequeue();
+
+            if (current.equals(destination)){
+                break;
+            }
+
+            for (Cell next : cellsGraph.getNeightbors(current)) {
+                double newCost = costSoFar.get(current.getId()) + next.getTerrain().getMovementCost();
+
+                if (!costSoFar.containsKey(next.getId())
+                        || newCost < costSoFar.get(next.getId())){
+                    costSoFar.put(next.getId(), newCost);
+
+                    double priority = newCost + heuristic(next.getCoords(), destination.getCoords());
+                    frontier.enqueue(next, priority);
+                    cameFrom.put(next.getId(), current.getId());
+                }
+            }
+        }
+
+        if (cameFrom.size() > 0) {
+            List<Cell> auxPath = new ArrayList<>();
+            List<Cell> path = new ArrayList<>();
+            Cell prevCell = cellsGraph.getCells().get(destination.getId());
+            auxPath.add(destination);
+
+            while (prevCell != null
+                    && !prevCell.getId().equals(origin.getId())) {
+                auxPath.add(prevCell);
+                prevCell = cellsGraph.getCells().get(cameFrom.get(prevCell.getId()));
+            }
+            auxPath.add(origin);
+
+            // Inverting a path order
+            for (int i = auxPath.size() - 1; i >= 0; i--){
+                path.add(auxPath.get(i));
+            }
+            return path;
+        }
         return null;
+    }
+
+    public static double heuristic(ICoords a, ICoords b){
+        if (a instanceof HexCoords && b instanceof HexCoords){
+            return Math.abs(((HexCoords) a).getQ() - ((HexCoords) b).getQ())
+                    + Math.abs(((HexCoords) a).getR() - ((HexCoords) b).getR());
+
+        } else {
+            return Math.abs(((SquareCoords) a).getX() - ((SquareCoords) b).getX())
+                    + Math.abs(((SquareCoords) a).getY() - ((SquareCoords) b).getY());
+        }
     }
 
     // endregion - Methods

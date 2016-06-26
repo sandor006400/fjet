@@ -171,24 +171,6 @@ public class UtilCoordinates {
     }
 
     /**
-     * Calculates Square coordinate using pixel (x,y) coordinate, board pixel dimensions (width,height) and
-     * Board dimensions (cols,rows)
-     * @param xCoord
-     * @param yCoord
-     * @param width
-     * @param height
-     * @param cols
-     * @param rows
-     * @return
-     */
-    // TODO -> Pending tests
-    /*public static SquareCoords squareCoordsFromPixelCoords(int xCoord, int yCoord, int width, int height, int cols, int rows){
-        int x = (cols / width) * xCoord;
-        int y = (rows / height) * yCoord;
-        return new SquareCoords(x, y);
-    }*/
-
-    /**
      * Calculates Square coordinate using pixel (x,y) coordinate and cell's edgeSize.
      * @param xCoord
      * @param yCoord

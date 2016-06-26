@@ -6,6 +6,7 @@ import org.avv.fjet.core.board.ICoords;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Alexander Vorobiev on 25/06/16.
@@ -53,6 +54,10 @@ public class FJetCellsGraph {
 
    public List<Cell> getNeightbors(Cell cell){
       return this.edges.get(cell.getId());
+   }
+
+   public Map<String, Cell> getCells(){
+      return this.cells;
    }
 
     // endregion - Getters and Setters

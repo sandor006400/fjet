@@ -13,12 +13,19 @@ import android.view.WindowManager;
 import org.avv.fjet.core.Game;
 import org.avv.fjet.core.board.Board;
 import org.avv.fjet.core.board.BoardFactory;
+import org.avv.fjet.core.board.Cell;
+import org.avv.fjet.core.board.SquareCoords;
 import org.avv.fjet.core.board.Terrain;
 import org.avv.fjet.core.board.TerrainFactory;
+import org.avv.fjet.graph.FJetCellsGraph;
+import org.avv.fjet.graph.UtilPathFindingAlgorithms;
 import org.avv.fjet.graphics.GameView;
 import org.avv.fjet.graphics.board.BoardDrawable;
 import org.avv.fjet.graphics.board.BoardDrawableFactory;
 import org.avv.fjet.touch.FJetTouchListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Alexander Vorobiev on 21/05/16.
@@ -109,6 +116,8 @@ public class GameActivity extends Activity {
         Log.d("GameActivity", "onResume");
 
         this.gameEngine.onResume();
+
+        pruebecilla();
     }
 
     @Override
@@ -129,6 +138,29 @@ public class GameActivity extends Activity {
         Point size = new Point();
         display.getSize(size);
         return size;
+    }
+
+    private void pruebecilla(){
+        SquareCoords[] rangeNCoords = {
+                new SquareCoords(3,2),
+                new SquareCoords(2,3), new SquareCoords(3,3), new SquareCoords(4,3),
+                new SquareCoords(1,4), new SquareCoords(2,4), new SquareCoords(3,4), new SquareCoords(4,4), new SquareCoords(5,4),
+                new SquareCoords(2,5), new SquareCoords(3,5), new SquareCoords(4,5),
+                new SquareCoords(3,6)
+        };
+
+        List<Cell> cells = new ArrayList<>();
+        Terrain t = TerrainFactory.getInstance(this).getTerrain(Terrain.TerrainType.GRASSLAND);   // Al cells must have the same movement cost
+
+        for (SquareCoords coords : rangeNCoords){
+            cells.add(new Cell(coords, t));
+        }
+        FJetCellsGraph graph = new FJetCellsGraph(cells);
+
+        // Origin -> coords(2,3) -> index: 1
+        // Destination -> coords(4,4) -> index: 7
+        List<Cell> path = UtilPathFindingAlgorithms.aStar(cells.get(1), cells.get(7), graph);
+        Log.d("---->", path.toString());
     }
 
     // endregion - Methods
