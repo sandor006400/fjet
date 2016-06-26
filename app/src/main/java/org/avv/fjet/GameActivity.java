@@ -79,12 +79,13 @@ public class GameActivity extends Activity {
             }
         }
 
-        Board b = BoardFactory.createBoard(this, Board.BoardType.SQUARE_CELLS, terrains);
+        Board b = BoardFactory.createBoard(this, Board.BoardType.HEX_CELLS, terrains);
         Game g = new Game(b);
         BoardDrawable boardDrawable = BoardDrawableFactory.getInstance().createBoardDrawable(b, 300, 300, 80);
 
         this.gameView = new GameView(this);
-        this.gameEngine = new GameEngine(g, boardDrawable, this.gameView.getHolder(), null);
+        this.gameEngine = new GameEngine(g, boardDrawable,
+                this.gameView.getHolder(), new ExampleGameRules(g));
         this.gameEngine.setFPS(1);
 
         this.touchListener = new FJetTouchListener(this.gameEngine, this);

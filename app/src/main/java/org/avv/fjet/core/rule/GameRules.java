@@ -15,7 +15,7 @@ public abstract class GameRules {
 
     // region - Fields
 
-    private Game game;
+    protected Game game;
 
     // endregion - Fields
 

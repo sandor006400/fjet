@@ -120,7 +120,6 @@ public class GameEngine extends GameViewThread implements GameView.IGameViewObse
     @Override
     public void receiveActionResult(Action.IActionResult result) {
 
-
     }
 
     @Override
@@ -227,7 +226,7 @@ public class GameEngine extends GameViewThread implements GameView.IGameViewObse
 
         Paint paint = new Paint();
         paint.setStrokeWidth(4);
-        paint.setColor(Color.GREEN);
+        paint.setColor(Color.BLACK);
 
         for (Object cell : game.getBoard().getSelectedCells()) {
 
@@ -235,11 +234,11 @@ public class GameEngine extends GameViewThread implements GameView.IGameViewObse
             FJetPoint offset = boardDrawable.getOffset();
 
             if (coords instanceof HexCoords) {
-                UtilCellDrawing.drawHexCellEdge(c, this.edgeSize, this.boardDrawable.getScale(), (HexCoords) coords, Color.GREEN, 5f, offset);
+                UtilCellDrawing.drawHexCellEdge(c, this.edgeSize, this.boardDrawable.getScale(), (HexCoords) coords, Color.BLACK, 10f, offset);
                 UtilCoordinates.hexCoordsToPixel(currentEdgeSize, (HexCoords) coords);
 
             } else {
-                UtilCellDrawing.drawSquareCellEdge(c, this.edgeSize, this.boardDrawable.getScale(), (SquareCoords) coords, Color.GREEN, 5f, offset);
+                UtilCellDrawing.drawSquareCellEdge(c, this.edgeSize, this.boardDrawable.getScale(), (SquareCoords) coords, Color.BLACK, 10f, offset);
                 UtilCoordinates.squareCoordsToPixel(currentEdgeSize, (SquareCoords) coords);
             }
         }
@@ -263,9 +262,9 @@ public class GameEngine extends GameViewThread implements GameView.IGameViewObse
 
                     if (GameEngine.this.gameRules != null) {
                         Action action = GameEngine.this.gameRules.getActionWithOnTapDown(tapDownCoords);
-                        action.setObserver(GameEngine.this);
 
                         if (action != null) {
+                            action.setObserver(GameEngine.this);
                             GameEngine.this.addActionToQueue(action);
                         }
                     }
@@ -277,9 +276,9 @@ public class GameEngine extends GameViewThread implements GameView.IGameViewObse
 
                     if (GameEngine.this.gameRules != null) {
                         Action action = GameEngine.this.gameRules.getActionWithOnLongPress(longPressCoords);
-                        action.setObserver(GameEngine.this);
 
                         if (action != null) {
+                            action.setObserver(GameEngine.this);
                             GameEngine.this.addActionToQueue(action);
                         }
                     }
@@ -291,9 +290,9 @@ public class GameEngine extends GameViewThread implements GameView.IGameViewObse
 
                     if (GameEngine.this.gameRules != null) {
                         Action action = GameEngine.this.gameRules.getActionWithOnTapUp(tapUpCoords);
-                        action.setObserver(GameEngine.this);
 
                         if (action != null) {
+                            action.setObserver(GameEngine.this);
                             GameEngine.this.addActionToQueue(action);
                         }
                     }

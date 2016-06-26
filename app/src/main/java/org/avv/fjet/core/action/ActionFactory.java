@@ -10,6 +10,7 @@ public class ActionFactory {
 
     // Movement Actions 0-9999
     public static final int MOVE_TO_ACTION = 0;
+    public static final int SHOW_MOVEMENT_PATH_ACTION = 1;
 
     // Attack Actions 10000-19999
     public static final int ATTACK_ACTION = 10000;
@@ -68,6 +69,9 @@ public class ActionFactory {
 
             case SCALE_BOARD_VIEW_ACTION:
                 return new ScaleViewAction();
+
+            case SHOW_MOVEMENT_PATH_ACTION:
+                return new ShowPathAction();
 
             default:
                 return createAction(action);

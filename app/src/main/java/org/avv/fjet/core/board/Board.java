@@ -170,6 +170,16 @@ public class Board {
         }
     }
 
+    public void selectCells(List<Cell> cells){
+        Cell selectedCell;
+        List<String> ids = new ArrayList<>();
+
+        for (Cell cell : cells) {
+            ids.add(cell.getId());
+        }
+        selectCells(Arrays.copyOf(ids.toArray(), ids.size(), String[].class));
+    }
+
     public void selectCells(String [] cellIds){
         List<Cell> selectedCells = getCellsWithIds(cellIds);
 
