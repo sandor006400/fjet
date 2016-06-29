@@ -1,14 +1,21 @@
 package org.avv.fjet.core.player;
 
+import org.avv.fjet.core.board.HexCoords;
+import org.avv.fjet.core.board.SquareCoords;
+import org.avv.fjet.core.board.Terrain;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.UUID;
+
 /**
  * Created by Alexander Vladimirovich Vorobiev
  * At 27/02/2016
  */
-public abstract class Player {
+public class Player {
 
     // region - Constants
 
-    private String DEFAULT_ID = "AAAAA00000";
     private String DEFAULT_NAME = "Unknown";
 
     // endregion - Constants
@@ -22,59 +29,102 @@ public abstract class Player {
 
     // region - Constructors
 
-    protected Player(){
-        this.id = DEFAULT_ID;
+    public Player(){
+        this.id = generateId();
         this.name = DEFAULT_NAME;
     }
 
-    protected Player(PlayerState playerState){
-        this.id = playerState.playerId;
-        this.name = playerState.playerName;
+    public Player(String json){
+        initWithJson(json);
     }
 
     // endregion - Constructors
 
     // region - Getters and Setters
 
+    public String getId(){
+        return this.id;
+    }
+
+    public void setId(String id){
+        this.id = id;
+    }
+
+    public String getName(){
+        return this.name;
+    }
+
+    public void setName(String name){
+        this.name = name;
+    }
+
     // endregion - Getters and Setters
 
     // region - Methods for/from SuperClass/Interfaces
 
-    abstract void beginsTurn();
+    @Override
+    public boolean equals(Object o) {
+        if (o == null){
+            return false;
 
-    protected PlayerState getSavedState() {
-        return new PlayerState()
-                .setPlayerId(this.id)
-                .setPlayerName(this.name);
+        } else if (o instanceof Player) {
+            return ((Player)o).name.equals(this.name)
+                    && ((Player)o).id.equals(this.id);
+        } else {
+            return false;
+        }
     }
+
 
     // endregion - Methods for/from SuperClass/Interfaces
 
     // region - Methods
 
+    private String generateId(){
+        return UUID.randomUUID().toString().replace(" ", "");
+    }
+
+    public String toJson(){
+        JSONObject jsonObject = new JSONObject();
+
+        try {
+            jsonObject.put("id", this.id);
+            jsonObject.put("name", this.name);
+
+        } catch (JSONException e) {
+
+        }
+        return jsonObject.toString();
+    }
+
+    public void initWithJson(String json) {
+        JSONObject jsonObject = null;
+        try {
+            jsonObject = new JSONObject(json);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        if (jsonObject != null) {
+            try {
+                this.id = jsonObject.getString("id");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                this.name = jsonObject.getString("name");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
+
     // endregion - Methods
 
     // region - Inner and Anonymous Classes
-
-    /**
-     * Interface used to store Player's data
-     */
-    protected class PlayerState {
-
-        private String playerId;
-        private String playerName;
-
-        public PlayerState setPlayerId(String id){
-            this.playerId = id;
-            return this;
-        }
-
-        public PlayerState setPlayerName(String name){
-            this.playerName = name;
-            return this;
-        }
-
-    }
 
     // endregion - Inner and Anonymous Classes
 

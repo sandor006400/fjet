@@ -119,7 +119,7 @@ public class Board {
         this.cellsMap.put(coords, cell);
     }
 
-    public Map getCells(){
+    public Map<ICoords, Cell> getCells(){
         return this.cellsMap;
     }
 
@@ -127,7 +127,7 @@ public class Board {
         return this.selectedCells;
     }
 
-    public Map getUnits(){
+    public Map<String, Unit> getUnits(){
         return this.unitsMap;
     }
 

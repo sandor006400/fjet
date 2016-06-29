@@ -20,6 +20,7 @@ import org.avv.fjet.core.board.ICoords;
 import org.avv.fjet.core.board.SquareCoords;
 import org.avv.fjet.core.board.Terrain;
 import org.avv.fjet.core.board.TerrainFactory;
+import org.avv.fjet.core.player.Player;
 import org.avv.fjet.graph.FJetCellsGraph;
 import org.avv.fjet.graph.UtilPathFindingAlgorithms;
 import org.avv.fjet.graphics.GameView;
@@ -79,8 +80,17 @@ public class GameActivity extends Activity {
             }
         }
 
+        Player p1 = new Player();
+        p1.setName("Piter");
+        Player p2 = new Player();
+        p2.setName("Nestor");
+
         Board b = BoardFactory.createBoard(this, Board.BoardType.HEX_CELLS, terrains);
         Game g = new Game(b);
+
+        g.addPlayer(p1);
+        g.addPlayer(p2);
+
         BoardDrawable boardDrawable = BoardDrawableFactory.getInstance().createBoardDrawable(b, 300, 300, 80);
 
         this.gameView = new GameView(this);

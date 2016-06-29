@@ -24,6 +24,7 @@ public class Unit {
     // region - Fields
 
     private String id;
+    private String playerId;
     private Cell cell;
 
     // endregion - Fields
@@ -40,6 +41,7 @@ public class Unit {
      */
     public Unit(UnitData data){
         this.id = data.id;
+        this.playerId = data.playerId;
     }
 
     // endregion - Constructors
@@ -50,12 +52,20 @@ public class Unit {
         this.cell = cell;
     }
 
+    public void setPlayerId(String playerId){
+        this.playerId = playerId;
+    }
+
     public Cell getCell(){
         return this.cell;
     }
 
     public String getId(){
         return this.id;
+    }
+
+    public String getPlayerId(){
+        return this.playerId;
     }
 
     // endregion - Getters and Setters
@@ -93,6 +103,7 @@ public class Unit {
     public UnitData getUnitData(){
         UnitData data = new UnitData();
         data.id = this.id;
+        data.playerId = this.playerId;
         return data;
     }
 
@@ -104,6 +115,7 @@ public class Unit {
     static public class UnitData {
 
         public String id;
+        public String playerId;
 
         public UnitData(){
 
@@ -117,6 +129,8 @@ public class Unit {
             JSONObject jsonObject = new JSONObject();
             try {
                 jsonObject.put("id", this.id);
+                jsonObject.put("playerId", this.playerId);
+
             } catch (JSONException e) {
 
             }
@@ -124,12 +138,26 @@ public class Unit {
         }
 
         public void initWithJson(String json) {
+            JSONObject jsonObject = null;
             try {
-                JSONObject jsonObject = new JSONObject(json);
-                this.id = jsonObject.getString("id");
+                jsonObject = new JSONObject(json);
 
             } catch (JSONException e) {
                 e.printStackTrace();
+            }
+            if (jsonObject != null) {
+                try {
+                    this.id = jsonObject.getString("id");
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    this.playerId = jsonObject.getString("playerId");
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         }
 
