@@ -121,7 +121,7 @@ public class Game {
             for (Player player : this.players) {
                 jsonArrayPlayers.put(player.toJson());
             }
-            jsonObject.put("payers", jsonArrayPlayers);
+            jsonObject.put("players", jsonArrayPlayers);
 
         } catch (JSONException e) {
 
@@ -158,11 +158,7 @@ public class Game {
 
             // Initializing playerUnits map
             for (Unit unit : this.board.getUnits().values()){
-                List<String> unitIds = this.playerUnitsMap.get(unit.getPlayerId());
-
-                if (unitIds != null) {
-                    unitIds.add(unit.getId());
-                }
+                addUnit(unit, unit.getPlayerId());
             }
         }
     }

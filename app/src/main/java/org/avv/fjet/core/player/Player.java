@@ -16,7 +16,7 @@ public class Player {
 
     // region - Constants
 
-    private String DEFAULT_NAME = "Unknown";
+    private static String DEFAULT_NAME = "Unknown";
 
     // endregion - Constants
 

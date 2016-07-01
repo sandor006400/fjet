@@ -25,7 +25,7 @@ public class BoardDrawable {
     // region - Constants
 
     private static final float DEFAULT_SCALE = 1.0f;
-    private static final float MIN_SCALE = 0.5f;
+    private static final float MIN_SCALE = 0.1f;
     private static final float MAX_SCALE = 2.0f;
 
     // endregion - Constants

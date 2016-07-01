@@ -21,6 +21,7 @@ import org.avv.fjet.core.board.SquareCoords;
 import org.avv.fjet.core.board.Terrain;
 import org.avv.fjet.core.board.TerrainFactory;
 import org.avv.fjet.core.player.Player;
+import org.avv.fjet.core.unit.Unit;
 import org.avv.fjet.graph.FJetCellsGraph;
 import org.avv.fjet.graph.UtilPathFindingAlgorithms;
 import org.avv.fjet.graphics.GameView;
@@ -90,6 +91,25 @@ public class GameActivity extends Activity {
 
         g.addPlayer(p1);
         g.addPlayer(p2);
+
+        Unit u1 = new Unit();
+        Unit u2 = new Unit();
+        Unit u3 = new Unit();
+        Unit u4 = new Unit();
+        Unit u5 = new Unit();
+        Unit u6 = new Unit();
+
+        g.addUnit(u1, p1.getId());
+        g.addUnit(u2, p1.getId());
+        g.addUnit(u3, p1.getId());
+        g.addUnit(u4, p1.getId());
+        g.addUnit(u5, p2.getId());
+        g.addUnit(u6, p2.getId());
+
+        String gJson = g.toJson().toString();
+
+        Game g2 = new Game(gJson, this);
+
 
         BoardDrawable boardDrawable = BoardDrawableFactory.getInstance().createBoardDrawable(b, 300, 300, 80);
 
