@@ -29,7 +29,7 @@ public class TerrainFactory {
     // region - Constructors
 
     private TerrainFactory(Context c){
-        initTerrains(c);
+        initBasicTerrains(c);
     }
 
     // endregion - Constructors
@@ -38,6 +38,23 @@ public class TerrainFactory {
 
     public Terrain getTerrain(Terrain.TerrainType terrainType){
         return this.terrainsMap.get(terrainType.ordinal());
+    }
+
+    public Terrain getTerrain(Integer terrainType){
+        return this.terrainsMap.get(terrainType);
+    }
+
+    /**
+     * Adds new Terrain subclass to terrains map.
+     * @param terrainType
+     * @param terrain
+     * @return
+     */
+    public void addNewTerrain(Integer terrainType, Terrain terrain){
+
+        if (terrainType >= Terrain.TerrainType.values().length) {
+            this.terrainsMap.put(terrainType, terrain);
+        }
     }
 
     // endregion - Getters and Setters
@@ -55,7 +72,7 @@ public class TerrainFactory {
         return INSTANCE;
     }
 
-    private void initTerrains(Context c){
+    private void initBasicTerrains(Context c){
         this.terrainsMap = new LinkedHashMap<>();
 
         if (c != null) {
@@ -81,13 +98,13 @@ public class TerrainFactory {
             // Flood
             Drawable fD = c.getResources().getDrawable(R.drawable.tex_sq_terrain_04, c.getTheme());
             Drawable fDH = c.getResources().getDrawable(R.drawable.tex_he_terrain_04, c.getTheme());
-            Terrain fT = new Terrain(Terrain.TerrainType.FLOOD, fD, fDH, 1.0f, 1.0f);
+            Terrain fT = new Terrain(Terrain.TerrainType.FLOOD, fD, fDH, 1.2f, 1.0f);
             this.terrainsMap.put(Terrain.TerrainType.FLOOD.ordinal(), fT);
 
             // Forest
             Drawable foD = c.getResources().getDrawable(R.drawable.tex_sq_terrain_05, c.getTheme());
             Drawable foDH = c.getResources().getDrawable(R.drawable.tex_he_terrain_05, c.getTheme());
-            Terrain foT = new Terrain(Terrain.TerrainType.FOREST, foD, foDH, 1.0f, 1.0f);
+            Terrain foT = new Terrain(Terrain.TerrainType.FOREST, foD, foDH, 2.0f, 1.0f);
             this.terrainsMap.put(Terrain.TerrainType.FOREST.ordinal(), foT);
 
             // Grassland
@@ -111,7 +128,7 @@ public class TerrainFactory {
             // Jungle
             Drawable jD = c.getResources().getDrawable(R.drawable.tex_sq_terrain_09, c.getTheme());
             Drawable jDH = c.getResources().getDrawable(R.drawable.tex_he_terrain_09, c.getTheme());
-            Terrain jT = new Terrain(Terrain.TerrainType.JUNGLE, jD, jDH, 1.0f, 1.0f);
+            Terrain jT = new Terrain(Terrain.TerrainType.JUNGLE, jD, jDH, 2.5f, 1.0f);
             this.terrainsMap.put(Terrain.TerrainType.JUNGLE.ordinal(), jT);
 
             // Lakes
@@ -129,7 +146,7 @@ public class TerrainFactory {
             // Mountain
             Drawable moD = c.getResources().getDrawable(R.drawable.tex_sq_terrain_12, c.getTheme());
             Drawable moDH = c.getResources().getDrawable(R.drawable.tex_he_terrain_12, c.getTheme());
-            Terrain moT = new Terrain(Terrain.TerrainType.MOUNTAIN, moD, moDH, 1.0f, 1.0f);
+            Terrain moT = new Terrain(Terrain.TerrainType.MOUNTAIN, moD, moDH, 3.0f, 1.0f);
             this.terrainsMap.put(Terrain.TerrainType.MOUNTAIN.ordinal(), moT);
 
             // Oasis
@@ -149,7 +166,6 @@ public class TerrainFactory {
             Drawable pDH = c.getResources().getDrawable(R.drawable.tex_he_terrain_14, c.getTheme());
             Terrain pT = new Terrain(Terrain.TerrainType.PLAINS, pD, pDH, 1.0f, 1.0f);
             this.terrainsMap.put(Terrain.TerrainType.PLAINS.ordinal(), pT);
-
         }
     }
 

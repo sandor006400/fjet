@@ -73,7 +73,7 @@ public class GameActivity extends Activity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        Terrain[][] terrains = new Terrain[50][50];
+        Terrain[][] terrains = new Terrain[32][32];
 
         for (int i = 0; i < terrains.length; i++){
             for (int j = 0; j < terrains[0].length; j++){
@@ -86,7 +86,7 @@ public class GameActivity extends Activity {
         Player p2 = new Player();
         p2.setName("Nestor");
 
-        Board b = BoardFactory.createBoard(this, Board.BoardType.HEX_CELLS, terrains);
+        Board b = BoardFactory.createBoard(this, Board.BoardType.SQUARE_CELLS, terrains);
         Game g = new Game(b);
 
         g.addPlayer(p1);

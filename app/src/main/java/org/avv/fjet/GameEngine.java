@@ -77,6 +77,14 @@ public class GameEngine extends GameViewThread implements GameView.IGameViewObse
 
     // region - Getters and Setters
 
+    public Game getGame(){
+        return this.game;
+    }
+
+    public BoardDrawable getBoardDrawable(){
+        return this.boardDrawable;
+    }
+
     // endregion - Getters and Setters
 
     // region - Methods for/from SuperClass/Interfaces
@@ -224,21 +232,17 @@ public class GameEngine extends GameViewThread implements GameView.IGameViewObse
     private void drawSelectedCells(Canvas c){
         float currentEdgeSize = this.edgeSize * this.boardDrawable.getScale();
 
-        Paint paint = new Paint();
-        paint.setStrokeWidth(4);
-        paint.setColor(Color.BLACK);
-
         for (Object cell : game.getBoard().getSelectedCells()) {
 
             ICoords coords = ((Cell)cell).getCoords();
             FJetPoint offset = boardDrawable.getOffset();
 
             if (coords instanceof HexCoords) {
-                UtilCellDrawing.drawHexCellEdge(c, this.edgeSize, this.boardDrawable.getScale(), (HexCoords) coords, Color.BLACK, 10f, offset);
+                UtilCellDrawing.drawHexCell(c, this.edgeSize, this.boardDrawable.getScale(), (HexCoords) coords, Color.BLACK, Color.GREEN, 10f, offset);
                 UtilCoordinates.hexCoordsToPixel(currentEdgeSize, (HexCoords) coords);
 
             } else {
-                UtilCellDrawing.drawSquareCellEdge(c, this.edgeSize, this.boardDrawable.getScale(), (SquareCoords) coords, Color.BLACK, 10f, offset);
+                UtilCellDrawing.drawSquare(c, this.edgeSize, this.boardDrawable.getScale(), (SquareCoords) coords, Color.BLACK, Color.GREEN, 10f, offset);
                 UtilCoordinates.squareCoordsToPixel(currentEdgeSize, (SquareCoords) coords);
             }
         }

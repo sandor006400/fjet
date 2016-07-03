@@ -1,8 +1,10 @@
 package org.avv.fjet.core.action;
 
+import org.avv.fjet.GameEngine;
 import org.avv.fjet.core.board.Board;
 import org.avv.fjet.core.board.ICoords;
 import org.avv.fjet.core.unit.Unit;
+import org.avv.fjet.graphics.unit.UnitDrawable;
 
 /**
  * Created by Alexander Vladimirovich Vorobiev
@@ -20,7 +22,7 @@ public class MoveUnitAction extends Action {
     private ICoords origin;
     private ICoords destination;
     private ICoords [] pathCoords;  // Coordinates that belong to a Unit movement path
-    private Board board;
+    private GameEngine gameEngine;
 
     // endregion - Fields
 
@@ -46,8 +48,8 @@ public class MoveUnitAction extends Action {
         return this;
     }
 
-    public MoveUnitAction setBoard(Board board){
-        this.board = board;
+    public MoveUnitAction setGameEngine(GameEngine gameEngine){
+        this.gameEngine = gameEngine;
         return this;
     }
 
@@ -63,14 +65,18 @@ public class MoveUnitAction extends Action {
     @Override
     protected IActionResult getExecutionResult() {
         this.unit.getCell().removeUnit();
-        this.unit.setCell(this.board.getCellWithCoords(this.destination));
+        this.unit.setCell(this.gameEngine.getGame().getBoard().getCellWithCoords(this.destination));
+        this.gameEngine.getBoardDrawable().getUnitDrawable(this.unit.getId()).setPosition(
+                this.gameEngine.getBoardDrawable().getPositionWithCoords(this.destination));
         return new MoveUnitActionResult(this.unit, this.pathCoords);
     }
 
     @Override
     protected IActionUndoResult getExecutionUndoResult() {
         this.unit.getCell().removeUnit();
-        this.unit.setCell(this.board.getCellWithCoords(this.origin));
+        this.unit.setCell(this.gameEngine.getGame().getBoard().getCellWithCoords(this.origin));
+        this.gameEngine.getBoardDrawable().getUnitDrawable(this.unit.getId()).setPosition(
+                this.gameEngine.getBoardDrawable().getPositionWithCoords(this.origin));
         return null;
     }
 

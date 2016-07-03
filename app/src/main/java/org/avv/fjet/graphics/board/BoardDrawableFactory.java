@@ -59,7 +59,7 @@ public class BoardDrawableFactory {
      * @return
      */
     public BoardDrawable createBoardDrawable(Board board, int width, int height, int edgeSize){
-        BoardDrawable boardDrawable = new BoardDrawable();
+        BoardDrawable boardDrawable = new BoardDrawable(edgeSize);
 
         // Setting the bounds rect
         boardDrawable.setBoardBounds(new FJetRect(0, 0, width, height));

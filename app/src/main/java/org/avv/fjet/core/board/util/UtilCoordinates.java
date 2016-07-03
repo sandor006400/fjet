@@ -162,7 +162,7 @@ public class UtilCoordinates {
      */
     public static int distanceBetweenSquareCoords(SquareCoords coordsA, SquareCoords coordsB){
         return Math.abs(coordsA.getX() - coordsB.getX())
-                + Math.abs(coordsA.getX() - coordsB.getY());
+                + Math.abs(coordsA.getY() - coordsB.getY());
     }
 
     public static SquareCoords addSquareCoords(SquareCoords coordsA, SquareCoords coordsB){

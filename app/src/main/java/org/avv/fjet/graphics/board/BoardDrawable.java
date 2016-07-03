@@ -8,6 +8,10 @@ import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.PathShape;
 import android.util.Log;
 
+import org.avv.fjet.core.board.HexCoords;
+import org.avv.fjet.core.board.ICoords;
+import org.avv.fjet.core.board.SquareCoords;
+import org.avv.fjet.core.board.util.UtilCoordinates;
 import org.avv.fjet.core.geometry.FJetPoint;
 import org.avv.fjet.core.geometry.FJetRect;
 import org.avv.fjet.graphics.unit.UnitDrawable;
@@ -34,6 +38,7 @@ public class BoardDrawable {
 
     private FJetRect boardBounds;   // Board bounds in screen coordinates
     private float scale;            // BoardDrawable current scale
+    private int edgeSize;
 
     private Map<String, CellDrawable> cellDrawablesMap;
     private Map<String, UnitDrawable> unitDrawablesMap;
@@ -42,9 +47,10 @@ public class BoardDrawable {
 
     // region - Constructors
 
-    public BoardDrawable(){
+    public BoardDrawable(int edgeSize){
         init();
 
+        this.edgeSize = edgeSize;
     }
 
     // endregion - Constructors
@@ -78,6 +84,10 @@ public class BoardDrawable {
         return new FJetPoint(this.boardBounds.getX(), this.boardBounds.getY());
     }
 
+    public UnitDrawable getUnitDrawable(String unitId){
+        return this.unitDrawablesMap.get(unitId);
+    }
+
     // endregion - Getters and Setters
 
     // region - Methods for/from SuperClass/Interfaces
@@ -103,6 +113,16 @@ public class BoardDrawable {
     // endregion - Methods for/from SuperClass/Interfaces
 
     // region - Methods
+
+    public FJetPoint getPositionWithCoords(ICoords coords){
+        if (coords instanceof HexCoords){
+            return UtilCoordinates.hexCoordsToPixel(this.edgeSize, (HexCoords)coords);
+
+        } else if (coords instanceof SquareCoords){
+            return UtilCoordinates.squareCoordsToPixel(edgeSize, (SquareCoords) coords);
+        }
+        return null;
+    }
 
     private void init(){
         this.scale = DEFAULT_SCALE;
