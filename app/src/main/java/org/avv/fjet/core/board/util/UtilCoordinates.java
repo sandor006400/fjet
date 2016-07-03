@@ -39,15 +39,16 @@ public class UtilCoordinates {
     // region - Methods
 
     /**
-     * Manhattan distance between two hexagon grid coordinates.
+     * Manhattan distance between two hexagon axial grid coordinates.
+     * Source: http://www.redblobgames.com/grids/hexagons/#range
      * @param coordsA
      * @param coordsB
      * @return
      */
     public static int distanceBetweenHexCoords(HexCoords coordsA, HexCoords coordsB){
-        return Math.max(
-                Math.abs(coordsA.getQ() - coordsB.getQ()),
-                Math.abs(coordsA.getR() - coordsB.getR()));
+        return (Math.abs(coordsA.getQ() - coordsB.getQ())
+                + Math.abs(coordsA.getQ() + coordsA.getR() - coordsB.getQ() - coordsB.getR())
+                + Math.abs(coordsA.getR() - coordsB.getR())) / 2;
     }
 
     public static HexCoords addHexCoords(HexCoords coordsA, HexCoords coordsB){

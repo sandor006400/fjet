@@ -35,7 +35,7 @@ public class Board {
 
     private BoardType type;
 
-    private Map<ICoords, Cell> cellsMap;
+    private Map<String, Cell> cellsMap;
     private Map<String, Unit> unitsMap;
 
     private List<Cell> selectedCells;  // The selected cells
@@ -65,10 +65,13 @@ public class Board {
     // region - Getters and Setters
 
     public Cell getCellWithCoords(ICoords coords){
-        for (Map.Entry<ICoords, Cell> entry : this.cellsMap.entrySet()){
+        /*for (Map.Entry<ICoords, Cell> entry : this.cellsMap.entrySet()){
             if (entry.getKey().equals(coords)){
                 return entry.getValue();
             }
+        }*/
+        if (this.cellsMap != null){
+            return this.cellsMap.get(coords.toShortString());
         }
         return null;
     }
@@ -81,7 +84,7 @@ public class Board {
     public List<Cell> getCellsWithCoords(ICoords [] coords){
         List<Cell> cells = new ArrayList<>();
 
-        for (Map.Entry<ICoords, Cell> entry : this.cellsMap.entrySet()){
+        /*for (Map.Entry<ICoords, Cell> entry : this.cellsMap.entrySet()){
             boolean found = false;
 
             for (int i = 0; i < coords.length && !found; i++) {
@@ -89,6 +92,13 @@ public class Board {
                     cells.add(entry.getValue());
                     found = true;
                 }
+            }
+        }*/
+        for (int i = 0; i < coords.length; i++) {
+            Cell c = this.cellsMap.get(coords[i].toShortString());
+
+            if (c != null) {
+                cells.add(c);
             }
         }
         return cells;
@@ -102,7 +112,7 @@ public class Board {
     public List<Cell> getCellsWithIds(String [] ids){
         List<Cell> cells = new ArrayList<>();
 
-        for (Map.Entry<ICoords, Cell> entry : this.cellsMap.entrySet()){
+        for (Map.Entry<String, Cell> entry : this.cellsMap.entrySet()){
             boolean found = false;
 
             for (int i = 0; i < ids.length && !found; i++) {
@@ -116,10 +126,10 @@ public class Board {
     }
 
     public void setCellAndCoords(ICoords coords, Cell cell){
-        this.cellsMap.put(coords, cell);
+        this.cellsMap.put(coords.toShortString(), cell);
     }
 
-    public Map<ICoords, Cell> getCells(){
+    public Map<String, Cell> getCells(){
         return this.cellsMap;
     }
 
@@ -227,7 +237,7 @@ public class Board {
 
         for (int i = 0; i < data.cells.length; i++){
             Cell cell = new Cell(data.cells[i], c);
-            this.cellsMap.put(cell.getCoords(), cell);
+            this.cellsMap.put(cell.getCoords().toShortString(), cell);
         }
 
         for (int i = 0; i < data.units.length; i++){
