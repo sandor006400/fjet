@@ -119,11 +119,14 @@ public class GameActivity extends Activity {
 
 
         BoardDrawable boardDrawable = BoardDrawableFactory.getInstance().createBoardDrawable(this, b, 300, 300, 80);
+        ExampleGameRules gameRules = new ExampleGameRules(g);
 
         this.gameView = new GameView(this);
         this.gameEngine = new GameEngine(g, boardDrawable,
-                this.gameView.getHolder(), new ExampleGameRules(g, this.gameEngine));
+                this.gameView.getHolder(), gameRules);
         this.gameEngine.setFPS(1);
+
+        gameRules.setGameEngine(this.gameEngine);
 
         this.touchListener = new FJetTouchListener(this.gameEngine, this);
         this.gameView.setOnTouchListener(touchListener);

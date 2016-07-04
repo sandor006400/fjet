@@ -31,16 +31,19 @@ public class ExampleGameRules extends GameRules {
 
     // region - Constructors
 
-    public ExampleGameRules(Game game, GameEngine gameEngine) {
+    public ExampleGameRules(Game game) {
         super(game);
 
-        this.gameEngine = gameEngine;
         this.touchesCount = 0;
     }
 
     // endregion - Constructors
 
     // region - Getters and Setters
+
+    public void setGameEngine(GameEngine gameEngine){
+        this.gameEngine = gameEngine;
+    }
 
     // endregion - Getters and Setters
 
@@ -56,13 +59,30 @@ public class ExampleGameRules extends GameRules {
     @Override
     public Action getActionWithOnTapUp(ICoords coords) {
 
-        if (this.game.getBoard().getSelectedCells().contains(coords)) {
+        boolean existe = false;
+
+        for (Cell cell: this.game.getBoard().getSelectedCells()){
+
+            if (cell.getCoords().equals(coords)){
+                existe = true;
+            }
+        }
+
+        if (existe) {
             MoveUnitAction action = new MoveUnitAction();
-            Unit u = this.game.getBoard().getCellsWithCoords(new ICoords[]{coords}).get(0).getUnit();
-            action.setUnit(u);
-            action.setGameEngine(this.gameEngine);
-            action.setDestination(coords);
-            return action;
+            Unit u = null;
+
+            for (Cell cell : this.gameEngine.getGame().getBoard().getSelectedCells()){
+                if (cell.getUnit() != null){
+                    u = cell.getUnit();
+                }
+            }
+            if (u != null) {
+                action.setUnit(u);
+                action.setGameEngine(this.gameEngine);
+                action.setDestination(coords);
+                return action;
+            }
 
         } else {
 
