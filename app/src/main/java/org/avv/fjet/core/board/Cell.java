@@ -3,8 +3,6 @@ package org.avv.fjet.core.board;
 import android.content.Context;
 
 import org.avv.fjet.core.unit.Unit;
-import org.avv.fjet.serialization.JsonSerializable;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -31,6 +29,7 @@ public class Cell {
     private String unitId;
     private ICoords coords;
     private Terrain terrain;
+    private boolean passable;
 
     // endregion - Fields
 
@@ -41,6 +40,7 @@ public class Cell {
         this.terrain = terrain;
         this.id = generateID();
         this.unitId = null;
+        this.passable = false;
     }
 
     public Cell(ICoords coords, Terrain terrain, String id){
@@ -48,6 +48,7 @@ public class Cell {
         this.terrain = terrain;
         this.id = id;
         this.unitId = null;
+        this.passable = false;
     }
 
     /**
@@ -60,6 +61,7 @@ public class Cell {
         this.unitId = data.unitId;
         this.terrain = TerrainFactory.getInstance(c).getTerrain(data.terrainType);
         this.coords = data.coords;
+        this.passable = data.passable;
     }
 
     // endregion - Constructors
@@ -108,7 +110,16 @@ public class Cell {
         if (this.unit != null) {
             data.unitId = this.unit.getId();
         }
+        data.passable = this.passable;
         return data;
+    }
+
+    public boolean isPassable(){
+        return this.passable;
+    }
+
+    public void setPassable(boolean passable){
+        this.passable = passable;
     }
 
     // endregion - Getters and Setters
@@ -154,6 +165,7 @@ public class Cell {
         public ICoords coords;
         public CoordsType coordsType;
         public String terrainType;
+        public boolean passable;
 
         public CellData(){
 
@@ -174,6 +186,7 @@ public class Cell {
                 jsonObject.put("coords", this.coords.toJson());
                 jsonObject.put("coordsType", this.coordsType);
                 jsonObject.put("terrainType", this.terrainType);
+                jsonObject.put("passable", this.passable);
 
             } catch (JSONException e) {
 
@@ -225,6 +238,12 @@ public class Cell {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+
+                try {
+                    this.passable = jsonObject.getBoolean("passable");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         }
 
@@ -238,7 +257,8 @@ public class Cell {
                         && ((CellData)o).id.equals(this.id)
                         && ((CellData)o).terrainType.equals(this.terrainType)
                         && ((CellData)o).unitId.equals(this.unitId)
-                        && ((CellData)o).coordsType == this.coordsType;
+                        && ((CellData)o).coordsType == this.coordsType
+                        && ((CellData)o).passable == this.passable;
             } else {
                 return false;
             }
