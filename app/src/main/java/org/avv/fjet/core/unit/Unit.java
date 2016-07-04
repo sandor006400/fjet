@@ -26,6 +26,7 @@ public class Unit {
     private String id;
     private String playerId;
     private Cell cell;
+    private String unitType;
 
     // endregion - Fields
 
@@ -42,6 +43,7 @@ public class Unit {
     public Unit(UnitData data){
         this.id = data.id;
         this.playerId = data.playerId;
+        this.unitType = data.unitType;
     }
 
     // endregion - Constructors
@@ -66,6 +68,14 @@ public class Unit {
 
     public String getPlayerId(){
         return this.playerId;
+    }
+
+    public String getUnitType(){
+        return this.unitType;
+    }
+
+    public void setUnitType(String unitType){
+        this.unitType = unitType;
     }
 
     // endregion - Getters and Setters
@@ -104,6 +114,7 @@ public class Unit {
         UnitData data = new UnitData();
         data.id = this.id;
         data.playerId = this.playerId;
+        data.unitType = this.unitType;
         return data;
     }
 
@@ -116,6 +127,7 @@ public class Unit {
 
         public String id;
         public String playerId;
+        public String unitType;
 
         public UnitData(){
 
@@ -129,6 +141,7 @@ public class Unit {
             JSONObject jsonObject = new JSONObject();
             try {
                 jsonObject.put("id", this.id);
+                jsonObject.put("type", this.unitType);
                 jsonObject.put("playerId", this.playerId);
 
             } catch (JSONException e) {
@@ -148,6 +161,12 @@ public class Unit {
             if (jsonObject != null) {
                 try {
                     this.id = jsonObject.getString("id");
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    this.unitType = jsonObject.getString("type");
 
                 } catch (JSONException e) {
                     e.printStackTrace();

@@ -10,21 +10,31 @@ public class Terrain {
     // region - Constants
 
     public enum TerrainType {
-        COAST,
-        DESERT,
-        GRASSLAND,
-        HILL,
-        MOUNTAIN,
-        OCEAN,
-        PLAINS,
-        FOREST,
-        JUNGLE,
-        MARSH,
-        ATOLL,
-        FLOOD,
-        ICE,
-        LAKES,
-        OASIS
+        COAST("Coast"),
+        DESERT("Desert"),
+        GRASSLAND("Grassland"),
+        HILL("Hill"),
+        MOUNTAIN("Mountain"),
+        OCEAN("Ocean"),
+        PLAINS("Plains"),
+        FOREST("Forest"),
+        JUNGLE("Jungle"),
+        MARSH("Marsh"),
+        ATOLL("Atoll"),
+        FLOOD("Flood"),
+        ICE("Ice"),
+        LAKES("Lakes"),
+        OASIS("Oasis");
+
+        private final String terrainType;
+
+        TerrainType(String terrainType){
+            this.terrainType = terrainType;
+        }
+
+        public String toString(){
+            return this.terrainType;
+        }
     }
 
     // endregion - Constants
@@ -33,7 +43,7 @@ public class Terrain {
 
     private Drawable drawableSq;    // Drawable for square Cells
     private Drawable drawableHe;    // Drawable for hex Cells
-    private TerrainType type;
+    private String type;
     private float movementCost;
     private float defenseCoefficient;
 
@@ -41,7 +51,7 @@ public class Terrain {
 
     // region - Constructors
 
-    public Terrain(TerrainType type, Drawable drawableSq, Drawable drawableHe, float movementCost, float defenseCoefficient){
+    public Terrain(String type, Drawable drawableSq, Drawable drawableHe, float movementCost, float defenseCoefficient){
         this.type = type;
         this.drawableSq = drawableSq;
         this.drawableHe = drawableHe;
@@ -53,7 +63,7 @@ public class Terrain {
 
     // region - Getters and Setters
 
-    public TerrainType getType(){
+    public String getType(){
         return this.type;
     }
 
@@ -79,7 +89,7 @@ public class Terrain {
 
     @Override
     public String toString() {
-        return "" + this.type;
+        return this.type;
     }
 
     // endregion - Methods for/from SuperClass/Interfaces

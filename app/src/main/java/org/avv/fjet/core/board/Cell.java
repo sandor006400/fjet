@@ -153,7 +153,7 @@ public class Cell {
         public String unitId;
         public ICoords coords;
         public CoordsType coordsType;
-        public Terrain.TerrainType terrainType;
+        public String terrainType;
 
         public CellData(){
 
@@ -221,7 +221,7 @@ public class Cell {
                 }
 
                 try {
-                    this.terrainType = Terrain.TerrainType.valueOf(jsonObject.getString("terrainType"));
+                    this.terrainType = jsonObject.getString("terrainType");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -236,7 +236,7 @@ public class Cell {
             } else if (o instanceof CellData) {
                 return ((CellData)o).coords == this.coords
                         && ((CellData)o).id.equals(this.id)
-                        && ((CellData)o).terrainType == this.terrainType
+                        && ((CellData)o).terrainType.equals(this.terrainType)
                         && ((CellData)o).unitId.equals(this.unitId)
                         && ((CellData)o).coordsType == this.coordsType;
             } else {

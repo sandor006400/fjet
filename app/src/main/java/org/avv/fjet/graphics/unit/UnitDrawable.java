@@ -1,11 +1,15 @@
 package org.avv.fjet.graphics.unit;
 
 import android.graphics.Canvas;
+import android.graphics.drawable.Animatable;
 
 import org.avv.fjet.core.geometry.FJetPoint;
 import org.avv.fjet.core.geometry.FJetRect;
 import org.avv.fjet.graphics.GameAnimation;
 import org.avv.fjet.graphics.GameDrawable;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Alexander Vorobiev on 17/05/16.
@@ -15,18 +19,28 @@ public class UnitDrawable extends GameDrawable {
     // region - Constants
 
     public enum State {
-        ATTACKING,
-        WAITING,
-        MOVING
+        ATTACKING("Attacking"),
+        WAITING("Waiting"),
+        MOVING("Moving");
+
+        private String state;
+
+        State(String state){
+            this.state = state;
+        }
+
+        public String toString(){
+            return this.state;
+        }
     }
 
     // endregion - Constants
 
     // region - Fields
 
-    private State currentState = State.WAITING;
+    private String currentState = State.WAITING.toString();
     private FJetPoint vector;       // Movement vector
-    private GameAnimation[] animations;
+    private Map<String, GameAnimation> animations;
 
     // endregion - Fields
 
@@ -42,8 +56,8 @@ public class UnitDrawable extends GameDrawable {
 
     // region - Getters and Setters
 
-    public void addAnimation(State state, GameAnimation animation){
-        this.animations[state.ordinal()] = animation;
+    public void addAnimation(String state, GameAnimation animation){
+        this.animations.put(state, animation);
     }
 
     // endregion - Getters and Setters
@@ -52,9 +66,10 @@ public class UnitDrawable extends GameDrawable {
 
     @Override
     protected void drawInRect(FJetRect drawRect, Canvas c) {
+        GameAnimation gameAnimation = this.animations.get(this.currentState);
 
-        if (this.animations[this.currentState.ordinal()] != null){
-            this.animations[this.currentState.ordinal()].draw(c, drawRect);
+        if (gameAnimation != null){
+            gameAnimation.draw(c, drawRect);
         }
     }
 
@@ -64,7 +79,7 @@ public class UnitDrawable extends GameDrawable {
 
     private void init(){
         this.vector = new FJetPoint(0,0);
-        this.animations = new GameAnimation[State.values().length];
+        this.animations = new HashMap<>();
     }
 
     // endregion - Methods

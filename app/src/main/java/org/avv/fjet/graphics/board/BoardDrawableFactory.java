@@ -1,5 +1,7 @@
 package org.avv.fjet.graphics.board;
 
+import android.content.Context;
+
 import org.avv.fjet.core.board.Board;
 import org.avv.fjet.core.board.Cell;
 import org.avv.fjet.core.board.HexCoords;
@@ -10,6 +12,7 @@ import org.avv.fjet.core.geometry.FJetPoint;
 import org.avv.fjet.core.geometry.FJetRect;
 import org.avv.fjet.core.unit.Unit;
 import org.avv.fjet.graphics.unit.UnitDrawable;
+import org.avv.fjet.graphics.unit.UnitDrawableFactory;
 
 /**
  * Created by Alexander Vorobiev on 29/05/16.
@@ -53,12 +56,13 @@ public class BoardDrawableFactory {
 
     /**
      * Generates BoardDrawable from Board
+     * @param context
      * @param board
      * @param width
      * @param height
      * @return
      */
-    public BoardDrawable createBoardDrawable(Board board, int width, int height, int edgeSize){
+    public BoardDrawable createBoardDrawable(Context context, Board board, int width, int height, int edgeSize){
         BoardDrawable boardDrawable = new BoardDrawable(edgeSize);
 
         // Setting the bounds rect
@@ -85,10 +89,19 @@ public class BoardDrawableFactory {
 
         // Initilizing UnitDrawables
         for (Object unit : board.getUnits().values()){
-            UnitDrawable unitDrawable = new UnitDrawable();
+            UnitDrawable unitDrawable = UnitDrawableFactory.getInstance(context).createUnitDrawable(((Unit)unit).getUnitType());
+            ICoords unitCoords = ((Unit)unit).getCell().getCoords();
+
+            if (unitCoords instanceof HexCoords){
+                unitDrawable.setSize(UtilCoordinates.calculateHexCellSize(edgeSize));
+                unitDrawable.setPosition(UtilCoordinates.hexCoordsToPixel(edgeSize, (HexCoords) unitCoords));
+
+            } else if (unitCoords instanceof SquareCoords) {
+                unitDrawable.setSize(new FJetPoint(edgeSize, edgeSize));
+                unitDrawable.setPosition(UtilCoordinates.squareCoordsToPixel(edgeSize, (SquareCoords) unitCoords));
+            }
             boardDrawable.addUnitDrawable(((Unit)unit).getId(), unitDrawable);
         }
-
         return boardDrawable;
     }
 

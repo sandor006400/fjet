@@ -7,6 +7,7 @@ import org.avv.fjet.core.action.ActionExecutor;
 import org.avv.fjet.core.action.ShowPathAction;
 import org.avv.fjet.core.board.Board;
 import org.avv.fjet.core.board.Cell;
+import org.avv.fjet.core.board.ICoords;
 import org.avv.fjet.core.player.Player;
 import org.avv.fjet.core.unit.Unit;
 import org.json.JSONArray;
@@ -84,19 +85,22 @@ public class Game {
         this.playerUnitsMap.put(player.getId(), new ArrayList<String>());
     }
 
-    public void addUnit(Unit unit, String playerId){
-        List<String> unitIds = this.playerUnitsMap.get(playerId);
+    public void addUnit(Unit unit, String playerId, Cell cell){
 
-        if (unitIds != null){
-            unitIds.add(unit.getId());
+        if (this.board.getCellWithCoords(cell.getCoords()) != null) {
+            List<String> unitIds = this.playerUnitsMap.get(playerId);
 
-        } else {
-            List<String> unitIdsArray = new ArrayList<>();
-            unitIdsArray.add(unit.getId());
-            this.playerUnitsMap.put(playerId, unitIdsArray);
+            if (unitIds != null) {
+                unitIds.add(unit.getId());
+
+            } else {
+                List<String> unitIdsArray = new ArrayList<>();
+                unitIdsArray.add(unit.getId());
+                this.playerUnitsMap.put(playerId, unitIdsArray);
+            }
+            unit.setPlayerId(playerId);
+            this.board.addUnit(unit, cell);
         }
-        unit.setPlayerId(playerId);
-        this.board.getUnits().put(unit.getId(), unit);
     }
 
     public void removeUnit(String unitId){
@@ -158,7 +162,7 @@ public class Game {
 
             // Initializing playerUnits map
             for (Unit unit : this.board.getUnits().values()){
-                addUnit(unit, unit.getPlayerId());
+                addUnit(unit, unit.getPlayerId(), unit.getCell());
             }
         }
     }

@@ -29,6 +29,7 @@ import org.avv.fjet.graphics.board.BoardDrawable;
 import org.avv.fjet.graphics.board.BoardDrawableFactory;
 import org.avv.fjet.touch.FJetTouchListener;
 
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -86,32 +87,38 @@ public class GameActivity extends Activity {
         Player p2 = new Player();
         p2.setName("Nestor");
 
-        Board b = BoardFactory.createBoard(this, Board.BoardType.SQUARE_CELLS, terrains);
+        Board b = BoardFactory.createBoard(this, Board.BoardType.HEX_CELLS, terrains);
         Game g = new Game(b);
 
         g.addPlayer(p1);
         g.addPlayer(p2);
 
         Unit u1 = new Unit();
+        u1.setUnitType("Warrior");
         Unit u2 = new Unit();
+        u2.setUnitType("Warrior");
         Unit u3 = new Unit();
+        u3.setUnitType("Warrior");
         Unit u4 = new Unit();
+        u4.setUnitType("Warrior");
         Unit u5 = new Unit();
+        u5.setUnitType("Warrior");
         Unit u6 = new Unit();
+        u6.setUnitType("Warrior");
 
-        g.addUnit(u1, p1.getId());
-        g.addUnit(u2, p1.getId());
-        g.addUnit(u3, p1.getId());
-        g.addUnit(u4, p1.getId());
-        g.addUnit(u5, p2.getId());
-        g.addUnit(u6, p2.getId());
+        g.addUnit(u1, p1.getId(), g.getBoard().getCellWithCoords(new HexCoords(0,1)));
+        g.addUnit(u2, p1.getId(), g.getBoard().getCellWithCoords(new HexCoords(0,2)));
+        g.addUnit(u3, p1.getId(), g.getBoard().getCellWithCoords(new HexCoords(0,3)));
+        g.addUnit(u4, p1.getId(), g.getBoard().getCellWithCoords(new HexCoords(0,4)));
+        g.addUnit(u5, p2.getId(), g.getBoard().getCellWithCoords(new HexCoords(0,5)));
+        g.addUnit(u6, p2.getId(), g.getBoard().getCellWithCoords(new HexCoords(0,6)));
 
         String gJson = g.toJson().toString();
 
         Game g2 = new Game(gJson, this);
 
 
-        BoardDrawable boardDrawable = BoardDrawableFactory.getInstance().createBoardDrawable(b, 300, 300, 80);
+        BoardDrawable boardDrawable = BoardDrawableFactory.getInstance().createBoardDrawable(this, b, 300, 300, 80);
 
         this.gameView = new GameView(this);
         this.gameEngine = new GameEngine(g, boardDrawable,
@@ -207,7 +214,7 @@ public class GameActivity extends Activity {
         Log.d("----------->", "TOTAL COORDENADAS: " + rangeNCoords.length);
 
         List<Cell> cells = new ArrayList<>();
-        Terrain t = TerrainFactory.getInstance(this).getTerrain(Terrain.TerrainType.GRASSLAND);   // Al cells must have the same movement cost
+        Terrain t = TerrainFactory.getInstance(this).getTerrain(Terrain.TerrainType.GRASSLAND.toString());   // Al cells must have the same movement cost
 
         for (ICoords c : rangeNCoords){
             cells.add(new Cell(c, t));
@@ -240,7 +247,7 @@ public class GameActivity extends Activity {
         Log.d("----------->", "TOTAL COORDENADAS: " + rangeNCoords.length);
 
         List<Cell> cells = new ArrayList<>();
-        Terrain t = TerrainFactory.getInstance(this).getTerrain(Terrain.TerrainType.GRASSLAND);   // Al cells must have the same movement cost
+        Terrain t = TerrainFactory.getInstance(this).getTerrain(Terrain.TerrainType.GRASSLAND.toString());   // Al cells must have the same movement cost
 
         for (ICoords c : rangeNCoords){
             cells.add(new Cell(c, t));

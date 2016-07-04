@@ -65,11 +65,7 @@ public class Board {
     // region - Getters and Setters
 
     public Cell getCellWithCoords(ICoords coords){
-        /*for (Map.Entry<ICoords, Cell> entry : this.cellsMap.entrySet()){
-            if (entry.getKey().equals(coords)){
-                return entry.getValue();
-            }
-        }*/
+
         if (this.cellsMap != null){
             return this.cellsMap.get(coords.toShortString());
         }
@@ -84,16 +80,6 @@ public class Board {
     public List<Cell> getCellsWithCoords(ICoords [] coords){
         List<Cell> cells = new ArrayList<>();
 
-        /*for (Map.Entry<ICoords, Cell> entry : this.cellsMap.entrySet()){
-            boolean found = false;
-
-            for (int i = 0; i < coords.length && !found; i++) {
-                if (entry.getKey().equals(coords[i])) {
-                    cells.add(entry.getValue());
-                    found = true;
-                }
-            }
-        }*/
         for (int i = 0; i < coords.length; i++) {
             Cell c = this.cellsMap.get(coords[i].toShortString());
 
@@ -143,6 +129,31 @@ public class Board {
 
     public BoardType getType(){
         return this.type;
+    }
+
+    /**
+     * Adds unit to units map and links unit with associated Cell.
+     * @param unit
+     * @param cell
+     */
+    public void addUnit(Unit unit, Cell cell){
+        if (this.cellsMap.containsKey(cell.getCoords().toShortString())) {
+            unit.setCell(cell);
+            cell.setUnit(unit);
+            this.unitsMap.put(unit.getId(), unit);
+        }
+    }
+
+    /**
+     * Removes unit from units map and units reference from associated cell.
+     * @param unit
+     */
+    public void removeUnit(Unit unit){
+
+        if (this.unitsMap.containsKey(unit.getId())) {
+            unit.getCell().setUnit(null);
+            this.unitsMap.remove(unit.getId());
+        }
     }
 
     // endregion - Getters and Setters
@@ -210,7 +221,9 @@ public class Board {
             String unitId = c.getUnitId();
 
             if (unitId != null && !unitId.equals("")){
-                c.setUnit(this.unitsMap.get(unitId));
+                Unit unit = this.unitsMap.get(unitId);
+                c.setUnit(unit);
+                unit.setCell(c);
             }
         }
     }
