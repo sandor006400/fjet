@@ -62,7 +62,7 @@ public class UnitDrawableFactory {
             UnitDrawable uD = new UnitDrawable();
 
             for (Map.Entry<String, GameAnimation> entry : gameAnimations.entrySet()) {
-                uD.addAnimation(entry.getKey(), entry.getValue());
+                uD.addAnimation(entry.getKey(), new GameAnimation(entry.getValue()));
             }
             return uD;
         }
@@ -78,7 +78,7 @@ public class UnitDrawableFactory {
         GameAnimation gameAnimation = new GameAnimation();
         gameAnimation.setDrawables(new Drawable[]{dU1, dU2, dU3});
         gameAnimation.setDuration(GameAnimation.Duration.INFINITE, 1);
-        gameAnimation.setUpdatesPerFrame(60, 3);
+        gameAnimation.setUpdatesPerFrame(60, 2);
         Map<String, GameAnimation> animationsMap = new HashMap<>();
         animationsMap.put(UnitDrawable.State.WAITING.toString(), gameAnimation);
         this.unitAnimations.put("Warrior", animationsMap);

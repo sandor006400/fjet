@@ -45,6 +45,11 @@ public class GameAnimation {
         init();
     }
 
+    public GameAnimation(GameAnimation gameAnimation){
+        init();
+        setAnimationValues(gameAnimation);
+    }
+
     // endregion - Constructors
 
     // region - Getters and Setters
@@ -190,6 +195,15 @@ public class GameAnimation {
         } else if (duration == Duration.ONE_TIME){
             this.updatesLeft = this.updatesPerFrame * this.drawables.length;
         }
+    }
+
+    private void setAnimationValues(GameAnimation gameAnimation){
+        this.updatesLeft = gameAnimation.updatesLeft;
+        this.cycles = gameAnimation.cycles;
+        this.currentDrawable = gameAnimation.currentDrawable;
+        this.duration = gameAnimation.duration;
+        this.updatesPerFrame = gameAnimation.updatesPerFrame;
+        this.drawables = gameAnimation.drawables;
     }
 
     // endregion - Methods

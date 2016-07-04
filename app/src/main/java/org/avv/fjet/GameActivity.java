@@ -122,7 +122,7 @@ public class GameActivity extends Activity {
 
         this.gameView = new GameView(this);
         this.gameEngine = new GameEngine(g, boardDrawable,
-                this.gameView.getHolder(), new ExampleGameRules(g));
+                this.gameView.getHolder(), new ExampleGameRules(g, this.gameEngine));
         this.gameEngine.setFPS(1);
 
         this.touchListener = new FJetTouchListener(this.gameEngine, this);

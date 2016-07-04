@@ -238,11 +238,11 @@ public class GameEngine extends GameViewThread implements GameView.IGameViewObse
             FJetPoint offset = boardDrawable.getOffset();
 
             if (coords instanceof HexCoords) {
-                UtilCellDrawing.drawHexCell(c, this.edgeSize, this.boardDrawable.getScale(), (HexCoords) coords, Color.BLACK, Color.GREEN, 10f, offset);
+                UtilCellDrawing.drawHexCell(c, this.edgeSize, this.boardDrawable.getScale(), (HexCoords) coords, Color.GREEN, Color.TRANSPARENT, 10f, offset);
                 UtilCoordinates.hexCoordsToPixel(currentEdgeSize, (HexCoords) coords);
 
             } else {
-                UtilCellDrawing.drawSquare(c, this.edgeSize, this.boardDrawable.getScale(), (SquareCoords) coords, Color.BLACK, Color.GREEN, 10f, offset);
+                UtilCellDrawing.drawSquare(c, this.edgeSize, this.boardDrawable.getScale(), (SquareCoords) coords, Color.GREEN, Color.TRANSPARENT, 10f, offset);
                 UtilCoordinates.squareCoordsToPixel(currentEdgeSize, (SquareCoords) coords);
             }
         }
