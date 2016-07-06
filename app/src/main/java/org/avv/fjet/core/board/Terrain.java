@@ -9,34 +9,6 @@ public class Terrain {
 
     // region - Constants
 
-    /*public enum TerrainType {
-        COAST("Coast"),
-        DESERT("Desert"),
-        GRASSLAND("Grassland"),
-        HILL("Hill"),
-        MOUNTAIN("Mountain"),
-        OCEAN("Ocean"),
-        PLAINS("Plains"),
-        FOREST("Forest"),
-        JUNGLE("Jungle"),
-        MARSH("Marsh"),
-        ATOLL("Atoll"),
-        FLOOD("Flood"),
-        ICE("Ice"),
-        LAKES("Lakes"),
-        OASIS("Oasis");
-
-        private final String terrainType;
-
-        TerrainType(String terrainType){
-            this.terrainType = terrainType;
-        }
-
-        public String toString(){
-            return this.terrainType;
-        }
-    }*/
-
     // endregion - Constants
 
     // region - Fields
