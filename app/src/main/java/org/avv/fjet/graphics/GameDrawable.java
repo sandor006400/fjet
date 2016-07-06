@@ -89,10 +89,10 @@ public abstract class GameDrawable {
 
     public void updateDrawRect(int offsetX, int offsetY, float scale){
         this.drawRect.setAttributes(
-                Math.round(((float)this.position.getX() * scale) - ((float)this.size.getX() / 2 * scale) + offsetX),
-                Math.round(((float)this.position.getY() * scale) - ((float)this.size.getY() / 2 * scale) + offsetY),
-                Math.round((float)this.size.getX() * scale),
-                Math.round((float)this.size.getY() * scale));
+                (int)(((float)this.position.getX() * scale) - ((float)this.size.getX() / 2 * scale) + offsetX),
+                (int)(((float)this.position.getY() * scale) - ((float)this.size.getY() / 2 * scale) + offsetY),
+                (int)Math.ceil((double)this.size.getX() * scale),
+                (int)Math.ceil((double)this.size.getY() * scale));
     }
 
     // endregion - Methods

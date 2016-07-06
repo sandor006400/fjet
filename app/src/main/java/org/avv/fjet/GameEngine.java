@@ -2,7 +2,6 @@ package org.avv.fjet;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -12,7 +11,6 @@ import android.view.SurfaceHolder;
 
 import org.avv.fjet.core.Game;
 import org.avv.fjet.core.action.Action;
-import org.avv.fjet.core.action.ActionFactory;
 import org.avv.fjet.core.action.ScaleViewAction;
 import org.avv.fjet.core.action.ScrollBoardViewAction;
 import org.avv.fjet.core.board.Board;
@@ -336,8 +334,7 @@ public class GameEngine extends GameViewThread implements GameView.IGameViewObse
         }
 
         private Action getScrollAction(FJetPoint p) {
-            ScrollBoardViewAction aScroll = (ScrollBoardViewAction) ActionFactory.createAction(
-                    ActionFactory.SCROLL_BOARD_VIEW_ACTION);
+            ScrollBoardViewAction aScroll = new ScrollBoardViewAction();
 
             if (aScroll != null) {
                 aScroll.setOffset(p)
@@ -348,8 +345,7 @@ public class GameEngine extends GameViewThread implements GameView.IGameViewObse
         }
 
         private Action getScaleAction(float scale) {
-            ScaleViewAction aScale = (ScaleViewAction) ActionFactory.createAction(
-                    ActionFactory.SCALE_BOARD_VIEW_ACTION);
+            ScaleViewAction aScale = new ScaleViewAction();
 
             if (aScale != null) {
                 aScale.setScale(scale)

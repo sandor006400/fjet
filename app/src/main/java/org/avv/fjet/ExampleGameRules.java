@@ -4,7 +4,6 @@ import android.util.Log;
 
 import org.avv.fjet.core.Game;
 import org.avv.fjet.core.action.Action;
-import org.avv.fjet.core.action.ActionFactory;
 import org.avv.fjet.core.action.MoveUnitAction;
 import org.avv.fjet.core.action.SelectCellAction;
 import org.avv.fjet.core.action.ShowPathAction;
@@ -93,8 +92,7 @@ public class ExampleGameRules extends GameRules {
                     Log.d("------->", "calculating a path");
                     Cell cellDestination = this.game.getBoard().getCellWithCoords(coords);
                     Cell cellOrigin = this.game.getBoard().getSelectedCells().get(0);
-                    ShowPathAction action = (ShowPathAction) ActionFactory.createAction(
-                            ActionFactory.SHOW_MOVEMENT_PATH_ACTION);
+                    ShowPathAction action = new ShowPathAction();
                     action.setBoard(this.game.getBoard())
                             .setOrigin(cellOrigin)
                             .setDestination(cellDestination);
@@ -106,8 +104,7 @@ public class ExampleGameRules extends GameRules {
                 if (this.game.getBoard().getCellWithCoords(coords).getUnit() != null) {
                     Log.d("------->", "selecting a cell");
                     this.touchesCount++;
-                    SelectCellAction action = (SelectCellAction) ActionFactory.createAction(
-                            ActionFactory.SELECT_CELL_ACTION);
+                    SelectCellAction action = new SelectCellAction();
                     action.setBoard(this.game.getBoard())
                             .setCoords(coords);
                     return action;
