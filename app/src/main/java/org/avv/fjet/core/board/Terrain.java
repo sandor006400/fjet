@@ -9,7 +9,7 @@ public class Terrain {
 
     // region - Constants
 
-    public enum TerrainType {
+    /*public enum TerrainType {
         COAST("Coast"),
         DESERT("Desert"),
         GRASSLAND("Grassland"),
@@ -35,7 +35,7 @@ public class Terrain {
         public String toString(){
             return this.terrainType;
         }
-    }
+    }*/
 
     // endregion - Constants
 

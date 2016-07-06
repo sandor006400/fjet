@@ -29,7 +29,7 @@ public class TerrainFactory {
     // region - Constructors
 
     private TerrainFactory(Context c){
-        initBasicTerrains(c);
+        //initBasicTerrains(c);
     }
 
     // endregion - Constructors
@@ -69,7 +69,7 @@ public class TerrainFactory {
         return INSTANCE;
     }
 
-    private void initBasicTerrains(Context c){
+    /*private void initBasicTerrains(Context c){
         this.terrainsMap = new LinkedHashMap<>();
 
         if (c != null) {
@@ -77,6 +77,7 @@ public class TerrainFactory {
             // Coast
             Drawable cD = c.getResources().getDrawable(R.drawable.tex_sq_terrain_01, c.getTheme());
             Drawable cDH = c.getResources().getDrawable(R.drawable.tex_he_terrain_01, c.getTheme());
+            Drawable x = c.getResources().
             Terrain cT = new Terrain(Terrain.TerrainType.COAST.toString(), cD, cDH, 1.0f, 1.0f);
             this.terrainsMap.put(Terrain.TerrainType.COAST.name(), cT);
 
@@ -164,7 +165,7 @@ public class TerrainFactory {
             Terrain pT = new Terrain(Terrain.TerrainType.PLAINS.toString(), pD, pDH, 1.0f, 1.0f);
             this.terrainsMap.put(Terrain.TerrainType.PLAINS.name(), pT);
         }
-    }
+    }*/
 
     /**
      * Returns a random Terrain

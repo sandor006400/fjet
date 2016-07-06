@@ -34,7 +34,7 @@ public class UnitDrawableFactory {
     private UnitDrawableFactory(Context c){
         this.unitAnimations = new HashMap<>();
 
-        initBasicUnitAnimations(c);
+        //initBasicUnitAnimations(c);
     }
 
     // region - Getters and Setters
@@ -69,7 +69,7 @@ public class UnitDrawableFactory {
         return null;
     }
 
-    private void initBasicUnitAnimations(Context c){
+    /*private void initBasicUnitAnimations(Context c){
 
         // TODO : DO IT BETTER
         Drawable dU1 = c.getDrawable(R.drawable.unit_dw_01);
@@ -83,7 +83,7 @@ public class UnitDrawableFactory {
         animationsMap.put(UnitDrawable.State.WAITING.toString(), gameAnimation);
         this.unitAnimations.put("Warrior", animationsMap);
 
-    }
+    }*/
 
     // endregion - Methods
 
