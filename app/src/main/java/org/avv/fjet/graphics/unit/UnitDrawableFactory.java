@@ -67,6 +67,10 @@ public class UnitDrawableFactory {
         return null;
     }
 
+    public void addNewUnitAnimation(Map<String, GameAnimation> gameAnimation, String unitType){
+        this.unitAnimations.put(unitType, gameAnimation);
+    }
+
     // endregion - Methods
 
     // region - Inner and Anonymous Classes

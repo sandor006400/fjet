@@ -131,6 +131,19 @@ public class Board {
         return this.type;
     }
 
+    public List<Unit> getSelectedUnits(){
+        List<Unit> units = new ArrayList<>();
+
+        for (Cell cell : this.selectedCells){
+            Unit u = cell.getUnit();
+
+            if (u != null){
+                units.add(u);
+            }
+        }
+        return units;
+    }
+
     /**
      * Adds unit to units map and links unit with associated Cell.
      * @param unit

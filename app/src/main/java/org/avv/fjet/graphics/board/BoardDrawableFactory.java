@@ -62,7 +62,7 @@ public class BoardDrawableFactory {
      * @param height
      * @return
      */
-    public BoardDrawable createBoardDrawable(Context context, Board board, int width, int height, int edgeSize){
+    public BoardDrawable createBoardDrawable(Context context, Board board, int width, int height, int edgeSize, int unitEdgeSize){
         BoardDrawable boardDrawable = new BoardDrawable(edgeSize);
 
         // Setting the bounds rect
@@ -93,11 +93,11 @@ public class BoardDrawableFactory {
             ICoords unitCoords = ((Unit)unit).getCell().getCoords();
 
             if (unitCoords instanceof HexCoords){
-                unitDrawable.setSize(UtilCoordinates.calculateHexCellSize(edgeSize));
+                unitDrawable.setSize(UtilCoordinates.calculateHexCellSize(unitEdgeSize));
                 unitDrawable.setPosition(UtilCoordinates.hexCoordsToPixel(edgeSize, (HexCoords) unitCoords));
 
             } else if (unitCoords instanceof SquareCoords) {
-                unitDrawable.setSize(new FJetPoint(edgeSize, edgeSize));
+                unitDrawable.setSize(new FJetPoint(unitEdgeSize, unitEdgeSize));
                 unitDrawable.setPosition(UtilCoordinates.squareCoordsToPixel(edgeSize, (SquareCoords) unitCoords));
             }
             boardDrawable.addUnitDrawable(((Unit)unit).getId(), unitDrawable);

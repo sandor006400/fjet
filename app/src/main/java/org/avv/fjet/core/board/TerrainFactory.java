@@ -74,15 +74,17 @@ public class TerrainFactory {
      * @return
      */
     public Terrain getRandomTerrain(){
-        Random random = new Random();
-        int rand = random.nextInt(this.terrainsMap.size());
+        if (this.terrainsMap.size() > 0) {
+            Random random = new Random();
+            int rand = random.nextInt(this.terrainsMap.size());
 
-        Collection<Terrain> values = this.terrainsMap.values();
-        int j = 0;
+            Collection<Terrain> values = this.terrainsMap.values();
+            int j = 0;
 
-        for(Terrain t : values) {
-            if (j++ == rand) {
-                return t;
+            for (Terrain t : values) {
+                if (j++ == rand) {
+                    return t;
+                }
             }
         }
         return null;
