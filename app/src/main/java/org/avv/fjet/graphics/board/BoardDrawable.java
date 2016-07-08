@@ -16,6 +16,7 @@ import org.avv.fjet.core.board.SquareCoords;
 import org.avv.fjet.core.board.util.UtilCoordinates;
 import org.avv.fjet.core.geometry.FJetPoint;
 import org.avv.fjet.core.geometry.FJetRect;
+import org.avv.fjet.core.geometry.util.UtilGeometry;
 import org.avv.fjet.graphics.unit.UnitDrawable;
 
 import java.util.ArrayList;
@@ -166,21 +167,29 @@ public class BoardDrawable {
      * @param c
      */
     public void draw(Canvas c) {
+        FJetPoint center = getCenter();
+        FJetRect scaledBounds = UtilGeometry.getFJetRectScalingAroundPoint(this.boardBounds, center, this.scale);
 
         // Drawing cell drawables
         for (CellDrawable cD : this.cellDrawablesMap.values()){
-            cD.draw(this.boardBounds, this.scale, c);
+            cD.draw(scaledBounds, this.scale, c);
         }
 
         // Drawing unit drawables
         for (UnitDrawable uD : this.unitDrawablesMap.values()){
-            uD.draw(this.boardBounds, this.scale, c);
+            uD.draw(scaledBounds, this.scale, c);
         }
     }
 
     // endregion - Methods for/from SuperClass/Interfaces
 
     // region - Methods
+
+    private FJetPoint getCenter(){
+        return new FJetPoint(
+                this.boardBounds.getX() + (this.boardBounds.getWidth() / 2),
+                this.boardBounds.getY() + (this.boardBounds.getHeight() / 2));
+    }
 
     public FJetPoint getPositionWithCoords(ICoords coords){
         if (coords instanceof HexCoords){
