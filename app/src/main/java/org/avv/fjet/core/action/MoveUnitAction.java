@@ -66,6 +66,7 @@ public class MoveUnitAction extends Action {
     protected IActionResult getExecutionResult() {
         this.unit.getCell().removeUnit();
         this.unit.setCell(this.gameEngine.getGame().getBoard().getCellWithCoords(this.destination));
+        this.gameEngine.getGame().getBoard().getCellWithCoords(this.destination).setUnit(this.unit);
         this.gameEngine.getBoardDrawable().getUnitDrawable(this.unit.getId()).setPosition(
                 this.gameEngine.getBoardDrawable().getPositionWithCoords(this.destination));
         return new MoveUnitActionResult(this.unit, this.pathCoords);

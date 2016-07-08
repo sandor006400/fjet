@@ -85,6 +85,10 @@ public class Game {
         this.playerUnitsMap.put(player.getId(), new ArrayList<String>());
     }
 
+    public List<Player> getPlayers(){
+        return this.players;
+    }
+
     public void addUnit(Unit unit, String playerId, Cell cell){
 
         if (this.board.getCellWithCoords(cell.getCoords()) != null) {
