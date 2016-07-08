@@ -91,6 +91,15 @@ public class UtilCoordinates {
     }
 
     /**
+     * Calculates HexCoords using edge size of hexagon cell in pixels.
+     * @param edgeSize
+     * @return
+     */
+    public static FJetPoint hexCoordsSize(float edgeSize){
+        return new FJetPoint((int)(edgeSize * SQRT_OF_3), (int)(edgeSize * 2));
+    }
+
+    /**
      * Rounds float coordinates (q,r) to the nearest hex coordinate. See <a href="http://www.redblobgames.com/grids/hexagons/#rounding">Rounding to nearest hex</a>.
      * @param q
      * @param r

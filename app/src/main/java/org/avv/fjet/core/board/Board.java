@@ -40,13 +40,18 @@ public class Board {
 
     private List<Cell> selectedCells;  // The selected cells
 
+    private int width = 0;
+    private int height = 0;
+
     // endregion - Fields
 
     // region - Constructors
 
-    public Board(BoardType type){
+    public Board(BoardType type, int width, int height){
         init();
 
+        this.width = width;
+        this.height = height;
         this.type = type;
     }
 
@@ -63,6 +68,18 @@ public class Board {
     // endregion - Constructors
 
     // region - Getters and Setters
+
+    public int getWidth(){
+        return this.width;
+    }
+
+    public int getHeight(){
+        return this.height;
+    }
+
+    public BoardType getBoardType(){
+        return this.type;
+    }
 
     public Cell getCellWithCoords(ICoords coords){
 
@@ -255,6 +272,8 @@ public class Board {
             unitsList.add(u.getUnitData());
         }
         data.units = Arrays.copyOf(unitsList.toArray(), unitsList.size(), Unit.UnitData[].class);
+        data.width = this.width;
+        data.height = this.height;
         return data;
     }
 
@@ -270,6 +289,8 @@ public class Board {
             Unit unit = new Unit(data.units[i]);
             this.unitsMap.put(unit.getId(), unit);
         }
+        this.width = data.width;
+        this.height = data.height;
         assignUnitsToCells();
     }
 
@@ -282,6 +303,8 @@ public class Board {
         private BoardType type;
         private Cell.CellData[] cells;
         private Unit.UnitData[] units;
+        private int width;
+        private int height;
 
         public BoardData(){
 
@@ -308,6 +331,8 @@ public class Board {
                     jsonArrayUnits.put(this.units[i].toJson());
                 }
                 jsonObject.put("units", jsonArrayUnits);
+                jsonObject.put("width", this.width);
+                jsonObject.put("height", this.height);
 
             } catch (JSONException e) {
 
@@ -350,6 +375,18 @@ public class Board {
                         Unit.UnitData unitData = new Unit.UnitData(unitsArray.getString(i));
                         this.units[i] = unitData;
                     }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    this.width = jsonObject.getInt("width");
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    this.height = jsonObject.getInt("height");
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

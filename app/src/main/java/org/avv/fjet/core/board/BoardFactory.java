@@ -42,9 +42,11 @@ public class BoardFactory {
     // region - Methods
 
     public static Board createBoard(Context c, Board.BoardType t, Terrain [][] terrains){
-        Board b = new Board(t);
+        Board b = null;
 
         if (terrains.length > 0 && terrains[0].length > 0) {
+            b = new Board(t, terrains[0].length, terrains.length);
+
             switch (t) {
 
                 case HEX_CELLS:

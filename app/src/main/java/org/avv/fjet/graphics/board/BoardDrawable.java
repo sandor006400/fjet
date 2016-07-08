@@ -1,6 +1,8 @@
 package org.avv.fjet.graphics.board;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
@@ -28,6 +30,12 @@ public class BoardDrawable {
 
     // region - Constants
 
+    public enum Alignment {
+        TOP_LEFT, TOP_CENTER, TOP_RIGHT,
+        CENTER_LEFT, CENTER, CENTER_RIGHT,
+        BOTTOM_LEFT, BOTTOM_CENTER, BOTTOM_RIGHT
+    }
+
     private static final float DEFAULT_SCALE = 1.0f;
     private static final float MIN_SCALE = 0.1f;
     private static final float MAX_SCALE = 2.0f;
@@ -35,6 +43,9 @@ public class BoardDrawable {
     // endregion - Constants
 
     // region - Fields
+
+    private float minScale = MIN_SCALE;
+    private float maxScale = MAX_SCALE;
 
     private FJetRect boardBounds;   // Board bounds in screen coordinates
     private float scale;            // BoardDrawable current scale
@@ -57,13 +68,25 @@ public class BoardDrawable {
 
     // region - Getters and Setters
 
+    public void setMinScale(float scale){
+        if (scale >= MIN_SCALE && scale <= this.maxScale) {
+            this.minScale = scale;
+        }
+    }
+
+    public void setMaxScale(float scale){
+        if (scale >= this.minScale && scale <= MAX_SCALE) {
+            this.maxScale = scale;
+        }
+    }
+
     public BoardDrawable setBoardBounds(FJetRect bounds){
         this.boardBounds = bounds;
         return this;
     }
 
     public void setScale(float scale){
-        if (scale >= MIN_SCALE && scale <= MAX_SCALE) {
+        if (scale >= this.minScale && scale <= this.maxScale) {
             this.scale = scale;
         }
     }
@@ -88,6 +111,52 @@ public class BoardDrawable {
         return this.unitDrawablesMap.get(unitId);
     }
 
+    /**
+     * Aligns BoardDrawable bounds
+     * @param alignment
+     * @param viewWidth
+     * @param viewHeight
+     */
+    public void setAlignment(Alignment alignment, int viewWidth, int viewHeight){
+
+        if (Alignment.TOP_LEFT.ordinal() == alignment.ordinal()) {
+            this.boardBounds.offsetTo(0, 0);
+
+        } else if (Alignment.TOP_CENTER.ordinal() == alignment.ordinal()) {
+            this.boardBounds.offsetTo((viewWidth / 2) - (this.boardBounds.getWidth() / 2), 0);
+
+        } else if (Alignment.TOP_RIGHT.ordinal() == alignment.ordinal()) {
+            this.boardBounds.offsetTo(viewWidth - this.boardBounds.getWidth(), 0);
+
+        } else if (Alignment.CENTER_LEFT.ordinal() == alignment.ordinal()) {
+            this.boardBounds.offsetTo(0, (viewHeight / 2) - (this.boardBounds.getHeight() / 2));
+
+        } else if (Alignment.CENTER.ordinal() == alignment.ordinal()) {
+            this.boardBounds.offsetTo(
+                    (viewWidth / 2) - (this.boardBounds.getWidth() / 2),
+                    (viewHeight / 2) - (this.boardBounds.getHeight() / 2));
+
+        } else if (Alignment.CENTER_RIGHT.ordinal() == alignment.ordinal()) {
+            this.boardBounds.offsetTo(
+                    viewWidth - this.boardBounds.getWidth(),
+                    (viewHeight / 2) - (this.boardBounds.getHeight() / 2));
+
+        } else if (Alignment.BOTTOM_LEFT.ordinal() == alignment.ordinal()) {
+            this.boardBounds.offsetTo(0, viewHeight - this.boardBounds.getHeight());
+
+        } else if (Alignment.BOTTOM_CENTER.ordinal() == alignment.ordinal()) {
+            this.boardBounds.offsetTo(
+                    (viewWidth / 2) - (this.boardBounds.getWidth() / 2),
+                    viewHeight - this.boardBounds.getHeight());
+
+        } else if (Alignment.BOTTOM_RIGHT.ordinal() == alignment.ordinal()) {
+            this.boardBounds.offsetTo(
+                    viewWidth - this.boardBounds.getWidth(),
+                    viewHeight - this.boardBounds.getHeight());
+        }
+
+    }
+
     // endregion - Getters and Setters
 
     // region - Methods for/from SuperClass/Interfaces
@@ -107,7 +176,6 @@ public class BoardDrawable {
         for (UnitDrawable uD : this.unitDrawablesMap.values()){
             uD.draw(this.boardBounds, this.scale, c);
         }
-
     }
 
     // endregion - Methods for/from SuperClass/Interfaces

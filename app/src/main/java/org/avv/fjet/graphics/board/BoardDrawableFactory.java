@@ -58,12 +58,23 @@ public class BoardDrawableFactory {
      * Generates BoardDrawable from Board
      * @param context
      * @param board
-     * @param width
-     * @param height
      * @return
      */
-    public BoardDrawable createBoardDrawable(Context context, Board board, int width, int height, int edgeSize, int unitEdgeSize){
+    public BoardDrawable createBoardDrawable(Context context, Board board, int edgeSize, int unitEdgeSize){
         BoardDrawable boardDrawable = new BoardDrawable(edgeSize);
+        int width = 0;
+        int height = 0;
+
+        // First, board width and heigt are calculated
+        if (board.getBoardType().equals(Board.BoardType.HEX_CELLS)){
+            FJetPoint size = UtilCoordinates.hexCoordsSize(edgeSize);
+            width = size.getX() * board.getWidth();
+            height = size.getY() * board.getHeight();
+
+        } else {    // The board have Square cells
+            width = edgeSize * board.getWidth();
+            height = edgeSize * board.getHeight();
+        }
 
         // Setting the bounds rect
         boardDrawable.setBoardBounds(new FJetRect(0, 0, width, height));

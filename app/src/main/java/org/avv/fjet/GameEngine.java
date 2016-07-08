@@ -58,6 +58,9 @@ public class GameEngine extends GameViewThread implements GameView.IGameViewObse
     private BoardDrawable boardDrawable;
     private GameRules gameRules;
 
+    private boolean scaleActivated;
+    private boolean scrollActivated;
+
     // endregion - Fields
 
     // region - Constructors
@@ -74,6 +77,14 @@ public class GameEngine extends GameViewThread implements GameView.IGameViewObse
     // endregion - Constructors
 
     // region - Getters and Setters
+
+    public void setScrollActivated(boolean activated){
+        this.scrollActivated = activated;
+    }
+
+    public void setScaleActivated(boolean activated){
+        this.scaleActivated = activated;
+    }
 
     public Game getGame(){
         return this.game;
@@ -302,14 +313,18 @@ public class GameEngine extends GameViewThread implements GameView.IGameViewObse
 
                 case TOUCH_EVENT_SCROLL:
                     Log.d("handleMessage", "TOUCH_EVENT_SCROLL");
-                    Action actionScroll = getScrollAction((FJetPoint)msg.obj);
-                    GameEngine.this.addActionToQueue(actionScroll);
+                    if (GameEngine.this.scrollActivated){
+                        Action actionScroll = getScrollAction((FJetPoint)msg.obj);
+                        GameEngine.this.addActionToQueue(actionScroll);
+                    }
                     break;
 
                 case TOUCH_EVENT_SCALE:
                     Log.d("handleMessage", "TOUCH_EVENT_SCALE");
-                    Action actionScale = getScaleAction((float)msg.obj);
-                    GameEngine.this.addActionToQueue(actionScale);
+                    if (GameEngine.this.scaleActivated){
+                        Action actionScale = getScaleAction((float)msg.obj);
+                        GameEngine.this.addActionToQueue(actionScale);
+                    }
                     break;
             }
         }
@@ -335,23 +350,17 @@ public class GameEngine extends GameViewThread implements GameView.IGameViewObse
 
         private Action getScrollAction(FJetPoint p) {
             ScrollBoardViewAction aScroll = new ScrollBoardViewAction();
-
-            if (aScroll != null) {
-                aScroll.setOffset(p)
-                        .setBoardDrawable(GameEngine.this.boardDrawable)
-                        .setObserver(GameEngine.this);
-            }
+            aScroll.setOffset(p)
+                    .setBoardDrawable(GameEngine.this.boardDrawable)
+                    .setObserver(GameEngine.this);
             return aScroll;
         }
 
         private Action getScaleAction(float scale) {
             ScaleViewAction aScale = new ScaleViewAction();
-
-            if (aScale != null) {
-                aScale.setScale(scale)
-                        .setBoardDrawable(GameEngine.this.boardDrawable)
-                        .setObserver(GameEngine.this);
-            }
+            aScale.setScale(scale)
+                    .setBoardDrawable(GameEngine.this.boardDrawable)
+                    .setObserver(GameEngine.this);
             return aScale;
         }
 
