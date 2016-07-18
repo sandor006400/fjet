@@ -167,8 +167,7 @@ public class BoardDrawable {
      * @param c
      */
     public void draw(Canvas c) {
-        FJetPoint center = getCenter();
-        FJetRect scaledBounds = UtilGeometry.getFJetRectScalingAroundPoint(this.boardBounds, center, this.scale);
+        FJetRect scaledBounds = getCurrentBounds();
 
         // Drawing cell drawables
         for (CellDrawable cD : this.cellDrawablesMap.values()){
@@ -184,6 +183,10 @@ public class BoardDrawable {
     // endregion - Methods for/from SuperClass/Interfaces
 
     // region - Methods
+
+    public FJetRect getCurrentBounds(){
+        return UtilGeometry.getFJetRectScalingAroundPoint(this.boardBounds, getCenter(), this.scale);
+    }
 
     private FJetPoint getCenter(){
         return new FJetPoint(

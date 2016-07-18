@@ -1,6 +1,7 @@
 package com.avv.fjet;
 
 import android.content.Context;
+import android.graphics.drawable.ShapeDrawable;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.InstrumentationTestCase;
 import android.test.suitebuilder.annotation.SmallTest;
@@ -53,7 +54,9 @@ public class UtilPathFindingAlgorithmsUnitTest extends InstrumentationTestCase {
         };
 
         List<Cell> cells = new ArrayList<>();
-        Terrain t = tF.getTerrain(Terrain.TerrainType.GRASSLAND);   // Al cells must have the same movement cost
+        Terrain newTerrain = new Terrain("Grassland", new ShapeDrawable(), new ShapeDrawable(), 1, 1);
+        TerrainFactory.getInstance(c).addNewTerrain(newTerrain.getType(), newTerrain);
+        Terrain t = tF.getTerrain(newTerrain.getType());   // Al cells must have the same movement cost
 
         for (SquareCoords coords : rangeNCoords){
             cells.add(new Cell(coords, t));

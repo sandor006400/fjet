@@ -1,6 +1,7 @@
 package com.avv.fjet;
 
 import android.content.Context;
+import android.graphics.drawable.ShapeDrawable;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.InstrumentationTestCase;
 import android.test.suitebuilder.annotation.SmallTest;
@@ -45,8 +46,9 @@ public class CellAndroidUnitTest extends InstrumentationTestCase {
 
     @Before
     public void createCell() throws Exception {
-        terrain = TerrainFactory.getInstance(c).getTerrain(
-                Terrain.TerrainType.GRASSLAND);
+        Terrain newTerrain = new Terrain("Grassland", new ShapeDrawable(), new ShapeDrawable(), 1, 1);
+        TerrainFactory.getInstance(c).addNewTerrain(newTerrain.getType(), newTerrain);
+        terrain = TerrainFactory.getInstance(c).getTerrain("Grassland");
         coords = new HexCoords(4, 5);
         cell = new Cell(coords, terrain);
     }

@@ -215,6 +215,21 @@ public class UtilCoordinates {
         return new FJetPoint(width, edgeSize * 2);
     }
 
+    /**
+     * Calculates a padding of Y row in HexCoords matrix. Only for y > 0.
+     * @param y
+     * @return
+     */
+    public static int getCoordLeftPaddingInMatrix(int y){
+
+        if (y % 2 == 0){    // Even
+            return (y - 2) / 2;
+
+        } else {    // Odd
+            return (y - 1) / 2;
+        }
+    }
+
     // endregion - Methods
 
     // region - Inner and Anonymous Classes

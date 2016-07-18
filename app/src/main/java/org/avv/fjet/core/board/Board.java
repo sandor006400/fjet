@@ -1,8 +1,10 @@
 package org.avv.fjet.core.board;
 
 import android.content.Context;
+import android.util.Log;
 
 import org.avv.fjet.core.action.Action;
+import org.avv.fjet.core.board.util.UtilCoordinates;
 import org.avv.fjet.core.unit.Unit;
 import org.avv.fjet.serialization.JsonSerializable;
 import org.json.JSONArray;
@@ -34,8 +36,7 @@ public class Board {
     // region - Fields
 
     private BoardType type;
-
-    private Map<String, Cell> cellsMap;
+    private Cell [][] cellsMatrix;
     private Map<String, Unit> unitsMap;
 
     private List<Cell> selectedCells;  // The selected cells
@@ -48,7 +49,7 @@ public class Board {
     // region - Constructors
 
     public Board(BoardType type, int width, int height){
-        init();
+        init(height, width);
 
         this.width = width;
         this.height = height;
@@ -61,7 +62,7 @@ public class Board {
      * @param c
      */
     public Board(BoardData data, Context c){
-        init();
+        init(data.height, data.width);
         initWithData(data, c);
     }
 
@@ -81,10 +82,32 @@ public class Board {
         return this.type;
     }
 
-    public Cell getCellWithCoords(ICoords coords){
+    /*public Cell getCellWithCoords(ICoords coords){
 
         if (this.cellsMap != null){
             return this.cellsMap.get(coords.toShortString());
+        }
+        return null;
+    }*/
+
+    public Cell getCellWithCoords(ICoords coords){
+        if (coords instanceof HexCoords) {
+            int y = ((HexCoords) coords).getR();
+            int x = ((HexCoords) coords).getQ() + UtilCoordinates.getCoordLeftPaddingInMatrix(y);
+
+            if (y >= 0 && x >= 0 && y < this.cellsMatrix.length && x < this.cellsMatrix[0].length){
+                Log.d("Board", "getCellWithCoords, HexCell -> coords: " + coords.toShortString() + " mCoords: " + y + "," + x);
+                return this.cellsMatrix[y][x];
+            }
+
+        } else if (coords instanceof SquareCoords){
+            int y = ((SquareCoords) coords).getY();
+            int x = ((SquareCoords) coords).getX();
+
+            if (y >= 0 && x >= 0 && y < this.cellsMatrix.length && x < this.cellsMatrix[0].length){
+                Log.d("Board", "getCellWithCoords, SquareCell -> coords: " + coords.toShortString() + " mCoords: " + y + "," + x);
+                return this.cellsMatrix[y][x];
+            }
         }
         return null;
     }
@@ -98,7 +121,7 @@ public class Board {
         List<Cell> cells = new ArrayList<>();
 
         for (int i = 0; i < coords.length; i++) {
-            Cell c = this.cellsMap.get(coords[i].toShortString());
+            Cell c = getCellWithCoords(coords[i]);
 
             if (c != null) {
                 cells.add(c);
@@ -115,12 +138,12 @@ public class Board {
     public List<Cell> getCellsWithIds(String [] ids){
         List<Cell> cells = new ArrayList<>();
 
-        for (Map.Entry<String, Cell> entry : this.cellsMap.entrySet()){
+        for (Cell cell: getCells()){
             boolean found = false;
 
             for (int i = 0; i < ids.length && !found; i++) {
-                if (entry.getValue().getId().equals(ids[i])) {
-                    cells.add(entry.getValue());
+                if (cell.getId().equals(ids[i])) {
+                    cells.add(cell);
                     found = true;
                 }
             }
@@ -129,11 +152,35 @@ public class Board {
     }
 
     public void setCellAndCoords(ICoords coords, Cell cell){
-        this.cellsMap.put(coords.toShortString(), cell);
+        if (coords instanceof HexCoords) {
+            int y = ((HexCoords) coords).getR();
+            int x = ((HexCoords) coords).getQ() + UtilCoordinates.getCoordLeftPaddingInMatrix(y);
+
+            if (y >= 0 && x >= 0 && y < this.cellsMatrix.length && x < this.cellsMatrix[0].length){
+                this.cellsMatrix[y][x] = cell;
+            }
+
+        } else if (coords instanceof SquareCoords){
+            int y = ((SquareCoords) coords).getY();
+            int x = ((SquareCoords) coords).getX();
+
+            if (y >= 0 && x >= 0 && y < this.cellsMatrix.length && x < this.cellsMatrix[0].length){
+                this.cellsMatrix[y][x] = cell;
+            }
+        }
     }
 
-    public Map<String, Cell> getCells(){
-        return this.cellsMap;
+    public List<Cell> getCells(){
+        List<Cell> cells = new ArrayList<>();
+
+        for (int j = 0;  j < this.cellsMatrix.length; j++){
+            for (int i = 0; i < this.cellsMatrix[0].length; i++){
+                if (this.cellsMatrix[j][i] != null){
+                    cells.add(this.cellsMatrix[j][i]);
+                }
+            }
+        }
+        return cells;
     }
 
     public List<Cell> getSelectedCells(){
@@ -167,7 +214,7 @@ public class Board {
      * @param cell
      */
     public void addUnit(Unit unit, Cell cell){
-        if (this.cellsMap.containsKey(cell.getCoords().toShortString())) {
+        if (getCellWithCoords(cell.getCoords()) != null) {
             unit.setCell(cell);
             cell.setUnit(unit);
             this.unitsMap.put(unit.getId(), unit);
@@ -199,10 +246,11 @@ public class Board {
 
     // region - Methods
 
-    private void init(){
-        this.cellsMap = new HashMap<>();
+    private void init(int height, int width){
+        //this.cellsMap = new HashMap<>();
         this.unitsMap = new HashMap<>();
         this.selectedCells = new ArrayList<>();
+        this.cellsMatrix = new Cell[height][width];
     }
 
     public boolean anyCellIsSelected(){
@@ -247,7 +295,7 @@ public class Board {
      * Used while json deserialization takes place to assign Units with Cells
      */
     private void assignUnitsToCells(){
-        for (Cell c : this.cellsMap.values()){
+        for (Cell c : this.getCells()){
             String unitId = c.getUnitId();
 
             if (unitId != null && !unitId.equals("")){
@@ -263,7 +311,7 @@ public class Board {
         data.type = this.type;
 
         List<Cell.CellData> cellsList = new ArrayList<>();
-        for (Cell c: this.cellsMap.values()){
+        for (Cell c: getCells()){
             cellsList.add(c.getCellData());
         }
         data.cells = Arrays.copyOf(cellsList.toArray(), cellsList.size(), Cell.CellData[].class);
@@ -282,7 +330,7 @@ public class Board {
 
         for (int i = 0; i < data.cells.length; i++){
             Cell cell = new Cell(data.cells[i], c);
-            this.cellsMap.put(cell.getCoords().toShortString(), cell);
+            setCellAndCoords(cell.getCoords(), cell);
         }
 
         for (int i = 0; i < data.units.length; i++){

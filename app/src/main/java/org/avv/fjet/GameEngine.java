@@ -20,6 +20,7 @@ import org.avv.fjet.core.board.ICoords;
 import org.avv.fjet.core.geometry.FJetPoint;
 import org.avv.fjet.core.board.SquareCoords;
 import org.avv.fjet.core.board.util.UtilCoordinates;
+import org.avv.fjet.core.geometry.FJetRect;
 import org.avv.fjet.core.rule.GameRules;
 import org.avv.fjet.graphics.GameView;
 import org.avv.fjet.graphics.GameViewThread;
@@ -244,7 +245,8 @@ public class GameEngine extends GameViewThread implements GameView.IGameViewObse
         for (Object cell : game.getBoard().getSelectedCells()) {
 
             ICoords coords = ((Cell)cell).getCoords();
-            FJetPoint offset = boardDrawable.getOffset();
+            FJetRect bounds = boardDrawable.getCurrentBounds();
+            FJetPoint offset = new FJetPoint(bounds.getX(), bounds.getY());
 
             if (coords instanceof HexCoords) {
                 UtilCellDrawing.drawHexCell(c, this.edgeSize, this.boardDrawable.getScale(), (HexCoords) coords, Color.GREEN, Color.TRANSPARENT, 10f, offset);

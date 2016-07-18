@@ -80,7 +80,7 @@ public class BoardDrawableFactory {
         boardDrawable.setBoardBounds(new FJetRect(0, 0, width, height));
 
         // Initilizing CellDrawables
-        for (Object cell : board.getCells().values()){
+        for (Object cell : board.getCells()){
             CellDrawable cellDrawable = new CellDrawable();
 
             ICoords coords = ((Cell)cell).getCoords();

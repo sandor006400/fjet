@@ -116,10 +116,11 @@ public class UtilPathFindingAlgorithms {
             return Math.abs(((HexCoords) a).getQ() - ((HexCoords) b).getQ())
                     + Math.abs(((HexCoords) a).getR() - ((HexCoords) b).getR());
 
-        } else {
+        } else if (a instanceof SquareCoords && b instanceof SquareCoords){
             return Math.abs(((SquareCoords) a).getX() - ((SquareCoords) b).getX())
                     + Math.abs(((SquareCoords) a).getY() - ((SquareCoords) b).getY());
         }
+        return 0;
     }
 
     // endregion - Methods
