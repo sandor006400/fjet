@@ -51,9 +51,6 @@ public class GameEngine extends GameViewThread implements GameView.IGameViewObse
 
     // region - Fields
 
-    float scale = DEFAULT_SCALE;
-    int edgeSize = 80;
-
     private final BlockingQueue<Action> actions;
     private Game game;
     private BoardDrawable boardDrawable;
@@ -240,7 +237,7 @@ public class GameEngine extends GameViewThread implements GameView.IGameViewObse
     }
 
     private void drawSelectedCells(Canvas c){
-        float currentEdgeSize = this.edgeSize * this.boardDrawable.getScale();
+        float currentEdgeSize = this.boardDrawable.getCurrentEdgeSize();
 
         for (Object cell : game.getBoard().getSelectedCells()) {
 
@@ -249,11 +246,11 @@ public class GameEngine extends GameViewThread implements GameView.IGameViewObse
             FJetPoint offset = new FJetPoint(bounds.getX(), bounds.getY());
 
             if (coords instanceof HexCoords) {
-                UtilCellDrawing.drawHexCell(c, this.edgeSize, this.boardDrawable.getScale(), (HexCoords) coords, Color.GREEN, Color.TRANSPARENT, 10f, offset);
+                UtilCellDrawing.drawHexCell(c, this.boardDrawable.getEdgeSize(), this.boardDrawable.getScale(), (HexCoords) coords, Color.GREEN, Color.TRANSPARENT, 10f, offset);
                 UtilCoordinates.hexCoordsToPixel(currentEdgeSize, (HexCoords) coords);
 
             } else {
-                UtilCellDrawing.drawSquare(c, this.edgeSize, this.boardDrawable.getScale(), (SquareCoords) coords, Color.GREEN, Color.TRANSPARENT, 10f, offset);
+                UtilCellDrawing.drawSquare(c, this.boardDrawable.getEdgeSize(), this.boardDrawable.getScale(), (SquareCoords) coords, Color.GREEN, Color.TRANSPARENT, 10f, offset);
                 UtilCoordinates.squareCoordsToPixel(currentEdgeSize, (SquareCoords) coords);
             }
         }
@@ -333,19 +330,20 @@ public class GameEngine extends GameViewThread implements GameView.IGameViewObse
 
         private ICoords getCoordsFromPoint(FJetPoint p){
             ICoords coords = null;
-            FJetPoint offset = boardDrawable.getOffset();
+            FJetRect boardBounds = boardDrawable.getCurrentBounds();
+            FJetPoint offset = new FJetPoint(boardBounds.getX(), boardBounds.getY());
 
             if (game.getBoard().getType() == Board.BoardType.HEX_CELLS) {
                 coords = UtilCoordinates.hexCoordsFromPixel(
                         p.getX() - offset.getX(),
                         p.getY() - offset.getY(),
-                        edgeSize * boardDrawable.getScale());
+                        boardDrawable.getCurrentEdgeSize());
 
             } else if (game.getBoard().getType() == Board.BoardType.SQUARE_CELLS) {
                 coords = UtilCoordinates.squareCoordsFromPixelCoords(
                         p.getX() - offset.getX(),
                         p.getY()- offset.getY(),
-                        edgeSize * boardDrawable.getScale());
+                        boardDrawable.getCurrentEdgeSize());
             }
             return coords;
         }

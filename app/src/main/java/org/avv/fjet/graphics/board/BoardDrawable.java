@@ -92,6 +92,10 @@ public class BoardDrawable {
         }
     }
 
+    public int getEdgeSize(){
+        return this.edgeSize;
+    }
+
     public float getScale(){
         return this.scale;
     }
@@ -183,6 +187,10 @@ public class BoardDrawable {
     // endregion - Methods for/from SuperClass/Interfaces
 
     // region - Methods
+
+    public float getCurrentEdgeSize(){
+        return this.scale * this.edgeSize;
+    }
 
     public FJetRect getCurrentBounds(){
         return UtilGeometry.getFJetRectScalingAroundPoint(this.boardBounds, getCenter(), this.scale);
