@@ -235,6 +235,10 @@ public class BoardDrawable {
         this.boardBounds.offsetBy(offset);
     }
 
+    public void removeUnitDrawables(){
+        this.unitDrawablesMap.clear();
+    }
+
     // endregion - Methods
 
     // region - Inner and Anonymous Classes

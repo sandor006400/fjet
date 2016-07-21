@@ -119,6 +119,17 @@ public class Game {
         }
     }
 
+    public void removeAllUnits(){
+        this.board.removeAllUnits();
+
+        for (Object unitsList : this.playerUnitsMap.values()) {
+
+            if (unitsList != null && unitsList instanceof List){
+                ((List)unitsList).clear();
+            }
+        }
+    }
+
     public String toJson(){
         JSONObject jsonObject = new JSONObject();
 

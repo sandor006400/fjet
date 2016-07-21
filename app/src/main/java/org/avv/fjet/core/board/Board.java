@@ -233,6 +233,17 @@ public class Board {
         }
     }
 
+    /**
+     * Removes all units from units map and units reference from associated cell.
+     */
+    public void removeAllUnits(){
+
+        for (Unit u : this.unitsMap.values()) {
+            u.getCell().setUnit(null);
+        }
+        this.unitsMap.clear();
+    }
+
     // endregion - Getters and Setters
 
     // region - Methods for/from SuperClass/Interfaces

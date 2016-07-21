@@ -43,7 +43,7 @@ public abstract class GameViewThread extends HandlerThread {
     }
 
     public GameViewThread setFPS(long fps){
-        if (fps != 0 && 1000 / fps <= MAX_FPS){
+        if (fps != 0 && fps <= MAX_FPS){
             this.interval = 1000 / fps;
         }
         return this;

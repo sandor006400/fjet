@@ -22,12 +22,15 @@ import org.avv.fjet.core.board.SquareCoords;
 import org.avv.fjet.core.board.util.UtilCoordinates;
 import org.avv.fjet.core.geometry.FJetRect;
 import org.avv.fjet.core.rule.GameRules;
+import org.avv.fjet.core.unit.Unit;
 import org.avv.fjet.graphics.GameView;
 import org.avv.fjet.graphics.GameViewThread;
 import org.avv.fjet.graphics.board.BoardDrawable;
 import org.avv.fjet.graphics.util.UtilCellDrawing;
 import org.avv.fjet.touch.FJetTouchListener;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -46,6 +49,8 @@ public class GameEngine extends GameViewThread implements GameView.IGameViewObse
     static final int TOUCH_EVENT_SCALE = 4;
     static final int TOUCH_EVENT_LONG_PRESS = 5;
     static final int TOUCH_EVENT_SHOW_PRESS = 6;
+
+    static final int PROCESS_ACTION = 7;
 
     // endregion - Constants
 
@@ -256,7 +261,22 @@ public class GameEngine extends GameViewThread implements GameView.IGameViewObse
         }
     }
 
-    // region - Methods
+    public void processAction(Action action){
+        if (this.handler != null) {
+            Message msg = this.handler.obtainMessage();
+            msg.what = PROCESS_ACTION;
+            msg.obj = action;
+            this.handler.sendMessage(msg);
+        }
+    }
+
+    /**
+     * Removes all Units from Game and BoardDrawable
+     */
+    public void removeAllUnits(){
+        this.boardDrawable.removeUnitDrawables();
+        this.game.removeAllUnits();
+    }
 
     // endregion - Methods
 
@@ -323,6 +343,14 @@ public class GameEngine extends GameViewThread implements GameView.IGameViewObse
                     if (GameEngine.this.scaleActivated){
                         Action actionScale = getScaleAction((float)msg.obj);
                         GameEngine.this.addActionToQueue(actionScale);
+                    }
+                    break;
+
+                case PROCESS_ACTION:
+                    Log.d("handleMessage", "PROCESS_ACTION");
+
+                    if (msg.obj != null && msg.obj instanceof Action) {
+                        GameEngine.this.addActionToQueue((Action) msg.obj);
                     }
                     break;
             }
