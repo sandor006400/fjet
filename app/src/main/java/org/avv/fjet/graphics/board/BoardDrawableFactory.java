@@ -81,19 +81,17 @@ public class BoardDrawableFactory {
 
         // Initilizing CellDrawables
         for (Object cell : board.getCells()){
-            CellDrawable cellDrawable = new CellDrawable();
+            CellDrawable cellDrawable = CellDrawableFactory.getInstance(context).createCellDrawable(((Cell)cell).getTerrain().getType());
 
             ICoords coords = ((Cell)cell).getCoords();
 
             if (coords instanceof HexCoords) {
                 cellDrawable.setSize(UtilCoordinates.calculateHexCellSize(edgeSize));
                 cellDrawable.setPosition(UtilCoordinates.hexCoordsToPixel(edgeSize, (HexCoords)coords));
-                cellDrawable.setDrawable(((Cell)cell).getTerrain().getDrawableHe());
 
             } else if (coords instanceof SquareCoords) {
                 cellDrawable.setSize(new FJetPoint(edgeSize, edgeSize));
                 cellDrawable.setPosition(UtilCoordinates.squareCoordsToPixel(edgeSize, (SquareCoords) coords));
-                cellDrawable.setDrawable(((Cell)cell).getTerrain().getDrawableSq());
             }
             boardDrawable.addCellDrawable(((Cell) cell).getId(), cellDrawable);
         }

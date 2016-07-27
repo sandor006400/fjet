@@ -1,7 +1,5 @@
 package org.avv.fjet.core.board;
 
-import android.graphics.drawable.Drawable;
-
 /**
  * Created by Alexander Vorobiev on 22/05/16.
  */
@@ -13,8 +11,6 @@ public class Terrain {
 
     // region - Fields
 
-    private Drawable drawableSq;    // Drawable for square Cells
-    private Drawable drawableHe;    // Drawable for hex Cells
     private String type;
     private float movementCost;
     private float defenseCoefficient;
@@ -23,10 +19,8 @@ public class Terrain {
 
     // region - Constructors
 
-    public Terrain(String type, Drawable drawableSq, Drawable drawableHe, float movementCost, float defenseCoefficient){
+    public Terrain(String type, float movementCost, float defenseCoefficient){
         this.type = type;
-        this.drawableSq = drawableSq;
-        this.drawableHe = drawableHe;
         this.movementCost = movementCost;
         this.defenseCoefficient = defenseCoefficient;
     }
@@ -37,14 +31,6 @@ public class Terrain {
 
     public String getType(){
         return this.type;
-    }
-
-    public Drawable getDrawableSq(){
-        return this.drawableSq;
-    }
-
-    public Drawable getDrawableHe(){
-        return this.drawableHe;
     }
 
     public float getMovementCost(){
