@@ -41,10 +41,13 @@ public class Game extends GameEntity {
     // region - Constructors
 
     public Game(Board board){
+        super();
         this.board = board;
     }
 
     public Game(JSONObject json){
+        super();
+
         initWithJson(json);
     }
 
@@ -165,7 +168,7 @@ public class Game extends GameEntity {
                 JSONArray playersArray = json.getJSONArray("players");
 
                 for (int i = 0; i < playersArray.length(); i++) {
-                    Player player = new Player(playersArray.getString(i));
+                    Player player = new Player(new JSONObject(playersArray.getString(i)));
                     this.players.add(player);
                 }
             } catch (JSONException e) {

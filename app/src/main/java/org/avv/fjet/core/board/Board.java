@@ -367,10 +367,12 @@ public class Board {
         private int height;
 
         public BoardData(){
-
+            super();
         }
 
         public BoardData(JSONObject json){
+            super();
+
             initWithJson(json);
         }
 

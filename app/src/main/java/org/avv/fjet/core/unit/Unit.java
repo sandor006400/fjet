@@ -34,6 +34,8 @@ public class Unit extends GameEntity {
     // region - Constructors
 
     public Unit(){
+        super();
+
         this.id = generateID();
     }
 

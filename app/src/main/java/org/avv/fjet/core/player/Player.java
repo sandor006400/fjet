@@ -1,5 +1,6 @@
 package org.avv.fjet.core.player;
 
+import org.avv.fjet.core.GameEntity;
 import org.avv.fjet.core.board.HexCoords;
 import org.avv.fjet.core.board.SquareCoords;
 import org.avv.fjet.core.board.Terrain;
@@ -12,7 +13,7 @@ import java.util.UUID;
  * Created by Alexander Vladimirovich Vorobiev
  * At 27/02/2016
  */
-public class Player {
+public class Player extends GameEntity {
 
     // region - Constants
 
@@ -30,11 +31,14 @@ public class Player {
     // region - Constructors
 
     public Player(){
+        super();
         this.id = generateId();
         this.name = DEFAULT_NAME;
     }
 
-    public Player(String json){
+    public Player(JSONObject json){
+        super();
+
         initWithJson(json);
     }
 
@@ -75,7 +79,6 @@ public class Player {
         }
     }
 
-
     // endregion - Methods for/from SuperClass/Interfaces
 
     // region - Methods
@@ -84,7 +87,8 @@ public class Player {
         return UUID.randomUUID().toString().replace(" ", "");
     }
 
-    public String toJson(){
+    @Override
+    protected JSONObject initJSONObject() {
         JSONObject jsonObject = new JSONObject();
 
         try {
@@ -94,31 +98,25 @@ public class Player {
         } catch (JSONException e) {
 
         }
-        return jsonObject.toString();
+        return jsonObject;
     }
 
-    public void initWithJson(String json) {
-        JSONObject jsonObject = null;
-        try {
-            jsonObject = new JSONObject(json);
+    @Override
+    public void initWithJson(JSONObject json) {
+        super.initWithJson(json);
 
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        if (jsonObject != null) {
+        if (json != null) {
             try {
-                this.id = jsonObject.getString("id");
+                this.id = json.getString("id");
             } catch (JSONException e) {
                 e.printStackTrace();
             }
 
             try {
-                this.name = jsonObject.getString("name");
+                this.name = json.getString("name");
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
         }
     }
 
