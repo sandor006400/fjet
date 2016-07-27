@@ -39,7 +39,7 @@ public class UtilPathFindingAlgorithmsUnitTest extends InstrumentationTestCase {
 
     @Override
     protected void setUp() throws Exception {
-        tF = TerrainFactory.getInstance(getInstrumentation().getContext());
+        tF = TerrainFactory.getInstance();
         c = getInstrumentation().getContext();
     }
 
@@ -55,7 +55,7 @@ public class UtilPathFindingAlgorithmsUnitTest extends InstrumentationTestCase {
 
         List<Cell> cells = new ArrayList<>();
         Terrain newTerrain = new Terrain("Grassland", new ShapeDrawable(), new ShapeDrawable(), 1, 1);
-        TerrainFactory.getInstance(c).addNewTerrain(newTerrain.getType(), newTerrain);
+        TerrainFactory.getInstance().addNewTerrain(newTerrain.getType(), newTerrain);
         Terrain t = tF.getTerrain(newTerrain.getType());   // Al cells must have the same movement cost
 
         for (SquareCoords coords : rangeNCoords){

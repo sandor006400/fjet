@@ -23,7 +23,7 @@ import java.util.Map;
  * Created by Alexander Vladimirovich Vorobiev
  * At 22/03/2016
  */
-public class Game {
+public class Game extends GameEntity {
 
     // region - Constants
 
@@ -44,8 +44,8 @@ public class Game {
         this.board = board;
     }
 
-    public Game(String json, Context c){
-        initWithJson(json, c);
+    public Game(JSONObject json){
+        initWithJson(json);
     }
 
     // endregion - Constructors
@@ -59,6 +59,26 @@ public class Game {
     // endregion - Getters and Setters
 
     // region - Methods for/from SuperClass/Interfaces
+
+    @Override
+    protected JSONObject initJSONObject() {
+        JSONObject jsonObject = new JSONObject();
+
+        try {
+            jsonObject.put("board", this.board.getBoardData().toJson());
+
+            JSONArray jsonArrayPlayers = new JSONArray();
+            for (Player player : this.players) {
+                jsonArrayPlayers.put(player.toJson());
+            }
+            jsonObject.put("players", jsonArrayPlayers);
+
+        } catch (JSONException e) {
+
+        }
+        return jsonObject;
+    }
+
 
     // endregion - Methods for/from SuperClass/Interfaces
 
@@ -130,42 +150,19 @@ public class Game {
         }
     }
 
-    public String toJson(){
-        JSONObject jsonObject = new JSONObject();
+    @Override
+    public void initWithJson(JSONObject json) {
+        super.initWithJson(json);
 
-        try {
-            jsonObject.put("board", this.board.getBoardData().toJson());
-
-            JSONArray jsonArrayPlayers = new JSONArray();
-            for (Player player : this.players) {
-                jsonArrayPlayers.put(player.toJson());
-            }
-            jsonObject.put("players", jsonArrayPlayers);
-
-        } catch (JSONException e) {
-
-        }
-        return jsonObject.toString();
-    }
-
-    public void initWithJson(String json, Context c) {
-        JSONObject jsonObject = null;
-        try {
-            jsonObject = new JSONObject(json);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        if (jsonObject != null) {
+        if (json != null) {
             try {
-                this.board = new Board(new Board.BoardData(jsonObject.getString("board")), c);
+                this.board = new Board(new Board.BoardData(new JSONObject(json.getString("board"))));
 
             } catch (JSONException e) {
                 e.printStackTrace();
             }
             try {
-                JSONArray playersArray = jsonObject.getJSONArray("players");
+                JSONArray playersArray = json.getJSONArray("players");
 
                 for (int i = 0; i < playersArray.length(); i++) {
                     Player player = new Player(playersArray.getString(i));

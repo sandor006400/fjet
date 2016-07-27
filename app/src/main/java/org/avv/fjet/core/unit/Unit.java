@@ -1,5 +1,6 @@
 package org.avv.fjet.core.unit;
 
+import org.avv.fjet.core.GameEntity;
 import org.avv.fjet.core.board.Cell;
 import org.avv.fjet.core.board.HexCoords;
 import org.avv.fjet.core.board.ICoords;
@@ -15,7 +16,7 @@ import java.util.UUID;
  * Created by Alexander Vladimirovich Vorobiev
  * At 27/02/2016
  */
-public class Unit {
+public class Unit extends GameEntity {
 
     // region - Constants
 
@@ -37,13 +38,13 @@ public class Unit {
     }
 
     /**
-     * Creates a Unit using json with Unit data
-     * @param data
+     * Creates a Unit using json with json
+     * @param json
      */
-    public Unit(UnitData data){
-        this.id = data.id;
-        this.playerId = data.playerId;
-        this.unitType = data.unitType;
+    public Unit(JSONObject json){
+        super(json);
+
+        initWithJson(json);
     }
 
     // endregion - Constructors
@@ -82,6 +83,45 @@ public class Unit {
 
     // region - Methods for/from SuperClass/Interfaces
 
+    @Override
+    public void initWithJson(JSONObject json) {
+        super.initWithJson(json);
+
+        if (json != null) {
+            try {
+                this.id = json.getString("id");
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            try {
+                this.unitType = json.getString("type");
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            try {
+                this.playerId = json.getString("playerId");
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    protected JSONObject initJSONObject() {
+        JSONObject jsonObject = super.toJson();
+        try {
+            jsonObject.put("id", this.id);
+            jsonObject.put("type", this.unitType);
+            jsonObject.put("playerId", this.playerId);
+
+        } catch (JSONException e) {
+
+        }
+        return jsonObject;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -110,77 +150,9 @@ public class Unit {
         return UUID.randomUUID().toString();
     }
 
-    public UnitData getUnitData(){
-        UnitData data = new UnitData();
-        data.id = this.id;
-        data.playerId = this.playerId;
-        data.unitType = this.unitType;
-        return data;
-    }
-
     // endregion - Methods
 
     // region - Inner and Anonymous Classes
-
-
-    static public class UnitData {
-
-        public String id;
-        public String playerId;
-        public String unitType;
-
-        public UnitData(){
-
-        }
-
-        public UnitData(String json){
-            initWithJson(json);
-        }
-
-        public String toJson(){
-            JSONObject jsonObject = new JSONObject();
-            try {
-                jsonObject.put("id", this.id);
-                jsonObject.put("type", this.unitType);
-                jsonObject.put("playerId", this.playerId);
-
-            } catch (JSONException e) {
-
-            }
-            return jsonObject.toString();
-        }
-
-        public void initWithJson(String json) {
-            JSONObject jsonObject = null;
-            try {
-                jsonObject = new JSONObject(json);
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            if (jsonObject != null) {
-                try {
-                    this.id = jsonObject.getString("id");
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    this.unitType = jsonObject.getString("type");
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    this.playerId = jsonObject.getString("playerId");
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-    }
 
     // endregion - Inner and Anonymous Classes
 

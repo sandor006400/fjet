@@ -18,6 +18,9 @@ public class UnitDrawable extends GameDrawable {
 
     // region - Constants
 
+    /**
+     * Default states of UnitDrawable
+     */
     public enum State {
         ATTACKING("Attacking"),
         WAITING("Waiting"),

@@ -28,7 +28,7 @@ public class TerrainFactory {
 
     // region - Constructors
 
-    private TerrainFactory(Context c){
+    private TerrainFactory(){
         this.terrainsMap = new LinkedHashMap<>();
     }
 
@@ -62,9 +62,9 @@ public class TerrainFactory {
 
     // region - Methods
 
-    public static TerrainFactory getInstance(Context c){
+    public static TerrainFactory getInstance(){
         if (INSTANCE == null){
-            INSTANCE = new TerrainFactory(c);
+            INSTANCE = new TerrainFactory();
         }
         return INSTANCE;
     }

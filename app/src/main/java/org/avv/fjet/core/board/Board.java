@@ -3,6 +3,7 @@ package org.avv.fjet.core.board;
 import android.content.Context;
 import android.util.Log;
 
+import org.avv.fjet.core.GameEntity;
 import org.avv.fjet.core.action.Action;
 import org.avv.fjet.core.board.util.UtilCoordinates;
 import org.avv.fjet.core.unit.Unit;
@@ -59,11 +60,10 @@ public class Board {
     /**
      * Creates a Board using json with Board data
      * @param data
-     * @param c
      */
-    public Board(BoardData data, Context c){
+    public Board(BoardData data){
         init(data.height, data.width);
-        initWithData(data, c);
+        initWithData(data);
     }
 
     // endregion - Constructors
@@ -321,32 +321,30 @@ public class Board {
         BoardData data = new BoardData();
         data.type = this.type;
 
-        List<Cell.CellData> cellsList = new ArrayList<>();
+        List<Cell> cellsList = new ArrayList<>();
         for (Cell c: getCells()){
-            cellsList.add(c.getCellData());
+            cellsList.add(c);
         }
-        data.cells = Arrays.copyOf(cellsList.toArray(), cellsList.size(), Cell.CellData[].class);
-        List<Unit.UnitData> unitsList = new ArrayList<>();
+        data.cells = Arrays.copyOf(cellsList.toArray(), cellsList.size(), Cell[].class);
+        List<Unit> unitsList = new ArrayList<>();
         for (Unit u: this.unitsMap.values()){
-            unitsList.add(u.getUnitData());
+            unitsList.add(u);
         }
-        data.units = Arrays.copyOf(unitsList.toArray(), unitsList.size(), Unit.UnitData[].class);
+        data.units = Arrays.copyOf(unitsList.toArray(), unitsList.size(), Unit[].class);
         data.width = this.width;
         data.height = this.height;
         return data;
     }
 
-    private void initWithData(BoardData data, Context c){
+    private void initWithData(BoardData data){
         this.type = data.type;
 
         for (int i = 0; i < data.cells.length; i++){
-            Cell cell = new Cell(data.cells[i], c);
-            setCellAndCoords(cell.getCoords(), cell);
+            setCellAndCoords(data.cells[i].getCoords(), data.cells[i]);
         }
 
         for (int i = 0; i < data.units.length; i++){
-            Unit unit = new Unit(data.units[i]);
-            this.unitsMap.put(unit.getId(), unit);
+            this.unitsMap.put(data.units[i].getId(), data.units[i]);
         }
         this.width = data.width;
         this.height = data.height;
@@ -357,11 +355,14 @@ public class Board {
 
     // region - Inner and Anonymous Classes
 
-    static public class BoardData {
+    /**
+     * Memento pattern implementation for Board class
+     */
+    static public class BoardData extends GameEntity {
 
         private BoardType type;
-        private Cell.CellData[] cells;
-        private Unit.UnitData[] units;
+        private Cell[] cells;
+        private Unit[] units;
         private int width;
         private int height;
 
@@ -369,11 +370,12 @@ public class Board {
 
         }
 
-        public BoardData(String json){
+        public BoardData(JSONObject json){
             initWithJson(json);
         }
 
-        public String toJson(){
+        @Override
+        protected JSONObject initJSONObject() {
             JSONObject jsonObject = new JSONObject();
 
             try {
@@ -396,55 +398,50 @@ public class Board {
             } catch (JSONException e) {
 
             }
-            return jsonObject.toString();
+            return jsonObject;
         }
 
-        public void initWithJson(String json) {
-            JSONObject jsonObject = null;
-            try {
-                jsonObject = new JSONObject(json);
+        @Override
+        public void initWithJson(JSONObject json) {
+            super.initWithJson(json);
 
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            if (jsonObject != null) {
+            if (json != null) {
                 try {
-                    this.type = BoardType.valueOf(jsonObject.getString("type"));
+                    this.type = BoardType.valueOf(json.getString("type"));
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
                 try {
-                    JSONArray cellsArray = jsonObject.getJSONArray("cells");
-                    this.cells = new Cell.CellData[cellsArray.length()];
+                    JSONArray cellsArray = json.getJSONArray("cells");
+                    this.cells = new Cell[cellsArray.length()];
 
                     for (int i = 0; i < cellsArray.length(); i++) {
-                        Cell.CellData cellData = new Cell.CellData(cellsArray.getString(i));
+                        Cell cellData = new Cell(new JSONObject(cellsArray.getString(i)));
                         this.cells[i] = cellData;
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
                 try {
-                    JSONArray unitsArray = jsonObject.getJSONArray("units");
-                    this.units = new Unit.UnitData[unitsArray.length()];
+                    JSONArray unitsArray = json.getJSONArray("units");
+                    this.units = new Unit[unitsArray.length()];
 
                     for (int i = 0; i < unitsArray.length(); i++) {
-                        Unit.UnitData unitData = new Unit.UnitData(unitsArray.getString(i));
+                        Unit unitData = new Unit(new JSONObject(unitsArray.getString(i)));
                         this.units[i] = unitData;
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
                 try {
-                    this.width = jsonObject.getInt("width");
+                    this.width = json.getInt("width");
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
                 try {
-                    this.height = jsonObject.getInt("height");
+                    this.height = json.getInt("height");
 
                 } catch (JSONException e) {
                     e.printStackTrace();

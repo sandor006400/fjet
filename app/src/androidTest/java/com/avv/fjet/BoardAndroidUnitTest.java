@@ -48,7 +48,7 @@ public class BoardAndroidUnitTest extends InstrumentationTestCase {
 
     @Override
     protected void setUp() throws Exception {
-        tF = TerrainFactory.getInstance(getInstrumentation().getContext());
+        tF = TerrainFactory.getInstance();
         c = getInstrumentation().getContext();
     }
 
@@ -61,7 +61,7 @@ public class BoardAndroidUnitTest extends InstrumentationTestCase {
 
         for (int i = 0; i < terrains.length; i++){
             for (int j = 0; j < terrains[0].length; j++){
-                terrains[i][j] = TerrainFactory.getInstance(c).getRandomTerrain();
+                terrains[i][j] = TerrainFactory.getInstance().getRandomTerrain();
             }
         }
 

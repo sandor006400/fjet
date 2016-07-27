@@ -12,6 +12,7 @@ import org.avv.fjet.core.board.Cell;
 import org.avv.fjet.core.board.HexCoords;
 import org.avv.fjet.core.board.Terrain;
 import org.avv.fjet.core.board.TerrainFactory;
+import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -47,8 +48,8 @@ public class CellAndroidUnitTest extends InstrumentationTestCase {
     @Before
     public void createCell() throws Exception {
         Terrain newTerrain = new Terrain("Grassland", new ShapeDrawable(), new ShapeDrawable(), 1, 1);
-        TerrainFactory.getInstance(c).addNewTerrain(newTerrain.getType(), newTerrain);
-        terrain = TerrainFactory.getInstance(c).getTerrain("Grassland");
+        TerrainFactory.getInstance().addNewTerrain(newTerrain.getType(), newTerrain);
+        terrain = TerrainFactory.getInstance().getTerrain("Grassland");
         coords = new HexCoords(4, 5);
         cell = new Cell(coords, terrain);
     }
@@ -66,9 +67,9 @@ public class CellAndroidUnitTest extends InstrumentationTestCase {
 
     @Test
     public void cell_jsonSerialization() throws Exception {
-        Cell.CellData data = cell.getCellData();
-        String json = data.toJson();
-        Cell.CellData newCellData = new Cell.CellData();
+        Cell data = cell;
+        String json = data.toJson().toString();
+        Cell newCellData = new Cell(new JSONObject(json));
 
         assertEquals(data, newCellData);
     }
