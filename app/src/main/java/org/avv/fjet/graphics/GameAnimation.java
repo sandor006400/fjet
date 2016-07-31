@@ -71,9 +71,12 @@ public class GameAnimation {
      */
     public GameAnimation setDuration(Duration duration, int cycles){
         this.duration = duration;
-        if (duration == Duration.X_TIMES
-                || duration == Duration.INFINITE){
+        if (duration == Duration.X_TIMES) {
             this.cycles = cycles;
+            this.updatesLeft = cycles * this.updatesPerFrame * this.drawables.length;
+
+        } else if (duration == Duration.INFINITE){
+            this.cycles = 1;    // Its enought
             this.updatesLeft = cycles * this.updatesPerFrame * this.drawables.length;
 
         } else if (duration == Duration.ONE_TIME){
