@@ -1,4 +1,4 @@
-package org.avv.fjet.graph;
+package org.avv.fjet.algorithms;
 
 import org.avv.fjet.core.board.Cell;
 import org.avv.fjet.core.board.ICoords;

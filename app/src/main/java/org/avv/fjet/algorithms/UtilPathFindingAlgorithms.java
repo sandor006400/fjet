@@ -1,4 +1,4 @@
-package org.avv.fjet.graph;
+package org.avv.fjet.algorithms;
 
 import android.util.Log;
 
@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Queue;
 
 /**
  * Created by Alexander Vorobiev on 22/05/16.

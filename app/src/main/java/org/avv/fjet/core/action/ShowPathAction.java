@@ -6,8 +6,8 @@ import org.avv.fjet.core.board.HexCoords;
 import org.avv.fjet.core.board.ICoords;
 import org.avv.fjet.core.board.SquareCoords;
 import org.avv.fjet.core.board.util.UtilCoordinates;
-import org.avv.fjet.graph.FJetCellsGraph;
-import org.avv.fjet.graph.UtilPathFindingAlgorithms;
+import org.avv.fjet.algorithms.FJetCellsGraph;
+import org.avv.fjet.algorithms.UtilPathFindingAlgorithms;
 
 import java.util.List;
 

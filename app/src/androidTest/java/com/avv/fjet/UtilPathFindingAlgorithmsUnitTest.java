@@ -9,8 +9,8 @@ import org.avv.fjet.core.board.Cell;
 import org.avv.fjet.core.board.SquareCoords;
 import org.avv.fjet.core.board.Terrain;
 import org.avv.fjet.core.board.TerrainFactory;
-import org.avv.fjet.graph.FJetCellsGraph;
-import org.avv.fjet.graph.UtilPathFindingAlgorithms;
+import org.avv.fjet.algorithms.FJetCellsGraph;
+import org.avv.fjet.algorithms.UtilPathFindingAlgorithms;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 

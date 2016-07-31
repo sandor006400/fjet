@@ -1,4 +1,4 @@
-package org.avv.fjet.graph;
+package org.avv.fjet.algorithms;
 
 import java.util.ArrayList;
 import java.util.List;
