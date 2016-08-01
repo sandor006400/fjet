@@ -1,13 +1,10 @@
 package org.avv.fjet.core.board;
 
-import android.content.Context;
-
 import org.avv.fjet.core.GameEntity;
 import org.avv.fjet.core.unit.Unit;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Map;
 import java.util.UUID;
 
 /**

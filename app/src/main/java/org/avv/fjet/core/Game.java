@@ -1,13 +1,9 @@
 package org.avv.fjet.core;
 
-import android.content.Context;
-
 import org.avv.fjet.core.action.Action;
 import org.avv.fjet.core.action.ActionExecutor;
-import org.avv.fjet.core.action.ShowPathAction;
 import org.avv.fjet.core.board.Board;
 import org.avv.fjet.core.board.Cell;
-import org.avv.fjet.core.board.ICoords;
 import org.avv.fjet.core.player.Player;
 import org.avv.fjet.core.unit.Unit;
 import org.json.JSONArray;

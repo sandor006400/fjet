@@ -1,11 +1,7 @@
 package org.avv.fjet.graphics.unit;
 
 import android.content.Context;
-import android.graphics.drawable.Animatable;
-import android.graphics.drawable.Drawable;
 
-import org.avv.fjet.R;
-import org.avv.fjet.core.Game;
 import org.avv.fjet.graphics.GameAnimation;
 
 import java.util.HashMap;

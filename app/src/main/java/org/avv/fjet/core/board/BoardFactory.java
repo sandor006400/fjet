@@ -1,11 +1,8 @@
 package org.avv.fjet.core.board;
 
 import android.content.Context;
-import android.util.Log;
 
 import org.avv.fjet.core.board.util.UtilCoordinates;
-
-import java.util.Map;
 
 /**
  * Created by Alexander Vladimirovich Vorobiev

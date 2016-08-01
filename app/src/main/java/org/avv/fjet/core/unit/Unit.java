@@ -2,11 +2,6 @@ package org.avv.fjet.core.unit;
 
 import org.avv.fjet.core.GameEntity;
 import org.avv.fjet.core.board.Cell;
-import org.avv.fjet.core.board.HexCoords;
-import org.avv.fjet.core.board.ICoords;
-import org.avv.fjet.core.board.SquareCoords;
-import org.avv.fjet.core.board.Terrain;
-import org.avv.fjet.serialization.JsonSerializable;
 import org.json.JSONException;
 import org.json.JSONObject;
 

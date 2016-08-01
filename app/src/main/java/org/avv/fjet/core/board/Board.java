@@ -1,13 +1,10 @@
 package org.avv.fjet.core.board;
 
-import android.content.Context;
 import android.util.Log;
 
 import org.avv.fjet.core.GameEntity;
-import org.avv.fjet.core.action.Action;
 import org.avv.fjet.core.board.util.UtilCoordinates;
 import org.avv.fjet.core.unit.Unit;
-import org.avv.fjet.serialization.JsonSerializable;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,7 +12,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 

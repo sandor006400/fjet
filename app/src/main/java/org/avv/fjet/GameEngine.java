@@ -22,15 +22,12 @@ import org.avv.fjet.core.board.SquareCoords;
 import org.avv.fjet.core.board.util.UtilCoordinates;
 import org.avv.fjet.core.geometry.FJetRect;
 import org.avv.fjet.core.rule.GameRules;
-import org.avv.fjet.core.unit.Unit;
 import org.avv.fjet.graphics.GameView;
 import org.avv.fjet.graphics.GameViewThread;
 import org.avv.fjet.graphics.board.BoardDrawable;
 import org.avv.fjet.graphics.util.UtilCellDrawing;
 import org.avv.fjet.touch.FJetTouchListener;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 

@@ -1,16 +1,11 @@
 package org.avv.fjet.graphics.unit;
 
 import android.graphics.Canvas;
-import android.graphics.drawable.Animatable;
 
 import org.avv.fjet.core.geometry.FJetPoint;
 import org.avv.fjet.core.geometry.FJetRect;
 import org.avv.fjet.graphics.AnimatedGameDrawable;
 import org.avv.fjet.graphics.GameAnimation;
-import org.avv.fjet.graphics.GameDrawable;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by Alexander Vorobiev on 17/05/16.

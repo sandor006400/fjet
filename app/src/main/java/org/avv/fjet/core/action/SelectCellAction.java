@@ -3,8 +3,6 @@ package org.avv.fjet.core.action;
 import org.avv.fjet.core.board.Board;
 import org.avv.fjet.core.board.ICoords;
 
-import java.util.Arrays;
-
 /**
  * Created by Alexander Vladimirovich Vorobiev
  * At 22/04/2016

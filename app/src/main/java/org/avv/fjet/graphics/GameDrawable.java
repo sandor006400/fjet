@@ -1,7 +1,6 @@
 package org.avv.fjet.graphics;
 
 import android.graphics.Canvas;
-import android.util.Log;
 
 import org.avv.fjet.core.geometry.FJetPoint;
 import org.avv.fjet.core.geometry.FJetRect;

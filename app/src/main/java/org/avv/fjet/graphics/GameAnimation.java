@@ -3,7 +3,6 @@ package org.avv.fjet.graphics;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import org.avv.fjet.core.geometry.FJetRect;
 

@@ -1,10 +1,8 @@
 package org.avv.fjet.core.action;
 
 import org.avv.fjet.GameEngine;
-import org.avv.fjet.core.board.Board;
 import org.avv.fjet.core.board.ICoords;
 import org.avv.fjet.core.unit.Unit;
-import org.avv.fjet.graphics.unit.UnitDrawable;
 
 /**
  * Created by Alexander Vladimirovich Vorobiev

@@ -1,9 +1,6 @@
 package org.avv.fjet.core.player;
 
 import org.avv.fjet.core.GameEntity;
-import org.avv.fjet.core.board.HexCoords;
-import org.avv.fjet.core.board.SquareCoords;
-import org.avv.fjet.core.board.Terrain;
 import org.json.JSONException;
 import org.json.JSONObject;
 

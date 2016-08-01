@@ -1,10 +1,5 @@
 package org.avv.fjet.core.board;
 
-import android.content.Context;
-import android.graphics.drawable.Drawable;
-
-import org.avv.fjet.R;
-
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;

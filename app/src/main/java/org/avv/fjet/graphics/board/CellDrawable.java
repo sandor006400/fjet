@@ -1,12 +1,6 @@
 package org.avv.fjet.graphics.board;
 
-import android.graphics.Canvas;
-import android.graphics.drawable.Drawable;
-import android.util.Log;
-
-import org.avv.fjet.core.geometry.FJetRect;
 import org.avv.fjet.graphics.AnimatedGameDrawable;
-import org.avv.fjet.graphics.GameDrawable;
 
 /**
  * Created by Alexander Vorobiev on 22/05/16.

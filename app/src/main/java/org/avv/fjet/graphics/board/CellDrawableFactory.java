@@ -3,7 +3,6 @@ package org.avv.fjet.graphics.board;
 import android.content.Context;
 
 import org.avv.fjet.graphics.GameAnimation;
-import org.avv.fjet.graphics.unit.UnitDrawable;
 
 import java.util.HashMap;
 import java.util.Map;

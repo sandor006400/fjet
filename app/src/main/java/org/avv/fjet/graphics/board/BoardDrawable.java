@@ -1,15 +1,6 @@
 package org.avv.fjet.graphics.board;
 
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Path;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.LayerDrawable;
-import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.shapes.PathShape;
-import android.util.Log;
-
 import org.avv.fjet.core.board.HexCoords;
 import org.avv.fjet.core.board.ICoords;
 import org.avv.fjet.core.board.SquareCoords;
@@ -19,9 +10,7 @@ import org.avv.fjet.core.geometry.FJetRect;
 import org.avv.fjet.core.geometry.util.UtilGeometry;
 import org.avv.fjet.graphics.unit.UnitDrawable;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
