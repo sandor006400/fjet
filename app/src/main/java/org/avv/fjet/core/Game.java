@@ -130,6 +130,7 @@ public class Game extends GameEntity {
         Unit unit = this.board.getUnits().remove(unitId);
 
         if (unit != null) {
+            unit.getCell().removeUnit();
             List<String> unitIds = this.playerUnitsMap.get(unit.getPlayerId());
 
             if (unitIds != null){

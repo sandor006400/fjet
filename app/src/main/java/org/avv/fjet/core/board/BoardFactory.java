@@ -47,19 +47,19 @@ public class BoardFactory {
             switch (t) {
 
                 case HEX_CELLS:
-                    for (int i = 0; i < terrains.length; i++){
-                        for (int j = 0; j < terrains[0].length; j++){
-                            ICoords coords = UtilCoordinates.offsetHexCoordsToAxialHexCoords(i, j);
-                            b.setCellAndCoords(coords, new Cell(coords, terrains[i][j]));
+                    for (int row = 0; row < terrains.length; row++){
+                        for (int col = 0; col < terrains[0].length; col++){
+                            ICoords coords = UtilCoordinates.offsetHexCoordsToAxialHexCoords(col, row);
+                            b.setCellAndCoords(coords, new Cell(coords, terrains[row][col]));
                         }
                     }
                     break;
 
                 case SQUARE_CELLS:
-                    for (int i = 0; i < terrains.length; i++){
-                        for (int j = 0; j < terrains[0].length; j++){
-                            ICoords coords = new SquareCoords(i, j);
-                            b.setCellAndCoords(coords, new Cell(coords, terrains[i][j]));
+                    for (int row = 0; row < terrains.length; row++){
+                        for (int col = 0; col < terrains[0].length; col++){
+                            ICoords coords = new SquareCoords(col, row);
+                            b.setCellAndCoords(coords, new Cell(coords, terrains[row][col]));
                         }
                     }
                     break;

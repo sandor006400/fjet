@@ -77,6 +77,13 @@ public class AnimatedGameDrawable extends GameDrawable {
         }
     }
 
+    public void changeState(String state){
+        if (this.animations.keySet().contains(state)){
+            getCurrentAnimation().reset();
+            this.currentState = state;
+        }
+    }
+
     // endregion - Methods
 
     // region - Inner and Anonymous Classes

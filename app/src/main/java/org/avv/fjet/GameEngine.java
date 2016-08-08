@@ -101,7 +101,7 @@ public class GameEngine extends GameViewThread implements GameView.IGameViewObse
     @Override
     public void drawObjects(Canvas c) {
         this.boardDrawable.draw(c);
-        drawSelectedCells(c);
+        //drawSelectedCells(c);
     }
 
     @Override

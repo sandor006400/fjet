@@ -105,6 +105,11 @@ public class BoardDrawable {
         return this.unitDrawablesMap.get(unitId);
     }
 
+    public CellDrawable getCellDrawable(String cellId){
+        return this.cellDrawablesMap.get(cellId);
+    }
+
+
     /**
      * Aligns BoardDrawable bounds
      * @param alignment
@@ -226,6 +231,14 @@ public class BoardDrawable {
 
     public void removeUnitDrawables(){
         this.unitDrawablesMap.clear();
+    }
+
+    public void removeUnitDrawable(String unitId){
+        this.unitDrawablesMap.remove(unitId);
+    }
+
+    public void removeCellDrawable(String cellId){
+        this.cellDrawablesMap.remove(cellId);
     }
 
     // endregion - Methods
