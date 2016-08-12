@@ -1,7 +1,5 @@
 package org.avv.fjet.core.board;
 
-import android.util.Log;
-
 import org.avv.fjet.core.GameEntity;
 import org.avv.fjet.core.board.util.UtilCoordinates;
 import org.avv.fjet.core.unit.Unit;

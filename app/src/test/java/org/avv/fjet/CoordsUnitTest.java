@@ -117,32 +117,10 @@ public class CoordsUnitTest {
         assertArrayEquals(rangeNCoords, coords.getCoordsInRangeArray(N));
 
     }
-/*
-    @Test
-    public void test_SquareCoordsJsonSerialization() throws Exception {
-        SquareCoords result = new SquareCoords(3,4);
-        String coordsJson = result.toJson();
 
-        SquareCoords newCoords = new SquareCoords(coordsJson);
-
-        System.out.print("New square coords: " + newCoords);
-
-        assertEquals(result, new SquareCoords(coordsJson));
-    }
-*/
     // endregion - HexCoords tests
 
     // region - UtilCoordinates tests
-
-    // TODO: Is difficult to make test for the conversion from pixel to Coords because UtilCoordinates.hexCoordsToPixel calculates the middle point of the Cell with scpecific Coords
-    /*@Test
-    public void test_calcHexCoordsToPixelConversions() throws Exception {
-        HexCoords result = new HexCoords(3,4);
-        FJetPoint p = new FJetPoint(60, 80);
-        int hexCellEdge = 20;
-        FJetPoint pResul = UtilCoordinates.hexCoordsToPixel(hexCellEdge, result);
-        assertEquals(p, pResul);
-    }*/
 
     @Test
     public void test_calcPixelToHexCoordsConversions_colAprox() throws Exception {
@@ -165,49 +143,12 @@ public class CoordsUnitTest {
         HexCoords finalCoord = UtilCoordinates.hexCoordsFromPixel(x, y, hexCellEdge);
         assertEquals(result, finalCoord);
     }
-/*
-    @Test
-    public void test_calcHexCoordsToOffsetCoords() throws Exception {
-        Object [] objs = BoardFactory.createBoard(null, BoardFactory.BoardType.HEX_CELLS, 3, 3).getCells().keySet().toArray();
-        List<HexCoords> coords = Arrays.asList(Arrays.copyOf(objs, objs.length, HexCoords[].class));
-        List<HexCoords> expectedCoords = Arrays.asList(
-                new HexCoords(0, 0), new HexCoords(1, 0), new HexCoords(2, 0),
-                new HexCoords(0, 1), new HexCoords(1, 1), new HexCoords(2, 1),
-                new HexCoords(-1, 2), new HexCoords(0, 2), new HexCoords(1, 2)
-        );
-        boolean allCoordsMatch = true;
 
-        if (coords.size() != expectedCoords.size()){
-            allCoordsMatch = false;
-
-        } else {
-
-            for (HexCoords c : coords) {
-                if (!expectedCoords.contains(c)){
-                    allCoordsMatch = false;
-                }
-            }
-        }
-        assertTrue(allCoordsMatch);
-    }
-*/
     @Test
     public void test_roundHexCoords() throws Exception {
         HexCoords result = new HexCoords(3,4);
         assertEquals(result, UtilCoordinates.roundHexCoords(3.232243f, 3.62321f));
     }
-/*
-    @Test
-    public void test_HexCoordsJsonSerialization() throws Exception {
-        HexCoords result = new HexCoords(3,4);
-        String coordsJson = result.toJson();
-
-        HexCoords newCoords = new HexCoords(coordsJson);
-
-        System.out.print("New hex coords: " + newCoords);
-        assertEquals(result, newCoords);
-    }
-*/
 
     @Test
     public void test_offsetHexCoordsToAxialHexCoords() throws Exception {
@@ -220,7 +161,6 @@ public class CoordsUnitTest {
         int padding = UtilCoordinates.getCoordLeftPaddingInMatrix(3);
         assertEquals(1, padding);
     }
-
 
     // endregion - UtilCoordinates tests
 
