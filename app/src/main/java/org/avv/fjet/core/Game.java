@@ -150,6 +150,20 @@ public class Game extends GameEntity {
         }
     }
 
+    public List<String> getPlayerUnitsIds(Player player){
+        return this.playerUnitsMap.get(player.getId());
+    }
+
+    public List<Unit> getPlayerUnits(Player player){
+        List<Unit> units = new ArrayList<>();
+
+        for (String id : getPlayerUnitsIds(player)){
+            units.add(getBoard().getUnits().get(id));
+        }
+        return units;
+    }
+
+
     @Override
     public void initWithJson(JSONObject json) {
         super.initWithJson(json);

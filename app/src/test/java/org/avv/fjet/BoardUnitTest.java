@@ -5,6 +5,7 @@ import org.avv.fjet.core.board.BoardFactory;
 import org.avv.fjet.core.board.Cell;
 import org.avv.fjet.core.board.HexCoords;
 import org.avv.fjet.core.board.ICoords;
+import org.avv.fjet.core.board.Terrain;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -17,11 +18,17 @@ public class BoardUnitTest {
 
     // region - Constants
 
-    /*
     @Test
     public void test_selectCell() throws Exception {
 
-        Board b = BoardFactory.createBoard(null, BoardFactory.BoardType.HEX_CELLS, 3, 3);
+        Terrain [][] terrains = new Terrain[3][3];
+        for (int i = 0; i < 3; i++){
+            for (int j = 0; j < 3; j++){
+                terrains[i][j] = new Terrain("Test", 1, 1.0f);
+            }
+        }
+
+        Board b = BoardFactory.createBoard(null, Board.BoardType.HEX_CELLS, terrains);
         HexCoords coords = new HexCoords(1, 1);
         b.selectCells(new ICoords[]{coords});
         HexCoords selectedCoords = null;
@@ -33,15 +40,72 @@ public class BoardUnitTest {
     }
 
     @Test
-    public void test_getCell() throws Exception {
+    public void test_getCell_topLeft() throws Exception {
 
-        Board b = BoardFactory.createBoard(null, BoardFactory.BoardType.HEX_CELLS, 3, 3);
-        HexCoords coords = new HexCoords(1, 1);
+        Terrain [][] terrains = new Terrain[3][3];
+        for (int i = 0; i < 3; i++){
+            for (int j = 0; j < 3; j++){
+                terrains[i][j] = new Terrain("Test", 1, 1.0f);
+            }
+        }
 
-        Cell selectedCell = (Cell) b.getCellWithCoords(coords);
+        Board b = BoardFactory.createBoard(null, Board.BoardType.HEX_CELLS, terrains);
+        HexCoords coords = new HexCoords(0, 0);
+
+        Cell selectedCell =  b.getCellWithCoords(coords);
         assertEquals(coords, selectedCell.getCoords());
     }
-    */
+
+    @Test
+    public void test_getCell_topRight() throws Exception {
+
+        Terrain [][] terrains = new Terrain[3][3];
+        for (int i = 0; i < 3; i++){
+            for (int j = 0; j < 3; j++){
+                terrains[i][j] = new Terrain("Test", 1, 1.0f);
+            }
+        }
+
+        Board b = BoardFactory.createBoard(null, Board.BoardType.HEX_CELLS, terrains);
+        HexCoords coords = new HexCoords(2, 0);
+
+        Cell selectedCell = b.getCellWithCoords(coords);
+        assertEquals(coords, selectedCell.getCoords());
+    }
+
+    @Test
+    public void test_getCell_bottomLeft() throws Exception {
+
+        Terrain [][] terrains = new Terrain[3][3];
+        for (int i = 0; i < 3; i++){
+            for (int j = 0; j < 3; j++){
+                terrains[i][j] = new Terrain("Test", 1, 1.0f);
+            }
+        }
+
+        Board b = BoardFactory.createBoard(null, Board.BoardType.HEX_CELLS, terrains);
+        HexCoords coords = new HexCoords(-1, 2);
+
+        Cell selectedCell = b.getCellWithCoords(coords);
+        assertEquals(coords, selectedCell.getCoords());
+    }
+
+    @Test
+    public void test_getCell_bottomRight() throws Exception {
+
+        Terrain [][] terrains = new Terrain[3][3];
+        for (int i = 0; i < 3; i++){
+            for (int j = 0; j < 3; j++){
+                terrains[i][j] = new Terrain("Test", 1, 1.0f);
+            }
+        }
+
+        Board b = BoardFactory.createBoard(null, Board.BoardType.HEX_CELLS, terrains);
+        HexCoords coords = new HexCoords(1, 2);
+
+        Cell selectedCell = b.getCellWithCoords(coords);
+        assertEquals(coords, selectedCell.getCoords());
+    }
 
     // endregion - Constants
 

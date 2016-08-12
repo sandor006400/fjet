@@ -1,15 +1,11 @@
 package org.avv.fjet;
 
-import org.avv.fjet.core.board.BoardFactory;
 import org.avv.fjet.core.board.HexCoords;
 import org.avv.fjet.core.geometry.FJetPoint;
 import org.avv.fjet.core.board.SquareCoords;
 
 import org.avv.fjet.core.board.util.UtilCoordinates;
 import org.junit.Test;
-
-import java.util.Arrays;
-import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -212,6 +208,19 @@ public class CoordsUnitTest {
         assertEquals(result, newCoords);
     }
 */
+
+    @Test
+    public void test_offsetHexCoordsToAxialHexCoords() throws Exception {
+        HexCoords result = UtilCoordinates.offsetHexCoordsToAxialHexCoords(0, 4);
+        assertEquals(new HexCoords(-2, 4), result);
+    }
+
+    @Test
+    public void test_getCoordLeftPaddingInMatrix() throws Exception {
+        int padding = UtilCoordinates.getCoordLeftPaddingInMatrix(3);
+        assertEquals(1, padding);
+    }
+
 
     // endregion - UtilCoordinates tests
 

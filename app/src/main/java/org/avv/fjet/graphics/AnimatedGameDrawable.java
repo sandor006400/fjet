@@ -84,6 +84,10 @@ public class AnimatedGameDrawable extends GameDrawable {
         }
     }
 
+    public String getCurrentState(){
+        return this.currentState;
+    }
+
     // endregion - Methods
 
     // region - Inner and Anonymous Classes

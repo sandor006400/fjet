@@ -68,12 +68,37 @@ public class UtilDesitionAlgorithms {
             }
 
         } else {
+            bestValue = Float.MAX_VALUE;
+
             for(IGameState state : gameState.getNextPossibleStates()){
                 auxValue = minimax(state, depth - 1, true);
                 bestValue = Math.min(auxValue, bestValue);
             }
         }
         return bestValue;
+    }
+
+    /**
+     * Returns the best State applying Minimax algorithm
+     * @param gameState
+     * @param depth
+     * @param maximazingPlayer
+     * @return
+     */
+    public static IGameState applyMinimax(IGameState gameState, int depth, boolean maximazingPlayer){
+        IGameState resul = gameState;
+        float bestValue = Float.MIN_VALUE;
+        float auxValue;
+
+        for(IGameState state : gameState.getNextPossibleStates()){
+            auxValue = minimax(state, depth - 1, false);
+            bestValue = Math.max(auxValue, bestValue);
+
+            if (auxValue > bestValue){
+                resul = state;
+            }
+        }
+        return resul;
     }
 
     // endregion - Methods

@@ -92,7 +92,6 @@ public class Board {
             int x = ((HexCoords) coords).getQ() + UtilCoordinates.getCoordLeftPaddingInMatrix(y);
 
             if (y >= 0 && x >= 0 && y < this.cellsMatrix.length && x < this.cellsMatrix[0].length){
-                Log.d("Board", "getCellWithCoords, HexCell -> coords: " + coords.toShortString() + " mCoords: " + y + "," + x);
                 return this.cellsMatrix[y][x];
             }
 
@@ -101,7 +100,6 @@ public class Board {
             int x = ((SquareCoords) coords).getX();
 
             if (y >= 0 && x >= 0 && y < this.cellsMatrix.length && x < this.cellsMatrix[0].length){
-                Log.d("Board", "getCellWithCoords, SquareCell -> coords: " + coords.toShortString() + " mCoords: " + y + "," + x);
                 return this.cellsMatrix[y][x];
             }
         }
@@ -149,19 +147,19 @@ public class Board {
 
     public void setCellAndCoords(ICoords coords, Cell cell){
         if (coords instanceof HexCoords) {
-            int y = ((HexCoords) coords).getR();
-            int x = ((HexCoords) coords).getQ() + UtilCoordinates.getCoordLeftPaddingInMatrix(y);
+            int row = ((HexCoords) coords).getR();
+            int col = ((HexCoords) coords).getQ() + UtilCoordinates.getCoordLeftPaddingInMatrix(row);
 
-            if (y >= 0 && x >= 0 && y < this.cellsMatrix.length && x < this.cellsMatrix[0].length){
-                this.cellsMatrix[y][x] = cell;
+            if (row >= 0 && col >= 0 && row < this.cellsMatrix.length && col < this.cellsMatrix[0].length){
+                this.cellsMatrix[row][col] = cell;
             }
 
         } else if (coords instanceof SquareCoords){
-            int y = ((SquareCoords) coords).getY();
-            int x = ((SquareCoords) coords).getX();
+            int row = ((SquareCoords) coords).getY();
+            int col = ((SquareCoords) coords).getX();
 
-            if (y >= 0 && x >= 0 && y < this.cellsMatrix.length && x < this.cellsMatrix[0].length){
-                this.cellsMatrix[y][x] = cell;
+            if (row >= 0 && col >= 0 && row < this.cellsMatrix.length && col < this.cellsMatrix[0].length){
+                this.cellsMatrix[row][col] = cell;
             }
         }
     }
