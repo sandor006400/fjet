@@ -18,16 +18,12 @@ public class UnitDrawable extends AnimatedGameDrawable {
 
     // region - Fields
 
-    private FJetPoint vector;       // Movement vector
-
     // endregion - Fields
 
     // region - Constructors
 
     public UnitDrawable(){
         super();
-
-        init();
     }
 
     // endregion - Constructors
@@ -50,10 +46,6 @@ public class UnitDrawable extends AnimatedGameDrawable {
     // endregion - Methods for/from SuperClass/Interfaces
 
     // region - Methods
-
-    private void init(){
-        this.vector = new FJetPoint(0,0);
-    }
 
     // endregion - Methods
 

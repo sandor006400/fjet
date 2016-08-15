@@ -31,6 +31,7 @@ public class Game extends GameEntity {
     protected Board board;
     protected List<Player> players = new ArrayList<>();
     protected Map<String, List<String>> playerUnitsMap = new HashMap<>();
+    protected int currentTurnPlayer = 0;
 
     // endregion - Fields
 
@@ -78,6 +79,18 @@ public class Game extends GameEntity {
         return jsonObject;
     }
 
+    public void nextTurn(){
+        if (this.players.size() > 0){
+            this.currentTurnPlayer = (this.currentTurnPlayer + 1) % this.players.size();
+        }
+    }
+
+    public Player getCurrentTurnPlayer(){
+        if (this.currentTurnPlayer >= 0 && this.currentTurnPlayer < this.players.size()){
+            return this.players.get(this.currentTurnPlayer);
+        }
+        return null;
+    }
 
     // endregion - Methods for/from SuperClass/Interfaces
 

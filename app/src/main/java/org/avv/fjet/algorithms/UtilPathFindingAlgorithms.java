@@ -1,7 +1,5 @@
 package org.avv.fjet.algorithms;
 
-import android.util.Log;
-
 import org.avv.fjet.core.board.Board;
 import org.avv.fjet.core.board.Cell;
 import org.avv.fjet.core.board.HexCoords;
@@ -56,8 +54,6 @@ public class UtilPathFindingAlgorithms {
      * @return
      */
     public static List<Cell> aStar(Cell origin, Cell destination, FJetCellsGraph cellsGraph){
-        Log.d("UtilPathFindingAlgorithms", "aStar, nodes: " + cellsGraph.getCells().size());
-
         Map<String, String> cameFrom = new HashMap<String, String>();
         Map<String, Double> costSoFar = new HashMap<String, Double>();
 

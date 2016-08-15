@@ -20,7 +20,6 @@ public class FJetTouchListener implements View.OnTouchListener {
 
     private int touchesCount = 0;
 
-    private IFjetTouchListenerDelegate delegate;
     private GestureDetector gestureListener;
     private ScaleGestureDetector scaleGestureDetector;
 
@@ -31,16 +30,11 @@ public class FJetTouchListener implements View.OnTouchListener {
     public FJetTouchListener(IFjetTouchListenerDelegate delegate, Context c){
         this.gestureListener = new GestureDetector(c, new FJetGestureListener(delegate));
         this.scaleGestureDetector = new ScaleGestureDetector(c, new FJetScaleGestureListener(delegate));
-        this.delegate = delegate;
     }
 
     // endregion - Constructors
 
     // region - Getters and Setters
-
-    public void setDelegate(IFjetTouchListenerDelegate delegate){
-        this.delegate = delegate;
-    }
 
     // endregion - Getters and Setters
 
@@ -62,7 +56,7 @@ public class FJetTouchListener implements View.OnTouchListener {
 
     // region - Inner and Anonymous Classes
 
-    public interface IFjetTouchListenerDelegate{
+    public interface IFjetTouchListenerDelegate {
 
         boolean onDown(MotionEvent e);
 
