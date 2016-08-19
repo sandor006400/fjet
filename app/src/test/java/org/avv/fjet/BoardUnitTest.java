@@ -28,7 +28,7 @@ public class BoardUnitTest {
             }
         }
 
-        Board b = BoardFactory.createBoard(null, Board.BoardType.HEX_CELLS, terrains);
+        Board b = BoardFactory.createBoard(Board.BoardType.HEX_CELLS, terrains);
         HexCoords coords = new HexCoords(1, 1);
         b.selectCells(new ICoords[]{coords});
         HexCoords selectedCoords = null;
@@ -49,7 +49,7 @@ public class BoardUnitTest {
             }
         }
 
-        Board b = BoardFactory.createBoard(null, Board.BoardType.HEX_CELLS, terrains);
+        Board b = BoardFactory.createBoard(Board.BoardType.HEX_CELLS, terrains);
         HexCoords coords = new HexCoords(0, 0);
 
         Cell selectedCell =  b.getCellWithCoords(coords);
@@ -66,7 +66,7 @@ public class BoardUnitTest {
             }
         }
 
-        Board b = BoardFactory.createBoard(null, Board.BoardType.HEX_CELLS, terrains);
+        Board b = BoardFactory.createBoard(Board.BoardType.HEX_CELLS, terrains);
         HexCoords coords = new HexCoords(2, 0);
 
         Cell selectedCell = b.getCellWithCoords(coords);
@@ -83,7 +83,7 @@ public class BoardUnitTest {
             }
         }
 
-        Board b = BoardFactory.createBoard(null, Board.BoardType.HEX_CELLS, terrains);
+        Board b = BoardFactory.createBoard(Board.BoardType.HEX_CELLS, terrains);
         HexCoords coords = new HexCoords(-1, 2);
 
         Cell selectedCell = b.getCellWithCoords(coords);
@@ -100,7 +100,7 @@ public class BoardUnitTest {
             }
         }
 
-        Board b = BoardFactory.createBoard(null, Board.BoardType.HEX_CELLS, terrains);
+        Board b = BoardFactory.createBoard(Board.BoardType.HEX_CELLS, terrains);
         HexCoords coords = new HexCoords(1, 2);
 
         Cell selectedCell = b.getCellWithCoords(coords);

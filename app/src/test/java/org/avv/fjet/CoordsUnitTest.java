@@ -123,28 +123,6 @@ public class CoordsUnitTest {
     // region - UtilCoordinates tests
 
     @Test
-    public void test_calcPixelToHexCoordsConversions_colAprox() throws Exception {
-        float hexCellEdge = 10;
-        HexCoords result = new HexCoords(0,0);
-        float x = UtilCoordinates.SQRT_OF_3 * hexCellEdge - 0.02f;  // 17.300507
-        float y = hexCellEdge;
-        HexCoords finalCoord = UtilCoordinates.hexCoordsFromPixel(x, y, hexCellEdge);
-        assertEquals(result, finalCoord);
-    }
-
-    @Test
-    public void test_calcPixelToHexCoordsConversions_rowAprox() throws Exception {
-        float hexCellEdge = 10;
-        HexCoords result = new HexCoords(0,0);
-        float x = (UtilCoordinates.SQRT_OF_3 * 2 / 3) * hexCellEdge;
-        float y = hexCellEdge;
-
-        System.out.println("x: " + x + " y: " + y);
-        HexCoords finalCoord = UtilCoordinates.hexCoordsFromPixel(x, y, hexCellEdge);
-        assertEquals(result, finalCoord);
-    }
-
-    @Test
     public void test_roundHexCoords() throws Exception {
         HexCoords result = new HexCoords(3,4);
         assertEquals(result, UtilCoordinates.roundHexCoords(3.232243f, 3.62321f));
