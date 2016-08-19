@@ -7,7 +7,7 @@ import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.PathShape;
 
 import org.avv.fjet.core.board.HexCoords;
-import org.avv.fjet.core.geometry.FJetPoint;
+import org.avv.fjet.graphics.geometry.FJetPoint;
 import org.avv.fjet.core.board.SquareCoords;
 import org.avv.fjet.core.board.util.UtilCoordinates;
 

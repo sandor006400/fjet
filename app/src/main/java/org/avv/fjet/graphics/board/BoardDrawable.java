@@ -5,9 +5,9 @@ import org.avv.fjet.core.board.HexCoords;
 import org.avv.fjet.core.board.ICoords;
 import org.avv.fjet.core.board.SquareCoords;
 import org.avv.fjet.core.board.util.UtilCoordinates;
-import org.avv.fjet.core.geometry.FJetPoint;
-import org.avv.fjet.core.geometry.FJetRect;
-import org.avv.fjet.core.geometry.util.UtilGeometry;
+import org.avv.fjet.graphics.geometry.FJetPoint;
+import org.avv.fjet.graphics.geometry.FJetRect;
+import org.avv.fjet.graphics.geometry.util.UtilGeometry;
 import org.avv.fjet.graphics.unit.UnitDrawable;
 
 import java.util.HashMap;

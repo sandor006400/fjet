@@ -2,8 +2,8 @@ package org.avv.fjet.graphics.unit;
 
 import android.graphics.Canvas;
 
-import org.avv.fjet.core.geometry.FJetPoint;
-import org.avv.fjet.core.geometry.FJetRect;
+import org.avv.fjet.graphics.geometry.FJetPoint;
+import org.avv.fjet.graphics.geometry.FJetRect;
 import org.avv.fjet.graphics.AnimatedGameDrawable;
 import org.avv.fjet.graphics.GameAnimation;
 

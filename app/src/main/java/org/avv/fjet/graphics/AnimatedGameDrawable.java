@@ -2,7 +2,7 @@ package org.avv.fjet.graphics;
 
 import android.graphics.Canvas;
 
-import org.avv.fjet.core.geometry.FJetRect;
+import org.avv.fjet.graphics.geometry.FJetRect;
 
 import java.util.HashMap;
 import java.util.Map;

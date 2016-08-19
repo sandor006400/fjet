@@ -2,8 +2,8 @@ package org.avv.fjet.graphics;
 
 import android.graphics.Canvas;
 
-import org.avv.fjet.core.geometry.FJetPoint;
-import org.avv.fjet.core.geometry.FJetRect;
+import org.avv.fjet.graphics.geometry.FJetPoint;
+import org.avv.fjet.graphics.geometry.FJetRect;
 
 /**
  * Created by Alexander Vorobiev on 22/05/16.

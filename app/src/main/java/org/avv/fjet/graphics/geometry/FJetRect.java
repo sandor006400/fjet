@@ -1,4 +1,4 @@
-package org.avv.fjet.core.geometry;
+package org.avv.fjet.graphics.geometry;
 
 import android.graphics.Rect;
 

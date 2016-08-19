@@ -4,7 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 
-import org.avv.fjet.core.geometry.FJetRect;
+import org.avv.fjet.graphics.geometry.FJetRect;
 
 /**
  * Created by Alexander Vorobiev on 17/05/16.

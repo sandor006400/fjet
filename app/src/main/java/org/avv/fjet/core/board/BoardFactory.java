@@ -38,7 +38,7 @@ public class BoardFactory {
 
     // region - Methods
 
-    public static Board createBoard(Context c, Board.BoardType t, Terrain [][] terrains){
+    public static Board createBoard(Board.BoardType t, Terrain [][] terrains){
         Board b = null;
 
         if (terrains.length > 0 && terrains[0].length > 0) {

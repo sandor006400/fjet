@@ -1,6 +1,6 @@
 package org.avv.fjet.core.action;
 
-import org.avv.fjet.core.geometry.FJetPoint;
+import org.avv.fjet.graphics.geometry.FJetPoint;
 import org.avv.fjet.graphics.board.BoardDrawable;
 
 /**

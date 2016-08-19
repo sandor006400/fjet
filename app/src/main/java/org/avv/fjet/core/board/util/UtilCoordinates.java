@@ -1,7 +1,7 @@
 package org.avv.fjet.core.board.util;
 
 import org.avv.fjet.core.board.HexCoords;
-import org.avv.fjet.core.geometry.FJetPoint;
+import org.avv.fjet.graphics.geometry.FJetPoint;
 import org.avv.fjet.core.board.SquareCoords;
 
 /**
