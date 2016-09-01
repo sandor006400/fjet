@@ -16,7 +16,7 @@ public abstract class Action {
 
     public enum Type {
         INFORMATIVE,    // Informative purpose
-        EXECUTIVE       // Permanent changes
+        PERMANENT       // Permanent changes
     }
 
     // endregion - Constants

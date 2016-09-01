@@ -27,7 +27,7 @@ public class MoveUnitAction extends Action {
     // region - Constructors
 
     public MoveUnitAction() {
-        super(Type.EXECUTIVE);
+        super(Type.PERMANENT);
 
     }
 

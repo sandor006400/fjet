@@ -78,7 +78,7 @@ public class ActionExecutor {
     public void executeAction(Action action){
         action.execute();
 
-        if (action.getType() == Action.Type.EXECUTIVE) {    // If the action is INFORMATIVE only executes it
+        if (action.getType() == Action.Type.PERMANENT) {    // If the action is INFORMATIVE only executes it
             updateActionsList(action);
         }
     }
